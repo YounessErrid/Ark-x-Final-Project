@@ -36,6 +36,9 @@ var agency = new mongoose.Schema({
     timestamp: true,
   });
 
+  // const Agency = mongoose.model("Agency", agency);
+  // module.exports = Agency;
+
 const Agency = mongoose.model("Agency", agency);
 module.exports = Agency;
 
