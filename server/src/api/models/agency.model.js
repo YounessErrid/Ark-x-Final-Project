@@ -26,11 +26,11 @@ var agency = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  portfolio: {
-    type: mongoose.Schema.Types.objectId,
-    ref: "Portfolio",
-    required: true,
-  },
+  // portfolio: {
+  //   type: mongoose.Schema.Types.objectId,
+  //   ref: "Portfolio",
+  //   required: true,
+  // },
 },
   {
     timestamp: true,
