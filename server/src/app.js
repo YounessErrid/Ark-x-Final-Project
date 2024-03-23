@@ -1,5 +1,8 @@
 require("dotenv").config();
 const express = require("express");
+const session = require('express-session');
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
 const connect = require("./config/db_config");
 
 // routes
@@ -12,6 +15,27 @@ const PORT = process.env.SERVER_PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Configure session management
+app.use(cookieParser());
+app.use(
+    session({
+        secret: process.env.SECRET_KEY_SESSION, // Secret key used to sign the session ID cookie
+        resave: false, // Whether to save the session for every request, even if it hasn't changed
+        saveUninitialized: true, // Whether to save uninitialized sessions (new but not modified)
+        cookie: {
+          maxAge: 24 * 60 * 60 * 1000, // Session expiration time in milliseconds (1 day)
+          secure: false, // Set to true if your app is served over HTTPS
+          httpOnly: true // Ensures that the cookie is only accessible via HTTP(S) and not JavaScript
+          // Other cookie options...
+        }
+      })
+);
+
+require('./config/auth/client.passport-config');
+
+// Initialize Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
 // Define tha Main function
 async function main() {
   //connect to the database
