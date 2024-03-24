@@ -2,7 +2,7 @@ const Agency = require('../models/agency.model');
 
 
 const create= async (req , res) => {
-    const {agencyName , Location, password , email }= req.body;
+    const {agencyName , location, password , email }= req.body;
 try {
     if(!agencyName||!location||!password||!email){
         return res.status(400).json({
@@ -27,14 +27,14 @@ try {
 const findOne = async (req , res) =>{
     const {id} = req.params;
     try{
-        const agencyName = await Agency.findById(id);
+        const agency = await Agency.findById(id);
 
-        if(!agencyName){
+        if(!agency){
             return res.status(404).json({
                 message: "agency not found"
             })
         }
-        return res.status(200).json(agencyName);
+        return res.status(200).json(agency);
     }
     catch(error){
         console.error("Error finding agency", error);
@@ -48,9 +48,9 @@ const findOne = async (req , res) =>{
 
 const viewAll = (req , res) =>{
     try{
-        const agencyName = Agency.find();
-        if(agencyName > 0){
-            return res.status(200).json(agencyName);
+        const agency = Agency.find();
+        if(agency > 0){
+            return res.status(200).json(agency);
         }else{
             return res.status(404).json({
                 message: "agency not found"
@@ -68,7 +68,7 @@ const viewAll = (req , res) =>{
 const update = async (req , res) =>{
     try{
         const {id} = req.params;
-        const {agencyName, Location, password, email }= req.body;
+        const {agencyName, location, password, email }= req.body;
         if(!agencyName||!location||!password||!email){
             return res.status(400).json({
                 message: "Please fill all the fields"

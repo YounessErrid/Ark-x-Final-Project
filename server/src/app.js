@@ -9,6 +9,7 @@ const connect = require("./config/db_config");
 
 // routes
 const clientRouter = require("./api/routes/client.routes")
+const agencyRouter = require("./api/routes/agency.routes")
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
@@ -34,6 +35,7 @@ app.use(
 );
 
 require('./config/auth/client.passport-config');
+require('./config/auth/agency.passport-config');
 
 // Initialize Passport.js
 app.use(passport.initialize());
@@ -44,7 +46,7 @@ const main  = async () => {
   await connect();
   
   //put the routes here
-  app.use('/api/agency',agencyRouter );
+  app.use('/api/agencies',agencyRouter );
   app.use('/api/clients', clientRouter);
   
 
