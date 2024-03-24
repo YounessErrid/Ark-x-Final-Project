@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/client.controller');
-// const authController = require('../controllers/client/auth.controller');
+const controller = require('../controllers/agency.controller');
+const authController = require('../controllers/client/auth.controller');
 const {authenticate, isAuthenticated} = require('../middlewares/userAuth.middleware')
 
 // Auth routes
 router.post('/auth/register', controller.register)
 router.post('/auth/login',authenticate, controller.login);
 router.get('/auth/logout', controller.destroy)
-
 // // CRUD routes for Post
 // router.post('/', controller.create)
 // router.get('/', controller.viewAll)

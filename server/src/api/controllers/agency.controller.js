@@ -1,16 +1,18 @@
 const bcrypt = require("bcrypt");
-const Client = require('../models/client.model');
+const Agency = require('../models/agency.model');
 const User = require('../models/user.model');
+
+
 
 const register = async (req, res) => {
 
-    const { email, password, fullname, phone } = req.body;
+    const { email, password, fullname, location} = req.body;
     try {
-      if (!email || !password || !fullname || !phone) {
+      if (!email || !password || !fullname || !location) {
         return res
           .status(400)
           .json({
-            error: "User creation failed: Missing required information!",
+            error: "Agency creation failed: Missing required information!",
           });
       }
   
@@ -24,19 +26,22 @@ const register = async (req, res) => {
       const user = new User({
         email: email,
         password: hashedPassword,
-        fullname: fullname
+        fullname: fullname,
+        role: 'agency'
       });
-  
-      const data = await user.save();
 
-      const client = new Client({ userId: data.id, phone: phone });
-      const cliData = await client.save();
+
+  
+      const userData = await user.save();
+
+      const agency = new Agency({ userId: userData.id, location: location });
+      const agencyData = await agency.save();
             
       res.status(201).json({
         success: true,
         message: "User created successfully",
-        user: data,
-        client: cliData
+        user: userData,
+        agency: agencyData
       });
     } catch (error) {
       return res
@@ -47,7 +52,6 @@ const register = async (req, res) => {
         ]);
     }
   };
-
 
   const login = (req, res) => {
     res.status(200).json({
