@@ -8,6 +8,7 @@ const connect = require("./config/db_config");
 // routes
 const clientRouter = require("./api/routes/client.routes")
 const agencyRouter = require("./api/routes/agency.routes")
+const adminRouter = require("./api/routes/admin.routes")
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
@@ -45,6 +46,7 @@ async function main() {
   //put the routes here
   app.use('/api/clients', clientRouter);
   app.use('/api/agencies', agencyRouter);
+  app.use('/api/admins', adminRouter);
   
 
   app.listen(PORT, () => {
