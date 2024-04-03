@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/admin.controller');
-const {authenticate, isAuthenticated} = require('../middlewares/userAuth.middleware')
+const {authenticate, isAuthenticated} = require('../middlewares/userAuth.middleware');
+const validateRegisterAdmin = require('../validations/registerAdmin.validator');
+const validateLoginUser = require('../validations/loginUser.validator');
 
 // Auth routes
-router.post('/auth/register', controller.register)
-router.post('/auth/login',authenticate, controller.login);
+router.post('/auth/register',[validateRegisterAdmin], controller.register)
+router.post('/auth/login',[validateLoginUser],authenticate, controller.login);
 router.get('/auth/logout', controller.destroy)
 // // CRUD routes for Post
 // router.post('/', controller.create)
