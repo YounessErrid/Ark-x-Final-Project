@@ -6,7 +6,7 @@ const authenticate = (req, res, next) => {
       return next(err);
     }
     if (!user) {
-      return res.status(401).json({ message: info.message || 'Authentication failed' });
+      return res.status(401).json({ message: `User ${info.message}`|| 'Authentication failed: user not found' });
     }
     req.logIn(user, (err) => {
       if (err) {

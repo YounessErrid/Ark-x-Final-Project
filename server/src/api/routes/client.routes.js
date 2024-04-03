@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/client.controller');
 // const authController = require('../controllers/client/auth.controller');
-const {authenticate, isAuthenticated} = require('../middlewares/userAuth.middleware')
+const {authenticate, isAuthenticated} = require('../middlewares/userAuth.middleware');
+const validateLoginInput = require('../validations/loginUser.validator');
+const validateRegisterClient = require('../validations/registerClient.validator');
 
 // Auth routes
-router.post('/auth/register', controller.register)
-router.post('/auth/login',authenticate, controller.login);
+router.post('/auth/register',[validateRegisterClient], controller.register)
+router.post('/auth/login',[validateLoginInput],authenticate, controller.login);
 router.get('/auth/logout', controller.destroy)
 
 // // CRUD routes for Post
