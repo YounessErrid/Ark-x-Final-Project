@@ -10,6 +10,10 @@ const connect = require("./config/db_config");
 // routes
 const clientRouter = require("./api/routes/client.routes")
 const agencyRouter = require("./api/routes/agency.routes")
+const serviceRouter = require("./api/routes/service.routes")
+const portfolioservice = require("./api/routes/portfolio.routes")
+const portfolio = require("./api/routes /portfolio.routes")
+
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;

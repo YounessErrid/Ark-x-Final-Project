@@ -52,13 +52,15 @@ const viewAll = (req , res) =>{
         if(agency > 0){
             return res.status(200).json(agency);
         }else{
-            return res.status(404).json({
+            return res
+            .status(404)
+            .json({
                 message: "agency not found"
             })
         }
     }catch(error){
     return res
-      .status(500).json
+      .status(500)
       .json([
         {error: 'internal server error'},
         {message: error.message, success: false}
