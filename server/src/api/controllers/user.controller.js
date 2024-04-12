@@ -1,29 +1,5 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
-
-// const create = async (req , res) =>{
-//     const { email, password, fullname , phone } = req.body;
-
-//     try {
-//         if (!email || !password || !fullname || !phone) {
-//             return res
-//                 .status(400)
-//                 .json({ error: "Client creation failed: Missing required information!" });
-//         }
-
-//         const newClient = new Client({ email, password, fullname, phone });
-//         await newClient.save();
-
-//         res.status(201).json({
-//             success: true,
-//             message: "Client created successfully",
-//         });
-//     } catch (error) {
-//         return res
-//             .status(500)
-//             .json([{ error: "Internal server error" }, { message: `Error creating client: ${error.message}` }]);
-//     }
-// }
 const login = (req, res) => {
   res.status(200).json({
     success: true,
@@ -34,7 +10,7 @@ const login = (req, res) => {
 const register = async (req, res) => {
   const { email, password, fullname, role } = req.body;
   try {
-    if (!email || !password || !fullname) {
+    if (!email || !password || !fullname || !profile) {
       return res.status(400).json({
         error: "Client creation failed: Missing required information!",
       });
