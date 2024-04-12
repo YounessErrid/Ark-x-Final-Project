@@ -13,16 +13,17 @@ const portfolioserviceSchema = new mongoose.Schema(
             unique: true,
             trim: true,
         },
+        // list of images
         image: {
             type: String,
             unique: true,
             trim: true,
         },
        
-        portfolioId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Portfolio'
-        },
+        // portfolioId: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'Portfolio'
+        // },
         serviceId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Service",

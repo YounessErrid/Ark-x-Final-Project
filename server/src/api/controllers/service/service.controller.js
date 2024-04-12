@@ -24,6 +24,7 @@ const create = async (req , res) => {
         }
     
 };
+//define update
 const findOne = async (req ,res) =>{
     const {id} = req.params;
     try{
