@@ -2,27 +2,16 @@
 
 var clientSchema = new mongoose.Schema(
   {
-    email: {
-      type: String,
+    userId : {
+      type : mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      unique: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    fullname: {
-      type: String,
-      required: true,
-      trim: true,
     },
     phone: {
       type: String,
       required: true,
-      trim: true,
     },
+
   },
   { timestamps: true }
 );

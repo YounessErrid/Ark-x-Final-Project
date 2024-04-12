@@ -14,6 +14,7 @@ const serviceRouter = require("./api/routes/service.routes")
 const portfolioservice = require("./api/routes/portfolio.routes")
 const portfolio = require("./api/routes /portfolio.routes")
 
+const adminRouter = require("./api/routes/admin.routes")
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
@@ -38,8 +39,7 @@ app.use(
       })
 );
 
-require('./config/auth/client.passport-config');
-require('./config/auth/agency.passport-config');
+require('./config/auth/user.passport-config');
 
 // Initialize Passport.js
 app.use(passport.initialize());
@@ -52,6 +52,8 @@ const main  = async () => {
   //put the routes here
   app.use('/api/agencies',agencyRouter );
   app.use('/api/clients', clientRouter);
+  app.use('/api/agencies', agencyRouter);
+  app.use('/api/admins', adminRouter);
   
 
   app.listen(PORT, () => {
