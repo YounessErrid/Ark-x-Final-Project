@@ -24,6 +24,31 @@ const create = async (req , res) => {
         }
     
 };
+const update = async (req, res, next) => {
+    try{
+        const {id} = req.params;
+        const {title, description} = req.body;
+        if(!title||!description){
+            return res.status(400).json({
+                message: "Please fill all the fields"
+            })
+        }
+        const updatedService = await service.findByIdAndUpdate(id, {title, description}, {new: true});
+        if(!updatedService){
+            return res.status(404).json({
+                message: "Service not found"
+            })
+        }
+        return res.status(200).json(updatedService);
+    }catch (error) {
+        return res
+          .status(500)
+          .json([
+            { error: "Internal server error" },
+            { message: `Error updating client: ${error.message}` },
+          ]);
+      }
+};
 //define update
 const findOne = async (req ,res) =>{
     const {id} = req.params;
@@ -82,5 +107,6 @@ module.exports = {
     create,
     findOne,
     viewall,
-    remove
+    remove,
+    update
 };
