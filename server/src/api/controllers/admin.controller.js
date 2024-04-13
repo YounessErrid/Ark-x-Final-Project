@@ -3,6 +3,7 @@ const Admin = require("../models/admin.model");
 const User = require("../models/user.model");
 const register = async (req, res) => {
   const { email, password, fullname } = req.body;
+  const path = req.file.path;
   try {
     if (!email || !password || !fullname) {
       return res.status(400).json({
@@ -21,12 +22,13 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       fullname: fullname,
+      profile_image: path,
       role: "admin",
     });
 
     const userData = await user.save();
 
-    const admin = new Admin({ userId: userData.id });
+    const admin = new Admin({ userId: userData.id});
     const adminData = await admin.save();
 
     res.status(201).json({
