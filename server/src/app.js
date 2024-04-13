@@ -1,22 +1,16 @@
 require("dotenv").config();
 const express = require("express");
-const agencyRouter = require("./api/routes/agency.routes");
 // const connect = require("./config/db_config");
 const session = require("express-session");
 const passport = require("passport");
-const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const connect = require("./config/db_config");
 const bodyParser = require("body-parser");
 
 // routes
-const clientRouter = require("./api/routes/client.routes");
-const agencyRouter = require("./api/routes/agency.routes");
 const serviceRouter = require("./api/routes/service.routes");
-const portfolioservice = require("./api/routes/portfolio.routes");
-const portfolio = require("./api/routes /portfolio.routes");
-
-const adminRouter = require("./api/routes/admin.routes");
+const portfolioservice = require("./api/routes/portfolioservice.routes");
+const portfolio = require("./api/routes/portfolio.routes");
 const clientRouter = require("./api/routes/client.routes");
 const agencyRouter = require("./api/routes/agency.routes");
 const adminRouter = require("./api/routes/admin.routes");
@@ -58,14 +52,10 @@ const main = async () => {
   await connect();
 
   //put the routes here
-  app.use("/api/agencies", agencyRouter);
   app.use("/api/clients", clientRouter);
   app.use("/api/agencies", agencyRouter);
   app.use("/api/admins", adminRouter);
-
-  app.use("/api/clients", clientRouter);
-  app.use("/api/agencies", agencyRouter);
-  app.use("/api/admins", adminRouter);
+  app.use("/api/portfolioService", portfolioservice)
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
