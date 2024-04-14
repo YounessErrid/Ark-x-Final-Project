@@ -8,11 +8,11 @@ var agencySchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  userId :[ {
+  userId :{
     type : mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
-  }],
+  },
   location: {
     type: String,
     required: true,
@@ -20,7 +20,7 @@ var agencySchema = new mongoose.Schema({
     trim: true,
   },
   portfolioId: {
-    type: mongoose.Schema.Types.objectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Portfolio",
   },
 },

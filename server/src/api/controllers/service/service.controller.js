@@ -71,21 +71,27 @@ const findOne = async (req, res) => {
 };
 const viewAll = async (req, res) => {
   try {
-    const services = await service.find();
-    if (!services) {
-      return res.status(404).json({
-        message: "Services not found",
-      });
+      const services = await service.find();
+  
+      if (services.length > 0) {
+        return res.status(200).json(services);
+      } else {
+        return res.status(404).json({ error: "No services found!" });
+      }
+    } catch (error) {
+      return res
+        .status(500)
+        .json([
+          { error: "Internal server error" },
+          { message: `Error retrieving services: ${error.message}` },
+        ]);
     }
-  } catch (error) {
-    return res
-      .status(500)
-      .json([
-        { error: "internal server error" },
-        { message: error.message, success: false },
-      ]);
-  }
+
 };
+
+
+
+
 
 const remove = async (req, res) => {
   try {
@@ -109,7 +115,7 @@ const remove = async (req, res) => {
 module.exports = {
     create,
     findOne,
-    viewall,
+    viewAll,
     remove,
     update
 };
