@@ -25,7 +25,7 @@ const create = async (req, res) => {
         .status(500)
         .json([
           { error: "Internal server error" },
-          { message: `Error creating client: ${error.message}` },
+          { message: `Error creating subscription: ${error.message}` },
         ]);
     }
   };

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const User = require("./user.model");
+
 
 var agencySchema = new mongoose.Schema({
   userId : {
@@ -7,17 +7,16 @@ var agencySchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  location: {
+  addresse: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
   },
-  // portfolioId: {
-  //   type: mongoose.Schema.Types.objectId,
-  //   ref: "Portfolio",
-  //   // required: true,
-  // },
+  portfolioId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Portfolio",
+    required: true,
+  },
 },
   {
     timestamp: true,

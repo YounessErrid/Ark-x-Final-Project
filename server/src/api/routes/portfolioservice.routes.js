@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/portfolioservice/portfolioservice.controller');
+const controller = require('../controllers/portfolioservice.controller');
 const upload = require("../middlewares/upload")
 
 

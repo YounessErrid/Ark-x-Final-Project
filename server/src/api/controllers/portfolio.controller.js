@@ -1,4 +1,4 @@
-const portfolio = require("../../models/portfolio.model");
+const portfolio = require("../models/portfolio.model");
 
 const create = async (req, res) => {
   const { description, logo, couverture, services } = req.body;

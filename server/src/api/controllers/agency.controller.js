@@ -3,10 +3,10 @@ const Agency = require("../models/agency.model");
 const User = require("../models/user.model");
 
 const register = async (req, res) => {
-  const { email, password, fullname, location } = req.body;
+  const { email, password, fullname, addresse } = req.body;
   const path = req.file.path;
   try {
-    if (!email || !password || !fullname || !location) {
+    if (!email || !password || !fullname || !addresse) {
       return res.status(400).json({
         error: "Agency creation failed: Missing required information!",
       });
@@ -29,7 +29,7 @@ const register = async (req, res) => {
 
     const userData = await user.save();
 
-    const agency = new Agency({ userId: userData.id, location: location });
+    const agency = new Agency({ userId: userData.id, addresse: addresse });
     const agencyData = await agency.save();
 
     res.status(201).json({

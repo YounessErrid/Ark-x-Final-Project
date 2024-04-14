@@ -10,10 +10,6 @@ var paymentSchema = new mongoose.Schema(
       type : Number,
       required: true,
     },
-    activated: {
-      type: Boolean,
-      required: true,
-    },
     subscriptionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Subscription",

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/portfolio/portfolio.controller');
+const controller = require('../controllers/portfolio.controller');
 
 router.post('/', controller.create)
 router.get('/:id', controller.findOne)
