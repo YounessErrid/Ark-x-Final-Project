@@ -17,6 +17,10 @@ const portfolioSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  portfolioServices: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "PortfolioService",
+  }],
   services: [
     {
       type: mongoose.Schema.Types.ObjectId,

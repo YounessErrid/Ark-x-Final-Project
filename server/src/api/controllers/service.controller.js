@@ -23,6 +23,31 @@ const create = async (req, res) => {
       ]);
   }
 };
+const update = async (req, res, next) => {
+    try{
+        const {id} = req.params;
+        const {title, description} = req.body;
+        if(!title||!description){
+            return res.status(400).json({
+                message: "Please fill all the fields"
+            })
+        }
+        const updatedService = await service.findByIdAndUpdate(id, {title, description}, {new: true});
+        if(!updatedService){
+            return res.status(404).json({
+                message: "Service not found"
+            })
+        }
+        return res.status(200).json(updatedService);
+    }catch (error) {
+        return res
+          .status(500)
+          .json([
+            { error: "Internal server error" },
+            { message: `Error updating client: ${error.message}` },
+          ]);
+      }
+};
 //define update
 const findOne = async (req, res) => {
   const { id } = req.params;
@@ -46,21 +71,27 @@ const findOne = async (req, res) => {
 };
 const viewAll = async (req, res) => {
   try {
-    const services = await service.find();
-    if (!services) {
-      return res.status(404).json({
-        message: "Services not found",
-      });
+      const services = await service.find();
+  
+      if (services.length > 0) {
+        return res.status(200).json(services);
+      } else {
+        return res.status(404).json({ error: "No services found!" });
+      }
+    } catch (error) {
+      return res
+        .status(500)
+        .json([
+          { error: "Internal server error" },
+          { message: `Error retrieving services: ${error.message}` },
+        ]);
     }
-  } catch (error) {
-    return res
-      .status(500)
-      .json([
-        { error: "internal server error" },
-        { message: error.message, success: false },
-      ]);
-  }
+
 };
+
+
+
+
 
 const remove = async (req, res) => {
   try {
@@ -82,8 +113,9 @@ const remove = async (req, res) => {
   }
 };
 module.exports = {
-  create,
-  findOne,
-  viewAll,
-  remove,
+    create,
+    findOne,
+    viewAll,
+    remove,
+    update
 };

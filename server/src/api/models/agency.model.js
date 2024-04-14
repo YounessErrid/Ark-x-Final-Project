@@ -2,7 +2,13 @@ const mongoose = require("mongoose");
 
 
 var agencySchema = new mongoose.Schema({
-  userId : {
+  agencyName: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
+  userId :{
     type : mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,

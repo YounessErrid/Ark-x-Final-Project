@@ -13,8 +13,8 @@ const agencyRouter = require("./api/routes/agency.routes")
 const adminRouter = require("./api/routes/admin.routes")
 const subscriptionRouter = require("./api/routes/subscription.routes")
 const stripeRouter = require("./api/routes/stripe.routes")
-const serviceRouter = require("./api/routes/service.routes");
-const portfolioServiceRouter = require("./api/routes/portfolioservice.routes");
+const serviceRouter = require("./api/routes/services.routes");
+const portfolioServiceRouter = require("./api/routes/portfolioservices.routes");
 const portfolioRouter = require("./api/routes/portfolio.routes");
 
 const app = express();
@@ -59,8 +59,9 @@ const main = async () => {
   app.use('/api/admins', adminRouter);
   app.use('/api/subscriptions', subscriptionRouter);
   app.use('/api/stripe', stripeRouter);
-  app.use("/api/portfolioService", portfolioServiceRouter)
-
+  app.use("/api/portfolioServices", portfolioServiceRouter)
+  app.use("/api/services",serviceRouter);
+  app.use("/api/portfolio",portfolioRouter);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

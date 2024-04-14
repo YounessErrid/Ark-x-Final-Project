@@ -88,9 +88,27 @@ const update = async (req, res) => {
       ]);
   }
 };
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedPortfolio = await portfolio.findByIdAndDelete(id);
+    if (!deletedPortfolio) {
+      return res.status(404).json({ error: "Portfolio not found!" });
+    }
+    return res.status(200).json(deletedPortfolio);
+  } catch (error) {
+    return res
+     .status(500)
+     .json([
+        { error: "internal server error" },
+        { message: error.message, success: false },
+      ]);
+  }
+};
 module.exports = {
   create,
   findOne,
   viewAll,
   update,
+  remove
 };
