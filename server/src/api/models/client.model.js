@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 var clientSchema = new mongoose.Schema(
   {
-    userId : {
-      type : mongoose.Schema.Types.ObjectId,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -11,7 +11,6 @@ var clientSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
   },
   { timestamps: true }
 );

@@ -4,6 +4,7 @@ const User = require("../models/user.model");
 
 const register = async (req, res) => {
   const { email, password, fullname, phone } = req.body;
+  const path = req.file.path;
   try {
     if (!email || !password || !fullname || !phone) {
       return res.status(400).json({
@@ -22,6 +23,7 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       fullname: fullname,
+      profile_image: path,
     });
 
     const data = await user.save();
@@ -51,7 +53,6 @@ const login = (req, res) => {
     message: "Successfully logged in",
   });
 };
-
 const destroy = async (req, res) => {
   req.logout(function (err) {
     if (err) {
@@ -69,11 +70,9 @@ const create = async (req, res) => {
 
   try {
     if (!email || !password || !fullname || !phone) {
-      return res
-        .status(400)
-        .json({
-          error: "Client creation failed: Missing required information!",
-        });
+      return res.status(400).json({
+        error: "Client creation failed: Missing required information!",
+      });
     }
 
     const newClient = new Client({ email, password, fullname, phone });
@@ -174,11 +173,9 @@ const remove = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      return res
-        .status(400)
-        .json({
-          error: "Client deletion failed: Missing required information!",
-        });
+      return res.status(400).json({
+        error: "Client deletion failed: Missing required information!",
+      });
     }
 
     const deletedClient = await Client.findByIdAndDelete(id);
