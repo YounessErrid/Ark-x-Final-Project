@@ -9,13 +9,15 @@ const connect = require("./config/db_config");
 const clientRouter = require("./api/routes/client.routes")
 const agencyRouter = require("./api/routes/agency.routes")
 const adminRouter = require("./api/routes/admin.routes")
+const subscriptionRouter = require("./api/routes/subscription.routes")
+const stripeRouter = require("./api/routes/stripe.routes")
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 // Configure session management
 app.use(cookieParser());
@@ -47,6 +49,8 @@ async function main() {
   app.use('/api/clients', clientRouter);
   app.use('/api/agencies', agencyRouter);
   app.use('/api/admins', adminRouter);
+  app.use('/api/subscriptions', subscriptionRouter);
+  app.use('/api/stripe', stripeRouter);
   
 
   app.listen(PORT, () => {
