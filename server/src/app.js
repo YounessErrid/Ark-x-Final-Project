@@ -8,8 +8,8 @@ const connect = require("./config/db_config");
 const bodyParser = require("body-parser");
 
 // routes
-const serviceRouter = require("./api/routes/service.routes");
-const portfolioservice = require("./api/routes/portfolioservice.routes");
+const serviceRouter = require("./api/routes/services.routes");
+const portfolioservice = require("./api/routes/portfolioservices.routes");
 const portfolio = require("./api/routes/portfolio.routes");
 const clientRouter = require("./api/routes/client.routes");
 const agencyRouter = require("./api/routes/agency.routes");

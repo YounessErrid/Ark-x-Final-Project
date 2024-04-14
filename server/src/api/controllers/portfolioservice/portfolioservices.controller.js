@@ -1,7 +1,7 @@
 const portfolioservice = require("../../models/portfolioServices.model");
 
 const create = async (req, res) => {
-  const { name, description, image, portfolioId, serviceId } = req.body;
+  const { name, description, image} = req.body;
   const path = req.files;
   console.log(path);
   try {
@@ -13,9 +13,8 @@ const create = async (req, res) => {
     const newPortfolioService = new portfolioservice({
       name,
       description,
-      // portfolioId,
       path,
-      // serviceId,
+    
     });
     await newPortfolioService.save();
     return res.status(200).json({
@@ -31,15 +30,15 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, image, portfolioId, serviceId } = req.body;
-    if (!name || !description || !image || !portfolioId || !serviceId) {
+    const { name, description, image } = req.body;
+    if (!name || !description || !image) {
       return res.status(400).json({
         message: "Please fill all the fields",
       });
     }
     const updatedPortfolioService = await portfolioservice.findByIdAndUpdate(
       id,
-      { name, description, image, portfolioId, serviceId }
+      { name, description, image}
     );
     if (!updatedPortfolioService) {
       return res.status(404).json({
