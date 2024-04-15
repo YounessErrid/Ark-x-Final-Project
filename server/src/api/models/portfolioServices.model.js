@@ -11,12 +11,16 @@ const portfolioserviceSchema = new mongoose.Schema({
     trim: true,
   },
   // list of images
-  image: [{
+  images: [{
     type: String,
     unique: true,
     trim: true,
   }],
- 
+  // serviceId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Service",
+  //   required: true,
+  // },
 });
 const portfolioservice = mongoose.model(
   "portfolioservice",

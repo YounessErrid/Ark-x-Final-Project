@@ -4,7 +4,7 @@ const controller = require('../controllers/portfolioservice.controller');
 const upload = require("../middlewares/upload")
 
 
-router.post('/', upload.array("image[]"), controller.create)
+router.post('/', upload.array("images[]"), controller.create)
 router.get('/:id', controller.findOne)
 router.get('/', controller.viewAll)
 router.put('/:id',controller.update)
