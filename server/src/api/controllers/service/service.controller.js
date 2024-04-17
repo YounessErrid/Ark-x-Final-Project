@@ -8,6 +8,7 @@ const create = async (req, res) => {
         message: "Please fill all the fields",
       });
     }
+    
     const newService = new service({ title, description });
     await newService.save();
     res.status(200).json({
@@ -34,11 +35,13 @@ const update = async (req, res, next) => {
         }
         const updatedService = await service.findByIdAndUpdate(id, {title, description}, {new: true});
         if(!updatedService){
-            return res.status(404).json({
+            return res.status(404)
+            .json({
                 message: "Service not found"
             })
         }
-        return res.status(200).json(updatedService);
+        return res.status(200)
+        .json(updatedService);
     }catch (error) {
         return res
           .status(500)
@@ -60,7 +63,7 @@ const findOne = async (req, res) => {
     }
     return res.status(200).json(service);
   } catch (error) {
-    console.error("Error finding agency", error);
+    console.error("Error finding service", error);
     return res
       .status(500)
       .json([

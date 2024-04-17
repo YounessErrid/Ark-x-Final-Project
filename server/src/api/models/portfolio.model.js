@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+var mongoose = require('mongoose');
+ 
 const portfolioSchema = new mongoose.Schema({
   description: {
     type: String,
@@ -21,12 +22,12 @@ const portfolioSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "PortfolioService",
   }],
-  services: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Service",
-    },
-  ],
+  // services: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Service",
+  //   },
+  // ],
 });
 const Portfolio = mongoose.model("Portfolio", portfolioSchema);
 module.exports = Portfolio;

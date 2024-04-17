@@ -121,7 +121,8 @@ const viewAll = async (req, res) => {
     if (clients.length > 0) {
       return res.status(200).json(clients);
     } else {
-      return res.status(404).json({ error: "No clients found!" });
+      return res.status(404)
+      .json({ error: "No clients found!" });
     }
   } catch (error) {
     return res
