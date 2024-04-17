@@ -1,9 +1,12 @@
 const portfolioservice = require("../models/portfolioServices.model");
 
 const create = async (req, res) => {
-  const { name, description, image} = req.body;
-  const path = req.files;
-  console.log(path);
+  const { name, description } = req.body;
+  const paths = req.files;
+  let images = [];
+  paths.forEach((element) => {
+    images.push(element.path);
+  });
   try {
     if (!name || !description) {
       return res.status(400).json({
@@ -13,8 +16,9 @@ const create = async (req, res) => {
     const newPortfolioService = new portfolioservice({
       name,
       description,
-      path,
-    
+      // portfolioId,
+      images,
+      // serviceId,
     });
     await newPortfolioService.save();
     return res.status(200).json({
@@ -30,15 +34,20 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, image } = req.body;
-    if (!name || !description || !image) {
+    const { name, description } = req.body;
+    const path = req.files;
+    let images = [];
+    path.forEach((element) => {
+      images.push(element.path);
+    });
+    if (!name || !description || !images) {
       return res.status(400).json({
         message: "Please fill all the fields",
       });
     }
     const updatedPortfolioService = await portfolioservice.findByIdAndUpdate(
       id,
-      { name, description, image}
+      { name, description, images }
     );
     if (!updatedPortfolioService) {
       return res.status(404).json({
@@ -115,4 +124,94 @@ module.exports = {
   remove,
   findOne,
   viewAll,
+};
+
+// const update = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, description, image } = req.body;
+//     if (!name || !description || !image) {
+//       return res.status(400).json({
+//         message: "Please fill all the fields",
+//       });
+//     }
+//     const updatedPortfolioService = await portfolioservice.findByIdAndUpdate(
+//       id,
+//       { name, description, image}
+//     );
+//     if (!updatedPortfolioService) {
+//       return res.status(404).json({
+//         message: "Portfolio service not found",
+//       });
+//     }
+//     return res.status(200).json(updatedPortfolioService);
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: "Internal server error",
+//       message: error.message,
+//     });
+//   }
+// };
+// const remove = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const deletedPortfolioService = await portfolioservice.findByIdAndDelete(
+//       id
+//     );
+//     if (!deletedPortfolioService) {
+//       return res.status(404).json({
+//         message: "Portfolio service not found",
+//       });
+//     }
+//     return res.status(200).json({
+//       message: "Portfolio service deleted successfully",
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: "Internal server error",
+//       message: error.message,
+//     });
+//   }
+// };
+// const findOne = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const portfolioService = await portfolioservice.findById(id);
+//     if (!portfolioService) {
+//       return res.status(404).json({
+//         message: "Portfolio service not found",
+//       });
+//     }
+//     return res.status(200).json(portfolioService);
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: "Internal server error",
+//       message: error.message,
+//     });
+//   }
+// };
+// const viewAll = async (req, res) => {
+//   try {
+//     const portfolioServices = await portfolioservice.find();
+//     if (portfolioServices > 0) {
+//       return res.status(200).json(portfolioServices);
+//     } else {
+//       return res.status(404).json({
+//         message: "No portfolio services found!",
+//       });
+//     }
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: "Internal server error",
+//       message: error.message,
+//     });
+//   }
+// };
+
+module.exports = {
+  create
+//   update,
+//   remove,
+//   findOne,
+//   viewAll,
 };
