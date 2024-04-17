@@ -12,16 +12,16 @@ const portfolioSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  couverture: {
+  cover: {
     type: String,
     required: true,
     unique: true,
     trim: true,
   },
-  portfolioServices: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "PortfolioService",
-  }],
+  // portfolioServices: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "PortfolioService",
+  // }],
   // services: [
   //   {
   //     type: mongoose.Schema.Types.ObjectId,

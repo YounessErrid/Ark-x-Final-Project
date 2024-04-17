@@ -13,7 +13,7 @@ const upload = require("../middlewares/upload");
 // Auth routes
 router.post(
   "/auth/register",
-  [upload.single("profile"), validateRegisterClient],
+  [upload.single("profile_image"), validateRegisterClient],
   controller.register
 );
 router.post(

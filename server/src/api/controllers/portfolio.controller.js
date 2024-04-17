@@ -1,9 +1,11 @@
-const Portfolio = require("../../models/portfolio.model");
+const portfolio = require("../models/portfolio.model");
 
 const create = async (req, res) => {
-  const { description, logo, couverture} = req.body;
+  const { description, services } = req.body;
+  const logo = req.files["logo"][0].path;
+  const cover = req.files["cover"][0].path;
   try {
-    if (!description || !logo || !couverture) {
+    if (!description || !logo || !cover) {
       return res.status(400).json({
         error: "Portfolio creation failed: Missing required information!",
       });
@@ -12,8 +14,8 @@ const create = async (req, res) => {
     const newPortfolio = new Portfolio({
       description,
       logo,
-      couverture,
-     
+      cover,
+      services,
     });
     await newPortfolio.save();
     return res.status(201).json({
@@ -73,17 +75,32 @@ const viewAll = async (req, res) => {
   }
 };
 const update = async (req, res) => {
-  const { id } = req.params;
-  const { description, logo, couverture } = req.body;
-  // console.log("Request body:", req.body);
-  // console.log("Description:", description);
-  // console.log("Logo:", logo);
-  // console.log("Couverture:", couverture);
-
-  if (!description || !logo || !couverture) {
+  try {
+    const { id } = req.params;
+    const { description, services } = req.body;
+    const logo = req.files["logo"][0].path;
+  const cover = req.files["cover"][0].path;
+    if (!description || !logo || !cover || !services) {
       return res.status(400).json({
           error: "Missing required information for update!",
       });
+    }
+    const updatedPortfolio = await portfolio.findByIdAndUpdate(
+      id,
+      { description, logo, cover, services },
+      { new: true }
+    );
+    if (!updatedPortfolio) {
+      return res.status(404).json({ error: "Portfolio not found!" });
+    }
+    return res.status(200).json(updatedPortfolio);
+  } catch (error) {
+    return res
+      .status(500)
+      .json([
+        { error: "internal server error" },
+        { message: error.message, success: false },
+      ]);
   }
   try {
  
@@ -109,34 +126,9 @@ const update = async (req, res) => {
 
 
 };
-
-
-
-const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deletedPortfolio = await Portfolio.findByIdAndDelete(id);
-    if (!deletedPortfolio) {
-                return res.status(404).json({ error: "Portfolio not found!" });
-            }
-            return res.status(200).json({
-                message: "Portfolio deleted successfully!",
-                portfolio: deletedPortfolio
-            });
-            
-        } catch (error) {
-           
-            console.error(`Error deleting portfolio with ID ${id}:`, error);
-            return res.status(500).json({
-                error: "Internal server error",
-                message: `Error deleting portfolio: ${error.message}`
-            });
-        }
-};
 module.exports = {
   create,
   findOne,
   viewAll,
   update,
-  remove
 };

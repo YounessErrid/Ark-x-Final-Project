@@ -13,9 +13,10 @@ const upload = require("../middlewares/upload");
 
 router.post(
   "/auth/register",
-  [upload.single("profile"), validateRegisterAdmin],
+  [upload.single("profile_image"), validateRegisterAdmin],
   controller.register
 );
+
 router.post("/auth/login", [validateLoginUser], authenticate, controller.login);
 router.get("/auth/logout", controller.destroy);
 // // CRUD routes for Post

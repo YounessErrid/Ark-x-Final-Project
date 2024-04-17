@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const Admin = require("../models/admin.model");
 const User = require("../models/user.model");
+
+
 const register = async (req, res) => {
   const { email, password, fullname } = req.body;
   const path = req.file.path;
@@ -11,7 +13,7 @@ const register = async (req, res) => {
       });
     }
 
-    const existingAdmin = await Admin.findOne({ email });
+    const existingAdmin = await User.findOne({ email });
     if (existingAdmin) {
       return res.status(400).json({ error: "Email already exists" });
     }

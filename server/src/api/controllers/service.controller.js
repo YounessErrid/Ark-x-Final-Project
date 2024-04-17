@@ -1,4 +1,4 @@
-const service = require("../../models/services.model");
+const service = require("../models/services.model");
 
 const create = async (req, res) => {
   const { title, description } = req.body;

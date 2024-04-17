@@ -27,12 +27,12 @@ const validateRegisterAgency = [
   .withMessage('Invalid email address. Please try again.'),
 
   // Validate Address
-  body('address')
+  body('addresse')
   .trim()
   .notEmpty()
-  .withMessage('Address is required')
+  .withMessage('Addresse is required')
   .isLength({ min: 10 })
-  .withMessage('Address must be at least 10 characters long'),
+  .withMessage('Addresse must be at least 10 characters long'),
 
   // Validate password
   body('password')
