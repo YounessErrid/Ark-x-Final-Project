@@ -18,9 +18,9 @@ var subscriptionSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    agencyId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Agency",
+        ref: "User",
         require: true,
       },
 
