@@ -21,7 +21,7 @@ var agencySchema = new mongoose.Schema({
   portfolioId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Portfolio",
-    required: true,
+   
   },
 },
   {
