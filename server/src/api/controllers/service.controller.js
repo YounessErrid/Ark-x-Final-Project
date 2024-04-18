@@ -5,10 +5,10 @@ const create = async (req, res) => {
   try {
     if (!title || !description) {
       return res.status(400).json({
-        message: "Please fill all the fields",
+        message: "Service update failed: Missing required information!",
       });
     }
-    
+
     const newService = new service({ title, description });
     await newService.save();
     res.status(200).json({
@@ -25,31 +25,31 @@ const create = async (req, res) => {
   }
 };
 const update = async (req, res, next) => {
-    try{
-        const {id} = req.params;
-        const {title, description} = req.body;
-        if(!title||!description){
-            return res.status(400).json({
-                message: "Please fill all the fields"
-            })
-        }
-        const updatedService = await service.findByIdAndUpdate(id, {title, description}, {new: true});
-        if(!updatedService){
-            return res.status(404)
-            .json({
-                message: "Service not found"
-            })
-        }
-        return res.status(200)
-        .json(updatedService);
-    }catch (error) {
-        return res
-          .status(500)
-          .json([
-            { error: "Internal server error" },
-            { message: `Error updating client: ${error.message}` },
-          ]);
-      }
+  try {
+    const { id } = req.params;
+    const newService = req.body;
+    if (!newService) {
+      return res.status(400).json({
+        message: "Service update failed: Missing required information!"
+      })
+    }
+    const updatedService = await service.findByIdAndUpdate(id, { ...newService }, { new: true });
+    if (!updatedService) {
+      return res.status(404)
+        .json({
+          message: "Service not found"
+        })
+    }
+    return res.status(200)
+      .json(updatedService);
+  } catch (error) {
+    return res
+      .status(500)
+      .json([
+        { error: "Internal server error" },
+        { message: `Error updating client: ${error.message}` },
+      ]);
+  }
 };
 //define update
 const findOne = async (req, res) => {
@@ -74,28 +74,23 @@ const findOne = async (req, res) => {
 };
 const viewAll = async (req, res) => {
   try {
-      const services = await service.find();
-  
-      if (services.length > 0) {
-        return res.status(200).json(services);
-      } else {
-        return res.status(404).json({ error: "No services found!" });
-      }
-    } catch (error) {
-      return res
-        .status(500)
-        .json([
-          { error: "Internal server error" },
-          { message: `Error retrieving services: ${error.message}` },
-        ]);
+    const services = await service.find();
+
+    if (services.length > 0) {
+      return res.status(200).json(services);
+    } else {
+      return res.status(404).json({ error: "No services found!" });
     }
+  } catch (error) {
+    return res
+      .status(500)
+      .json([
+        { error: "Internal server error" },
+        { message: `Error retrieving services: ${error.message}` },
+      ]);
+  }
 
 };
-
-
-
-
-
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
@@ -116,9 +111,9 @@ const remove = async (req, res) => {
   }
 };
 module.exports = {
-    create,
-    findOne,
-    viewAll,
-    remove,
-    update
+  create,
+  findOne,
+  viewAll,
+  remove,
+  update
 };

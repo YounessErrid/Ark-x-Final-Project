@@ -16,5 +16,5 @@ router.post(
 router.get("/:id", controller.findOne);
 router.get("/", controller.viewAll);
 router.put("/:id", controller.update);
-// router.delete('/:id',controller.remove)
+router.delete('/:id',controller.remove)
 module.exports = router;
