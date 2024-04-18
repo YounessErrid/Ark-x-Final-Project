@@ -1,34 +1,6 @@
 const Portfolio = require("../models/portfolio.model");
 
-// const create = async (req, res) => {
-//   const { description, services } = req.body;
-//   const logo = req.files["logo"][0].path;
-//   const cover = req.files["cover"][0].path;
-//   try {
-//     if (!description || !logo || !cover) {
-//       return res.status(400).json({
-//         error: "Portfolio creation failed: Missing required information!",
-//       });
-//     }
-  
-//     const newPortfolio = new Portfolio({
-//       description,
-//       logo,
-//       cover,
-//       services,
-//     });
-//     await newPortfolio.save();
-//     return res.status(201).json({
-//       success: true,
-//       message: "Successfully created portfolio",
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       error: "Internal server error",
-//       message: error.message,
-//     });
-//   }
-// };
+
 const create = async (req, res) => {
   const { description} = req.body;
    const logo = req.files["logo"][0].path;
@@ -78,64 +50,13 @@ const viewAll = async (req, res) => {
       ]);
   }
 };
-// const update = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { description, services } = req.body;
-//     const logo = req.files["logo"][0].path;
-//   const cover = req.files["cover"][0].path;
-//     if (!description || !logo || !cover || !services) {
-//       return res.status(400).json({
-//           error: "Missing required information for update!",
-//       });
-//     }
-//     const updatedPortfolio = await portfolio.findByIdAndUpdate(
-//       id,
-//       { description, logo, cover, services },
-//       { new: true }
-//     );
-//     if (!updatedPortfolio) {
-//       return res.status(404).json({ error: "Portfolio not found!" });
-//     }
-//     return res.status(200).json(updatedPortfolio);
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json([
-//         { error: "internal server error" },
-//         { message: error.message, success: false },
-//       ]);
-//   }
-//   try {
- 
-//       const updatedPortfolio = await Portfolio.findByIdAndUpdate(
-//           id,
-//           { description, logo, couverture },
-//           { new: true }
-//       );
-
-//       if (!updatedPortfolio) {
-//           return res.status(404).json({ error: "Portfolio not found!" });
-//       }
-//       return res.status(200).json(updatedPortfolio);
-
-//   } catch (error) {
-  
-//       console.error(`Error updating portfolio with ID ${id}:`, error);
-//       return res.status(500).json({
-//           error: "Internal server error",
-//           message: `Error updating portfolio: ${error.message}`,
-//       });
-//   }
+// 
 const update = async (req, res) => {
   const { id } = req.params;
   const { newPortfolio} = req.body;
   const logo = req.files["logo"][0].path;
   const cover = req.files["cover"][0].path;
-  // console.log("Request body:", req.body);
-  // console.log("Description:", description);
-  // console.log("Logo:", logo);
-  // console.log("Couverture:", couverture);
+ 
 
   if (!newPortfolio) {
       return res.status(400).json({
