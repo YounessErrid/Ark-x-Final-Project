@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/clients/auth";
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 const initialState = {
   user: null,
   isAuthenticated: false,
@@ -47,7 +47,7 @@ export const loginUser = createAsyncThunk(
         userCredentials,
         {
           headers: {
-            // "Content-Type": "application/json",
+            "Content-Type": "application/json",
           },
           withCredentials: true, // Send cookies with the request
         }

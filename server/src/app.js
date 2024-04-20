@@ -44,7 +44,6 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed request methods
   allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
 };
-app.use(cors(corsOptions));
 require("./config/auth/user.passport-config");
 
 // Define tha Main function
@@ -80,6 +79,7 @@ const main = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/uploads", express.static("uploads"));
+  app.use(cors(corsOptions));
 
   //put the routes here
   app.use("/api/clients", clientRouter);
