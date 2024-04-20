@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../features/userSlice";
 import loginSvg from "../assets/Login.svg";
 import logo from "../assets/logo.svg";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+  const onSubmit = (e) => {
+    // e.preventDefault();
+    const user = { email, password };
+    console.log(email);
+    dispatch(loginUser(user));
+  };
   return (
     <section class="gradient-form h-full bg-gray-300 dark:bg-neutral-700">
       <div class="container w-full m-auto h-full p-10">
@@ -18,7 +43,7 @@ const Login = () => {
                         uEvent
                       </h4>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                       <p class="mb-8 text-xl">Continue to your account</p>
                       <div class="relative mb-8" data-twe-input-wrapper-init>
                         <input
@@ -26,12 +51,17 @@ const Login = () => {
                           class="peer block min-h-[auto] w-full rounded border-0  px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
                           id="exampleFormControlInput1"
                           placeholder="Username"
+                          {...register("email")}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
+                        {errors.email && (
+                          <p className="text-red-400">{errors.email.message}</p>
+                        )}
                         <label
                           for="exampleFormControlInput1"
                           class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary"
                         >
-                          Username
+                          Email
                         </label>
                       </div>
                       <div class="relative mb-8" data-twe-input-wrapper-init>
@@ -40,7 +70,14 @@ const Login = () => {
                           class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[twe-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-white dark:placeholder:text-neutral-300 dark:autofill:shadow-autofill dark:peer-focus:text-primary [&:not([data-twe-input-placeholder-active])]:placeholder:opacity-0"
                           id="exampleFormControlInput11"
                           placeholder="Password"
+                          {...register("password")}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
+                        {errors.password && (
+                          <p className="text-red-400">
+                            {errors.password.message}
+                          </p>
+                        )}
                         <label
                           for="exampleFormControlInput11"
                           class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[twe-input-state-active]:-translate-y-[0.9rem] peer-data-[twe-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-400 dark:peer-focus:text-primary"
@@ -50,8 +87,8 @@ const Login = () => {
                       </div>
                       <div class="mb-12 pb-1 pt-1 text-center">
                         <button
-                          class="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong bg-gradient-to-r from-cyal to-pink"
-                          type="button"
+                          class="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong bg-cyan-300"
+                          type="submit"
                           data-twe-ripple-init
                           data-twe-ripple-color="light"
                         >

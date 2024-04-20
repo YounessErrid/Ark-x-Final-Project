@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/auth";
-
+const API_URL = "http://localhost:3000/api/clients/auth";
+// axios.defaults.withCredentials = true;
 const initialState = {
   user: null,
   isAuthenticated: false,
@@ -33,32 +33,31 @@ export const userSlice = createSlice({
         } else {
           state.error = action.error.message;
         }
-      })
-
+      });
   },
 });
 
 // LOGIN USER
 export const loginUser = createAsyncThunk(
-    "user/loginUser",
-    async (userCredentials, { rejectWithValue }) => {
-      try {
-        const request = await axios.post(
-          API_URL.concat("/login"),
-          userCredentials,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true, // Send cookies with the request
-          }
-        );
-        const response = await request.data;
-        return response;
-      } catch (error) {
-        return rejectWithValue(error.message);
-      }
+  "user/loginUser",
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      const request = await axios.post(
+        API_URL.concat("/login"),
+        userCredentials,
+        {
+          headers: {
+            // "Content-Type": "application/json",
+          },
+          withCredentials: true, // Send cookies with the request
+        }
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-  );
+  }
+);
 
 export default userSlice.reducer;
