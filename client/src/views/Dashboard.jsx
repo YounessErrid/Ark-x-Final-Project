@@ -1,0 +1,28 @@
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { Agencies } from "./Agencies";
+import { Sidebar } from "../components/Sidebar";
+
+export const Dashboard = () => {
+  return (
+    <div className="flex bg-lightBlue" data-theme="light">
+      <div className="drawer lg:drawer-open">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col items-center  mx-12 my-8">
+          {/* Page content here */}
+          <Routes>
+            <Route path="/agencies" element={<Agencies />} />
+            {/* <Route path="/costumers" element={<Costumers />} /> */}
+          </Routes>
+          <label
+            htmlFor="my-drawer-2"
+            className="btn btn-primary drawer-button lg:hidden"
+          >
+            Open drawer
+          </label>
+        </div>
+        <Sidebar />
+      </div>
+    </div>
+  );
+};

@@ -5,8 +5,35 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+          primary: "blue",
+          secondary: "teal",
+        },
+      },
+    ],
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: "#7D9CAB",
+        },
+        secondary: {
+          DEFAULT: "#F8BA90",
+        },
+        tretiary: {
+          DEFAULT: "#CEEAF7",
+        },
+        lightBlue: {
+          DEFAULT: "#F4F7FD",
+        },
+        whiteDirty: {
+          DEFAULT: "#FFFEFE",
+        },
+      },
+    },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }
 
