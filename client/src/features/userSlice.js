@@ -59,5 +59,29 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+//user register
+
+export const registerUser = createAsyncThunk(
+  "user/registerUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const request = await axios.post(
+        API_URL.concat("/Register"),
+        userData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true, // Send cookies with the request
+        }
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 export default userSlice.reducer;
