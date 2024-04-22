@@ -6,7 +6,6 @@ const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const connect = require("./config/db_config");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 
 // routes
 const clientRouter = require("./api/routes/client.routes");
@@ -32,12 +31,6 @@ const adminRouter = require("./api/routes/admin.routes");
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;*/
 
-const corsOptions = {
-  origin: "http://localhost:5173", // Replace with your frontend's actual URL
-  credentials: true, // This allows cookies and authorization headers
-  methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed request methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
-};
 
 // Middlewares
 app.use(express.json());
