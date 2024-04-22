@@ -12,9 +12,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
+
         <Route element={<Protected />}>
           <Route path="/dashboard/*" element={<Dashboard />} />
         </Route>
+
+
       </Routes>
     </>
   );

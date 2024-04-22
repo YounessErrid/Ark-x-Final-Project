@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Agencies } from "./Agencies";
+import { Services } from "./Services";
 import { Sidebar } from "../components/Sidebar";
 
 export const Dashboard = () => {
@@ -12,7 +13,7 @@ export const Dashboard = () => {
           {/* Page content here */}
           <Routes>
             <Route path="/agencies" element={<Agencies />} />
-            {/* <Route path="/costumers" element={<Costumers />} /> */}
+            <Route path="/services" element={<Services />} />
           </Routes>
           <label
             htmlFor="my-drawer-2"

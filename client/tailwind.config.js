@@ -31,6 +31,9 @@ export default {
         whiteDirty: {
           DEFAULT: "#FFFEFE",
         },
+        textGray: {
+          DEFAULT: "#9197B3",
+        },
       },
     },
   },
