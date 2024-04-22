@@ -1,15 +1,25 @@
-import { useState } from "react";
-import viteLogo from "/vite.svg";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Login from "./views/Login";
-import Register from './views/Register';
+import { Main } from "./views/Main";
+import { Dashboard } from "./views/Dashboard";
+import { Login } from "./views/Login";
+import Protected from "./routes/Protected";
 
 function App() {
+
   return (
-    <div class="">
-      <Login />
-      <Register/>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/login" element={<Login />} />
+
+        <Route element={<Protected />}>
+          <Route path="/dashboard/*" element={<Dashboard />} />
+        </Route>
+
+
+      </Routes>
+    </>
   );
 }
 

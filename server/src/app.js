@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-// const connect = require("./config/db_config");
+const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
@@ -32,6 +32,13 @@ const adminRouter = require("./api/routes/admin.routes");
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;*/
 
+const corsOptions = {
+  origin: "http://localhost:5173", // Replace with your frontend's actual URL
+  credentials: true, // This allows cookies and authorization headers
+  methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed request methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+};
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -53,6 +60,8 @@ const main = async () => {
 
   const app = express();
   const PORT = process.env.SERVER_PORT || 3001;
+
+  app.use(cors(corsOptions));
 
   // Configure session management
   app.use(cookieParser());
