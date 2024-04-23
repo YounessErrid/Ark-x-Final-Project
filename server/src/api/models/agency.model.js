@@ -30,36 +30,3 @@ var agencySchema = new mongoose.Schema({
 
 const Agency = mongoose.model("Agency", agencySchema);
 module.exports = Agency;
-/*const mongoose = require("mongoose");
-const User = require("./user.model");
-
-var agencySchema = new mongoose.Schema({
-  agencyName: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  userId :{
-    type : mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  portfolioId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Portfolio",
-  },
-},
-  {
-    timestamp: true,
-  });
-
-const Agency = mongoose.model("Agency", agencySchema);
-module.exports = Agency*/
-

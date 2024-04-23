@@ -1,12 +1,11 @@
 require("dotenv").config();
 const express = require("express");
-// const connect = require("./config/db_config");
+const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const connect = require("./config/db_config");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 
 // routes
 const clientRouter = require("./api/routes/client.routes");
@@ -32,6 +31,7 @@ const adminRouter = require("./api/routes/admin.routes");
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;*/
 
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -53,6 +53,8 @@ const main = async () => {
 
   const app = express();
   const PORT = process.env.SERVER_PORT || 3001;
+
+  app.use(cors(corsOptions));
 
   // Configure session management
   app.use(cookieParser());

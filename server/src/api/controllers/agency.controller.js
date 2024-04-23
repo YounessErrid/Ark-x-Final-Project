@@ -3,10 +3,10 @@ const Agency = require("../models/agency.model");
 const User = require("../models/user.model");
 
 const register = async (req, res) => {
-  const { email, password, fullname, addresse } = req.body;
+  const { email, password, fullname, addresse , agencyName} = req.body;
   const path = req.file.path;
   try {
-    if (!email || !password || !fullname || !addresse) {
+    if (!email || !password || !fullname || !addresse || !agencyName) {
       return res.status(400).json({
         error: "Agency creation failed: Missing required information!",
       });
@@ -29,14 +29,13 @@ const register = async (req, res) => {
 
     const userData = await user.save();
 
-    const agency = new Agency({ userId: userData.id, addresse: addresse });
+    const agency = new Agency({ userId: userData.id, addresse, agencyName });
     const agencyData = await agency.save();
 
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      user: userData,
-      agency: agencyData,
+      data: {...userData,agencyData }
     });
   } catch (error) {
     return res
@@ -67,9 +66,35 @@ const destroy = async (req, res) => {
   });
 };
 
+const viewAll = async (req, res) => {
+  try {
+    const agencies = await Agency.find().populate('userId', 'fullname email');
+
+    if (agencies.length === 0) {
+      return res.status(404).json({ error: "No agencies found" });
+    }
+    // Construct the response object with the desired fields
+    const responseData = agencies.map(agency => ({
+      fullname: agency.userId.fullname,
+      email: agency.userId.email,
+      agencyName: agency.agencyName,
+      address: agency.addresse // Corrected typo
+    }));
+    return res.status(200).json(responseData);
+    
+  } catch (error) {
+    return res.status(500).json({ 
+      error: "Internal server error",
+      message: `Error retrieving agencies: ${error.message}` 
+    });
+  }
+};
+
+
 
 module.exports = {
   register,
   login,
   destroy,
+  viewAll
 };
