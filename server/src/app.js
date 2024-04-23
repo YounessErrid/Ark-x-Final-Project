@@ -88,6 +88,7 @@ const main = async () => {
   app.use("/api/agencies", agencyRouter);
   app.use("/api/admins", adminRouter);
   app.use("/api/subscriptions", subscriptionRouter);
+  app.use("/api/payments", paymentRouter);
   app.use("/api/stripe", stripeRouter);
   app.use("/api/portfolioServices", portfolioServiceRouter);
   app.use("/api/services", serviceRouter);

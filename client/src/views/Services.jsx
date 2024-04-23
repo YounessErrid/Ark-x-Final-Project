@@ -9,6 +9,11 @@ export const Services = () => {
   const dispatch = useDispatch();
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  const columns = [
+    {'title': 'Title'},
+    {'description': 'Description'}
+  ]
+
   useEffect(() => {
     dispatch(fetchServices()).then(() => {
       // After fetching services, set dataLoaded to true
@@ -55,7 +60,7 @@ export const Services = () => {
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
           <Spinner loaded={true} />
-          <TanstackTable data={services} />
+          <TanstackTable data={services} columnsDef={columns}/>
         </>
       )}
     </div>
