@@ -33,9 +33,25 @@ export const userSlice = createSlice({
         } else {
           state.error = action.error.message;
         }
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
-});
+  },
+  
+);
+
 
 // LOGIN USER
 export const loginUser = createAsyncThunk(
@@ -63,11 +79,11 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async (userData, { rejectWithValue }) => {
+  async (userCredentials, { rejectWithValue }) => {
     try {
       const request = await axios.post(
         API_URL.concat("/Register"),
-        userData,
+        userCredentials,
         {
           headers: {
             "Content-Type": "application/json",
