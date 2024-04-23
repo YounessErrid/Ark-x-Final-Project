@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import { Agencies } from "./Agencies";
 import { Services } from "./Services";
 import { Sidebar } from "../components/Sidebar";
+import Subscriptions from "./Subscriptions";
+import Payments from "./Payments";
 
 export const Dashboard = () => {
   return (
@@ -14,6 +16,8 @@ export const Dashboard = () => {
           <Routes>
             <Route path="/agencies" element={<Agencies />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/subscriptions" element={<Subscriptions />} />
+            <Route path="/payments" element={<Payments />} />
           </Routes>
           <label
             htmlFor="my-drawer-2"

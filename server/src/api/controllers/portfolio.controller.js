@@ -31,8 +31,19 @@ const create = async (req, res) => {
 };
 
 const viewAll = async (req, res) => {
+  const pageSize = 10;
+  const { page, Service } = req.query;
   try {
-    const portfolios = await Portfolio.find();
+    const portfolios = await Portfolio.find(
+      // {
+      //   "$or": [
+      //     {portfolioServices: {"$regex": Service}}
+      //   ]
+      // }
+    )
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .sort({ createdAt: -1 });
     if (portfolios.length > 0) {
       return res.status(200).json(portfolios);
     } else {

@@ -81,7 +81,9 @@ const Login = () => {
                           className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                         />
                         {errors.password && (
-                          <p className="text-red-400">{errors.password.message}</p>
+                          <p className="text-red-400">
+                            {errors.password.message}
+                          </p>
                         )}
                       </div>
                       <div class="mb-12 pb-1 pt-1 text-center">

@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logouevent.svg";
-import { BiBuildingHouse, BiCategory, BiDollarCircle, BiSelectMultiple, BiUser } from "react-icons/bi";
+import {
+  BiBuildingHouse,
+  BiCategory,
+  BiDollarCircle,
+  BiSelectMultiple,
+  BiUser,
+} from "react-icons/bi";
 
 export const Sidebar = () => {
   return (

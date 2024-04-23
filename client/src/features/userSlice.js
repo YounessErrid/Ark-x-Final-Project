@@ -25,6 +25,7 @@ export const userSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.isAuthenticated = true;
+        console.log(state.user)
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
