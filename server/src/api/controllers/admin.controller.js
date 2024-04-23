@@ -53,6 +53,7 @@ const login = (req, res) => {
   res.status(200).json({
     success: true,
     message: "Successfully logged in",
+    user : {role: req.user.role , fullname: req.user.fullname},
   });
 };
 const destroy = async (req, res) => {

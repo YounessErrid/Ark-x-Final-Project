@@ -39,7 +39,15 @@ const initialState = {
 export const servicesSlice = createSlice({
   name: "services",
   initialState,
-  reducers: {},
+  reducers: {
+    // get services
+    // deleteService: (state, action) => {
+    //   const newServices = state.services.filter(
+    //     (service) => service._id!== action.payload
+    //   );
+    //   state.services = newServices;
+    // },
+  },
   extraReducers: (builder) => {
     builder
       // get services
@@ -63,5 +71,5 @@ export const servicesSlice = createSlice({
   },
 });
 
-
+// export const {deleteServices} = servicesSlice.actions;
 export default servicesSlice.reducer;

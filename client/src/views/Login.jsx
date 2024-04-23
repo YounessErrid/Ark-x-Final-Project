@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/userSlice";
 import loginSvg from "../assets/Login.svg";
 import logo from "../assets/logo.svg";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const {isAuthenticated, user, error, loading } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -15,6 +18,7 @@ const Login = () => {
     email: z.string().email(),
     password: z.string().min(8),
   });
+
   const {
     register,
     handleSubmit,
@@ -26,7 +30,15 @@ const Login = () => {
     // e.preventDefault();
     const user = { email, password };
     dispatch(loginUser(user));
+
   };
+
+  useEffect(() => {
+    if (user.role='admin' ) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
     <section class="gradient-form h-full bg-gray-300 dark:bg-neutral-700">
       <div class="container w-full m-auto h-full p-10">
@@ -59,7 +71,7 @@ const Login = () => {
                           placeholder="john@rhcp.com"
                           {...register("email")}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                          className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
                         />
                         {errors.email && (
                           <p className="text-red-400">{errors.email.message}</p>
@@ -78,7 +90,7 @@ const Login = () => {
                           placeholder="••••••••"
                           {...register("password")}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                          className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                         />
                         {errors.password && (
                           <p className="text-red-400">
@@ -86,15 +98,12 @@ const Login = () => {
                           </p>
                         )}
                       </div>
+
                       <div class="mb-12 pb-1 pt-1 text-center">
-                        <button
-                          class="mb-3 inline-block w-full h-12 rounded border text-neutral-900 border-blue-500 px-6 pb-2 pt-2.5 text-base font-semibold uppercase leading-normal dark:text-white shadow-dark-3 transition duration-150 ease-in-out hover:shadow-dark-2 focus:shadow-dark-2 focus:outline-none focus:ring-0 active:shadow-dark-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-                          type="submit"
-                          data-twe-ripple-init
-                          data-twe-ripple-color="light"
-                        >
-                          Log in
+                        <button className="btn btn-block bg-primary text-whiteDirty border-0">
+                          Login
                         </button>
+                        {error && <p className="text-red-400">{error}</p>}
                         <a href="#!">Forgot password?</a>
                       </div>
                       <div class="flex items-center justify-between pb-6">
