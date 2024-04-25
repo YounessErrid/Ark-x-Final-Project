@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchServices } from "../features/servicesSlice";
+import { fetchServices, deleteService } from "../features/servicesSlice";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
 
@@ -9,10 +9,7 @@ export const Services = () => {
   const dispatch = useDispatch();
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const columns = [
-    {'title': 'Title'},
-    {'description': 'Description'}
-  ]
+  const columns = [{ title: "Title" }, { description: "Description" }];
 
   useEffect(() => {
     dispatch(fetchServices()).then(() => {
@@ -29,8 +26,8 @@ export const Services = () => {
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-6">
           <div>
-          <h1 className="font-bold text-2xl">All Services</h1>
-          <p className="text-green-500">Active Services</p>
+            <h1 className="font-bold text-2xl">All Services</h1>
+            <p className="text-green-500">Active Services</p>
           </div>
           <label className="input input-bordered flex items-center gap-2">
             <input type="text" className="grow" placeholder="Search" />
@@ -50,8 +47,9 @@ export const Services = () => {
         </div>
 
         <div className="">
-          
-          <button className="btn bg-primary text-whiteDirty hover:bg-whiteDirty hover:text-textGray">Add Service</button>
+          <button className="btn bg-primary text-whiteDirty hover:bg-whiteDirty hover:text-textGray">
+            Add Service
+          </button>
         </div>
       </div>
       {loading && !dataLoaded && <Spinner />}
@@ -60,7 +58,13 @@ export const Services = () => {
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
           <Spinner loaded={true} />
-          <TanstackTable data={services} columnsDef={columns}/>
+          <TanstackTable
+            data={services}
+            columnsDef={columns}
+            deleteCallback={(id) => {
+              dispatch(deleteService(id));
+            }}
+          />
         </>
       )}
     </div>

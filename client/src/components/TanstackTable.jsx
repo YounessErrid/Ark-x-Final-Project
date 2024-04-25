@@ -17,13 +17,15 @@ import { useDispatch } from "react-redux";
 
 const columnHelper = createColumnHelper();
 
-export const TanstackTable = ({ data, columnsDef}) => {
+export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
   const dispatch = useDispatch();
 
   const handleDelete = (serviceId) => {
     // Here, you can add your logic to delete the service from the database
     // For example, you can call an API endpoint or perform any necessary database operation
     console.log("Deleting service with ID:", serviceId);
+    deleteCallback(serviceId);
+    
     // Once the deletion is successful, dispatch the deleteService action with the serviceId
     // dispatch(deleteService(serviceId));
   };
@@ -80,7 +82,7 @@ export const TanstackTable = ({ data, columnsDef}) => {
   );
 
   return (
-    <div className="py-6 overflow-x-auto">
+    <div className="py-6 overflow-x-auto max-h-">
       <table className="table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

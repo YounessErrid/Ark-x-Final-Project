@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const {isAuthenticated, user, error, loading } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,34 +35,35 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (user.role='admin' ) {
+    loginUser(user);
+    if (isAuthenticated && user.role === "admin") {
       navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
 
   return (
-    <section class="gradient-form h-full bg-gray-300 dark:bg-neutral-700">
-      <div class="container w-full m-auto h-full p-10">
-        <div class="flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
-          <div class="w-full">
-            <div class="block rounded-lg bg-white shadow-lg dark:bg-neutral-800">
-              <div class="g-0 lg:flex lg:flex-wrap">
-                <div class="px-4 md:px-0 lg:w-6/12">
-                  <div class="md:mx-6 md:p-12">
-                    <div class="text-center">
-                      <img class="mx-auto w-20 inline" src={logo} alt="logo" />
-                      <h4 class="mb-12 mt-1 pb-1 text-xl font-semibold">
+    <section className="gradient-form h-full bg-gray-300 dark:bg-neutral-700">
+      <div className="container w-full m-auto h-full p-10">
+        <div className="flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
+          <div className="w-full">
+            <div className="block rounded-lg bg-white shadow-lg dark:bg-neutral-800">
+              <div className="g-0 lg:flex lg:flex-wrap">
+                <div className="px-4 md:px-0 lg:w-6/12">
+                  <div className="md:mx-6 md:p-12">
+                    <div className="text-center">
+                      <img className="mx-auto w-20 inline" src={logo} alt="logo" />
+                      <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">
                         uEvent
                       </h4>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      <p class="mb-8 font-medium text-xl">
+                      <p className="mb-8 font-medium text-xl">
                         Continue to your account
                       </p>
                       <div className="mb-8">
                         <label
                           htmlFor="UserEmail"
-                          class="block text-base font-normal text-gray-700 dark:text-gray-200"
+                          className="block text-base font-normal text-gray-700 dark:text-gray-200"
                         >
                           Email
                         </label>
@@ -80,7 +82,7 @@ const Login = () => {
                       <div className="mb-8">
                         <label
                           htmlFor="UserPassword"
-                          class="block text-base font-normal text-gray-700 dark:text-gray-200"
+                          className="block text-base font-normal text-gray-700 dark:text-gray-200"
                         >
                           Password
                         </label>
@@ -99,18 +101,18 @@ const Login = () => {
                         )}
                       </div>
 
-                      <div class="mb-12 pb-1 pt-1 text-center">
+                      <div className="mb-12 pb-1 pt-1 text-center">
                         <button className="btn btn-block bg-primary text-whiteDirty border-0">
                           Login
                         </button>
                         {error && <p className="text-red-400">{error}</p>}
                         <a href="#!">Forgot password?</a>
                       </div>
-                      <div class="flex items-center justify-between pb-6">
-                        <p class="mb-0 me-2">Don't have an account?</p>
+                      <div className="flex items-center justify-between pb-6">
+                        <p className="mb-0 me-2">Don't have an account?</p>
                         <button
                           type="button"
-                          class="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
+                          className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
                           data-twe-ripple-init
                           data-twe-ripple-color="light"
                         >
@@ -120,8 +122,8 @@ const Login = () => {
                     </form>
                   </div>
                 </div>
-                <div class="items-center rounded-b-lg lg:w-6/12 lg:rounded-e-lg hidden lg:block lg:rounded-bl-none">
-                  <div class="px-4 py-6 text-white md:mx-6 md:p-12">
+                <div className="items-center rounded-b-lg lg:w-6/12 lg:rounded-e-lg hidden lg:block lg:rounded-bl-none">
+                  <div className="px-4 py-6 text-white md:mx-6 md:p-12">
                     <img className=" m-auto" src={loginSvg} alt="" />
                   </div>
                 </div>
