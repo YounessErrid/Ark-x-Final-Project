@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchServices, deleteService } from "../features/servicesSlice";
+import React, { useState } from "react";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
+import { useSelector } from "react-redux";
 
-export const Services = () => {
-  const { services, error, loading } = useSelector((state) => state.services);
-  const dispatch = useDispatch();
+const Subscriptions = () => {
+  const { subscriptions, error, loading } = useSelector(
+    (state) => state.subscriptions
+  );
   const [dataLoaded, setDataLoaded] = useState(false);
-
-  const columns = [{ title: "Title" }, { description: "Description" }];
-
-  useEffect(() => {
-    dispatch(fetchServices()).then(() => {
-      // After fetching services, set dataLoaded to true
-      setDataLoaded(true);
-    });
-  }, [dispatch]);
-
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -26,8 +16,8 @@ export const Services = () => {
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-6">
           <div>
-            <h1 className="font-bold text-2xl">All Services</h1>
-            <p className="text-green-500">Active Services</p>
+            <h1 className="font-bold text-2xl">All Subscriptions</h1>
+            <p className="text-green-500">Active Subscriptions</p>
           </div>
           <label className="input input-bordered flex items-center gap-2">
             <input type="text" className="grow" placeholder="Search" />
@@ -45,28 +35,18 @@ export const Services = () => {
             </svg>
           </label>
         </div>
-
-        <div className="">
-          <button className="btn bg-primary text-whiteDirty hover:bg-whiteDirty hover:text-textGray">
-            Add Service
-          </button>
-        </div>
       </div>
       {loading && !dataLoaded && <Spinner />}
       {error && error}
-      {services && (
+      {subscriptions && (
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
-          <Spinner loaded={true} />
-          <TanstackTable
-            data={services}
-            columnsDef={columns}
-            deleteCallback={(id) => {
-              dispatch(deleteService(id));
-            }}
-          />
+          <Spinner loaded={false} />
+          <TanstackTable data={subscriptions} />
         </>
       )}
     </div>
   );
 };
+
+export default Subscriptions;

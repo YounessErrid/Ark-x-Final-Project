@@ -12,28 +12,26 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
+import { useDispatch } from "react-redux";
+// import {  } from "../features/servicesSlice";
 
 const columnHelper = createColumnHelper();
 
-export const TanstackTable = ({ data }) => {
-  const generateColumnsFromData = (data) => {
-    if (!data || data.length === 0) {
-      return []; // Return an empty array if data is empty or not provided
-    }
+export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
+  const dispatch = useDispatch();
 
-    const sampleRow = data[0]; // Take the first row as a sample to generate columns
-
-    const columns = Object.keys(sampleRow).map((key) => {
-      return columnHelper.accessor(key, {
-        header: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize the first letter of the key for header
-        cell: (info) => info.getValue(), // Use the value directly for cell rendering
-        // footer: (info) => info.column.id,
-      });
-    });
-
-    return columns;
+  const handleDelete = (serviceId) => {
+    // Here, you can add your logic to delete the service from the database
+    // For example, you can call an API endpoint or perform any necessary database operation
+    console.log("Deleting service with ID:", serviceId);
+    deleteCallback(serviceId);
+    
+    // Once the deletion is successful, dispatch the deleteService action with the serviceId
+    // dispatch(deleteService(serviceId));
   };
+
   const [columns, setColumns] = useState([]);
+  // const [columns, setColumns] = useState([]);
   const [sorting, setSorting] = useState([]);
   const table = useReactTable({
     data,
@@ -48,8 +46,15 @@ export const TanstackTable = ({ data }) => {
   });
 
   useEffect(() => {
-    setColumns(generateColumnsFromData(data));
-  }, [data]);
+    const mappedColumns = columnsDef.map((def) =>
+    columnHelper.accessor(Object.keys(def)[0], {
+      header: Object.values(def)[0], // Use the displayed name as the header
+      cell: (info) => info.row.original[Object.keys(def)[0]], // Use the corresponding data field for cell rendering
+    })
+  );
+
+    setColumns(mappedColumns);
+  }, [data, columnsDef]);
 
   // Add an action column with three points icon for delete or update
   columns.push(
@@ -65,7 +70,7 @@ export const TanstackTable = ({ data }) => {
             className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>Delete</a>
+              <a onClick={() => handleDelete(info.row.original._id)}>Delete</a>
             </li>
             <li>
               <a>Update</a>
@@ -77,7 +82,7 @@ export const TanstackTable = ({ data }) => {
   );
 
   return (
-    <div className="py-6 overflow-x-auto">
+    <div className="py-6 overflow-x-auto max-h-">
       <table className="table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

@@ -12,7 +12,6 @@ const Protected = () => {
   // const access = useContext(authentication)
 
   return access.auth ? <Outlet /> : <Navigate to="/login" />;
-  return access.auth ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default Protected;

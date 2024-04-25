@@ -12,7 +12,7 @@ export const Spinner = ({ loaded }) => {
       }, 1000);
     } else {
       // If data is not yet loaded, ensure the spinner is visible
-      setShowSpinner(true);
+      setShowSpinner(false);
     }
 
     // Clean up the timer when the component unmounts or when loaded changes

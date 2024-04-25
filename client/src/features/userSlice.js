@@ -23,13 +23,16 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
+        state.error = null;
+        if(action.payload.success){
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         if (action.error.message === "Rejected") {
-          state.error = "Sign up Failed! Invalid Inputs";
+          state.error = "Invalid email or password"; ;
         } else {
           state.error = action.error.message;
         }
@@ -98,6 +101,5 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
-
 
 export default userSlice.reducer;

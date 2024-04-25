@@ -3,10 +3,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchAgencies } from "../features/agenciesSlice";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
+import { createColumnHelper } from "@tanstack/react-table";
 
 export const Agencies = () => {
+
   const { agencies, error, loading } = useSelector((state) => state.agencies);
   const dispatch = useDispatch();
+  
+  const columns = [ 
+    {'agencyName' : 'Agency'},
+    {'fullname' : 'Fullname'},
+    {'email' : 'Email'},
+    {'address' : 'Address'},
+  ]
 
   useEffect(() => {
     dispatch(fetchAgencies());
@@ -105,7 +114,7 @@ export const Agencies = () => {
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
           <Spinner loaded={true} />
-          <TanstackTable data={agencies} />
+          <TanstackTable data={agencies} columnsDef={columns} />
         </>
       )}
     </div>

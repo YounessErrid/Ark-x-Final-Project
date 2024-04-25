@@ -51,6 +51,7 @@ const login = (req, res) => {
   res.status(200).json({
     success: true,
     message: "Successfully logged in",
+    user : {role: req.user.role , fullname: req.user.fullname},
   });
 };
 
@@ -75,6 +76,7 @@ const viewAll = async (req, res) => {
     }
     // Construct the response object with the desired fields
     const responseData = agencies.map(agency => ({
+      _id:agency._id,
       fullname: agency.userId.fullname,
       email: agency.userId.email,
       agencyName: agency.agencyName,
