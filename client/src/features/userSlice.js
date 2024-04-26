@@ -25,7 +25,7 @@ export const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        if(action.payload.success){
+        if (action.payload.success) {
           state.user = action.payload.user;
           state.isAuthenticated = true;
         }
@@ -33,7 +33,7 @@ export const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         if (action.error.message === "Rejected") {
-          state.error = "Invalid email or password"; ;
+          state.error = "Invalid email or password";
         } else {
           state.error = action.error.message;
         }

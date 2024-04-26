@@ -58,8 +58,8 @@ const Login = () => {
                         uEvent
                       </h4>
                     </div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                      <p className="mb-8 font-medium text-xl">
+                    <form action="submit" onSubmit={handleSubmit(onSubmit)}>
+                      <p class="mb-8 font-medium text-xl">
                         Continue to your account
                       </p>
                       <div className="mb-8">
