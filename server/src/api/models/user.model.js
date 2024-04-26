@@ -19,7 +19,7 @@ var userSchema = new mongoose.Schema({
   },
   profile_image: {
     type: String,
-    unique: true,
+    // unique: true,
   },
   role: {
     type: String,

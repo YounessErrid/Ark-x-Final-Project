@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,16 +9,9 @@ import loginSvg from "../assets/Login.svg";
 import { registerUser } from "../features/userSlice";
 
 const Register = () => {
-  const { user, error, loading } = useSelector(
-    (state) => state.user
-  );
-
-  const [fullname, setFullname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-
+  const { error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const schema = z.object({
     fullname: z.string().min(4),
@@ -25,6 +19,7 @@ const Register = () => {
     email: z.string().email(),
     password: z.string().min(8),
   });
+
   const {
     register,
     handleSubmit,
@@ -33,9 +28,10 @@ const Register = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = () => {
-    const user = { fullname, email, phone, password };
-    dispatch(registerUser(user));
+  const onSubmit =  (data) => {
+    const {error} =  dispatch(registerUser(data));
+    if (!error) {
+      navigate("/login");}
   };
 
   return (
@@ -72,7 +68,6 @@ const Register = () => {
                           id="username"
                           placeholder="John Doe"
                           {...register("fullname")}
-                          onChange={(e) => setFullname(e.target.value)}
                           className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
                         />
                         {errors.fullname && (
@@ -94,7 +89,6 @@ const Register = () => {
                           id="userEmail"
                           placeholder="john@rhcp.com"
                           {...register("email")}
-                          onChange={(e) => setEmail(e.target.value)}
                           className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
                         />
                         {errors.email && (
@@ -114,7 +108,6 @@ const Register = () => {
                           id="userPhone"
                           placeholder="123-456-7890"
                           {...register("phone")}
-                          onChange={(e) => setPhone(e.target.value)}
                           className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
                         />
                         {errors.phone && (
@@ -134,7 +127,6 @@ const Register = () => {
                           id="UserPassword"
                           placeholder="••••••••"
                           {...register("password")}
-                          onChange={(e) => setPassword(e.target.value)}
                           className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                         />
                         {errors.password && (
@@ -146,22 +138,19 @@ const Register = () => {
 
                       <div className="mb-12 pb-1 pt-1 text-center">
                         <button className="btn btn-block bg-primary text-whiteDirty border-0">
-                          Login
+                          Register
                         </button>
                         {error && <p className="text-red-400">{error}</p>}
                         <a href="#!">Forgot password?</a>
                       </div>
 
                       <div className="flex items-center justify-between pb-6">
-                        <p className="mb-0 me-2">Don't have an account?</p>
-                        <button
-                          type="submit"
-                          className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
-                          data-twe-ripple-init
-                          data-twe-ripple-color="light"
-                        >
-                          Register
-                        </button>
+                        <p className="mb-0 me-2">
+                          You have an account?
+                          <Link className="font-semibold underline" to="/login">
+                            Login
+                          </Link>
+                        </p>
                       </div>
                     </form>
                   </div>

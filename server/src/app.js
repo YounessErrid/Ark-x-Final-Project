@@ -20,26 +20,14 @@ const portfolioRouter = require("./api/routes/portfolio.routes");
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
-//ROUTES AYA:
-/*const servicesRouter = require("./api/routes/services.routes");
-const portfolioservice = require("./api/routes/portfolioservices.routes");
-const portfolioRouter = require("./api/routes/portfolio.routes");
-const clientRouter = require("./api/routes/client.routes");
-const agencyRouter = require("./api/routes/agency.routes");
-const adminRouter = require("./api/routes/admin.routes");
-
-const app = express();
-const PORT = process.env.SERVER_PORT || 3001;*/
-
 
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
+
 const corsOptions = {
-  origin: "http://localhost:5173", // Replace with your frontend's actual URL
+  origin: "http://localhost:5173", 
   credentials: true, // This allows cookies and authorization headers
   methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed request methods
   allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
@@ -67,7 +55,6 @@ const main = async () => {
         maxAge: 24 * 60 * 60 * 1000, // Session expiration time in milliseconds (1 day)
         secure: false, // Set to true if your app is served over HTTPS
         httpOnly: true, // Ensures that the cookie is only accessible via HTTP(S) and not JavaScript
-        // Other cookie options...
       },
     })
   );
@@ -93,14 +80,6 @@ const main = async () => {
   app.use("/api/portfolioServices", portfolioServiceRouter);
   app.use("/api/services", serviceRouter);
   app.use("/api/portfolio", portfolioRouter);
-
-  /*//put the routes here
-  app.use("/api/clients", clientRouter);
-  app.use("/api/agencies", agencyRouter);
-  app.use("/api/admins", adminRouter);
-  app.use("/api/portfolioService", portfolioservice);
-  app.use("/api/services",servicesRouter);
-  app.use("/api/portfolio",portfolioRouter);*/
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

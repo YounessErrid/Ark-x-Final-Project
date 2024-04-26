@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { toFormData } from "axios";
 
 const API_URL = "http://localhost:3000/api/clients/auth";
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
+
 const initialState = {
   user: null,
   isAuthenticated: false,
@@ -49,7 +50,11 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        if (action.error.message === "Rejected") {
+          state.error = "Email already exists."; ;
+        } else {
+          state.error = action.error.message;
+        }
       });
   },
   },
@@ -79,20 +84,14 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-//user register
 
+//user register
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (userCredentials, { rejectWithValue }) => {
     try {
       // Create a new FormData object
       const formData = toFormData(userCredentials);
-
-      // Append each key-value pair from userCredentials to the FormData object
-      // Object.keys(userCredentials).forEach((key) => {
-      //   formData.append(key, userCredentials[key]);
-      // });
-
       // Send the request with FormData instead of the raw userCredentials object
       const request = await axios.post(
         API_URL.concat("/register"),
@@ -104,9 +103,9 @@ export const registerUser = createAsyncThunk(
           withCredentials: true, // Send cookies with the request
         }
       );
-      
       const response = await request.data;
       return response;
+
     } catch (error) {
       return rejectWithValue(error.message);
     }
