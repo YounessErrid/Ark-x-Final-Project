@@ -5,6 +5,7 @@ import { Services } from "./Services";
 import { Sidebar } from "../components/Sidebar";
 import Subscriptions from "./Subscriptions";
 import Payments from "./Payments";
+import Login from "./Login";
 
 export const Dashboard = () => {
   return (

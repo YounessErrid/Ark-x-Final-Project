@@ -12,7 +12,6 @@ const Login = () => {
   const { isAuthenticated, user, error, loading } = useSelector(
     (state) => state.user
   );
-
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,21 +30,14 @@ const Login = () => {
   });
   const onSubmit = (e) => {
     // e.preventDefault();
-    const user = { email, password };
-    if (isAuthenticated && user.role === "admin") {
-      navigate("/dashboard");
-    } else {
-      dispatch(loginUser(user));
-    }
+    const newUser = { email, password };
+    dispatch(loginUser(newUser));
+    console.log(user);
+    // if (user.role == "admin") {
+    //   navigate("/dashboard");
+    // }
   };
-
-  useEffect(() => {
-    if (isAuthenticated && user.role === "admin") {
-      navigate("/dashboard");
-    }
-
-    // loginUser(user);
-  }, [isAuthenticated, navigate]);
+  useEffect(() => {}, [isAuthenticated, navigate]);
 
   return (
     <section className="gradient-form h-full bg-gray-300 dark:bg-neutral-700">
@@ -66,8 +58,8 @@ const Login = () => {
                         uEvent
                       </h4>
                     </div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                      <p className="mb-8 font-medium text-xl">
+                    <form action="submit" onSubmit={handleSubmit(onSubmit)}>
+                      <p class="mb-8 font-medium text-xl">
                         Continue to your account
                       </p>
                       <div className="mb-8">
