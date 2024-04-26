@@ -91,12 +91,42 @@ const viewAll = async (req, res) => {
     });
   }
 };
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    if (!id) {
+      return res.status(400).json({
+        error: "Agency deletion failed: Missing required information!",
+      });
+    }
+
+    const deletedAgency = await Agency.findOneAndDelete({ _id: id });
+
+    if (!deletedAgency) {
+      return res.status(404).json({ error: "Agency not found!" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Agency deleted successfully",
+      data: deletedAgency
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json([
+        { error: "Internal server error" },
+        { message: `Error deleting agency: ${error.message}` },
+      ]);
+  }
+};
 
 
 module.exports = {
   register,
   login,
   destroy,
-  viewAll
+  viewAll,
+  remove
 };

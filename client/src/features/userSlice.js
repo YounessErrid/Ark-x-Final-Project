@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { toFormData } from "axios";
 
 const API_URL = "http://localhost:3000/api/clients/auth";
 axios.defaults.withCredentials = true;
@@ -37,6 +37,7 @@ export const userSlice = createSlice({
           state.error = action.error.message;
         }
       })
+      // register user
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -84,16 +85,26 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (userCredentials, { rejectWithValue }) => {
     try {
+      // Create a new FormData object
+      const formData = toFormData(userCredentials);
+
+      // Append each key-value pair from userCredentials to the FormData object
+      // Object.keys(userCredentials).forEach((key) => {
+      //   formData.append(key, userCredentials[key]);
+      // });
+
+      // Send the request with FormData instead of the raw userCredentials object
       const request = await axios.post(
-        API_URL.concat("/Register"),
-        userCredentials,
+        API_URL.concat("/register"),
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
           },
           withCredentials: true, // Send cookies with the request
         }
       );
+      
       const response = await request.data;
       return response;
     } catch (error) {
@@ -101,5 +112,6 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
 
 export default userSlice.reducer;

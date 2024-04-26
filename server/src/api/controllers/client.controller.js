@@ -4,7 +4,7 @@ const User = require("../models/user.model");
 
 const register = async (req, res) => {
   const { email, password, fullname, phone } = req.body;
-  const path = req.file.path;
+  let path = req.file ? req.file.path : null; // Check if req.file exists before accessing path
   try {
     if (!email || !password || !fullname || !phone) {
       return res.status(400).json({
@@ -23,8 +23,11 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       fullname: fullname,
-      profile_image: path,
     });
+    
+    if (path) {
+      user.profile_image = path;
+    }
 
     const data = await user.save();
 
@@ -46,6 +49,7 @@ const register = async (req, res) => {
       ]);
   }
 };
+
 
 const login = (req, res) => {
   res.status(200).json({
@@ -194,7 +198,7 @@ const remove = async (req, res) => {
       .status(500)
       .json([
         { error: "Internal server error" },
-        { message: `Error deleting Client: ${error.message}` },
+        { message: `Error deleting agency: ${error.message}` },
       ]);
   }
 };

@@ -2,25 +2,47 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/";
-
+//delete agency
+export const deleteAgency = createAsyncThunk(
+  "agencies/deleteAgency",
+  async (id, { rejectWithValue }) => {
+    console.log({
+      id: id,
+    });
+    try {
+      const response = await axios.delete(API_URL.concat("agencies/", id));
+  
+  if (response.status === 404) {
+    // If no agencies are found, handle it gracefully
+    console.log(response);
+    return;
+  }
+      console.log(response);
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }  
+  },
+  );
 // Fetch Agencies
 export const fetchAgencies = createAsyncThunk(
   "agencies/fetchAgencies",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(API_URL.concat("agencies"));
-      
-      // if (response.status === 404) {
-      //   // If no agencies are found, handle it gracefully
-      //   console.log(data);
-      //   return [];
-      // }
       console.log(response);
       
-      if (response.status !== 200) {
-        // Throw an error with the response status text
-        throw new Error(response.statusText);
+      if (response.error) {
+        // If no agencies are found, handle it gracefully
+        return [];
       }
+      // console.log(response);
+      
+      // if (response.status !== 200) {
+      //   // Throw an error with the response status text
+      //   throw new Error(response.statusText);
+      // }
 
       const data = await response.data;
       console.log(data);
@@ -31,8 +53,10 @@ export const fetchAgencies = createAsyncThunk(
   }
 );
 
+
+
 const initialState = {
-  agencies: null,
+  agencies: [],
   loading: false,
   error: null,
 };
@@ -57,11 +81,31 @@ export const agenciesSlice = createSlice({
         if (action.status === 404) {
           state.error = action.error.message ;
         } else {
-          state.error = action.error.message;r
+          state.error = action.error.message;
         }
       })
+      // delete agency
+      .addCase(deleteAgency.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteAgency.fulfilled, (state, action) => {
+        state.loading = false;
+        state.agencies = state.agencies.filter(
+          (agency) => agency._id !== action.payload.data._id
+        )
+      })
+      .addCase(deleteAgency.rejected, (state, action) => {
+        state.loading = false;
+        if (action.status === 404) {
+          state.error = action.error.message;
+        } else { 
+          state.error = action.error.message;
 
-  },
+  }
+      });
+    },
+
 });
 
 

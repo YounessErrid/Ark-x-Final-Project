@@ -28,7 +28,11 @@ var userSchema = new mongoose.Schema({
     enum: ["admin", "client", "agency"],
     default: "client",
   },
-});
+},
+{
+  timestamps: true,
+}
+);
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

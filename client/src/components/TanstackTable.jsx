@@ -20,14 +20,13 @@ const columnHelper = createColumnHelper();
 export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
   const dispatch = useDispatch();
 
-  const handleDelete = (serviceId) => {
+  const handleDelete = (id) => {
     // Here, you can add your logic to delete the service from the database
     // For example, you can call an API endpoint or perform any necessary database operation
-    console.log("Deleting service with ID:", serviceId);
-    deleteCallback(serviceId);
+    deleteCallback(id);
     
-    // Once the deletion is successful, dispatch the deleteService action with the serviceId
-    // dispatch(deleteService(serviceId));
+    // Once the deletion is successful, dispatch the deleteService action with the id
+    // dispatch(deleteService(id));
   };
 
   const [columns, setColumns] = useState([]);
@@ -83,6 +82,10 @@ export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
 
   return (
     <div className="py-6 overflow-x-auto max-h-">
+      {data.length === 0 ? (
+      // Display a message when no data is found
+      <p className="text-center text-gray-500">No data found</p>
+    ) : (
       <table className="table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -138,6 +141,7 @@ export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
           ))}
         </tfoot>
       </table>
+    )}
       <div className="join flex justify-between items-center">
         <div className="flex gap-x-4 items-center">
           <p className="text-textGray">The number of displyed rows.</p>

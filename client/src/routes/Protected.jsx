@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, Navigate } from 'react-router-dom';
 
 
 
 const Protected = () => {
 
-  const [access, setAccess] = useState({
-    auth: true,
-  });
+  const {isAuthenticated, user} = useSelector((state) => state.user);
 
-  // const access = useContext(authentication)
 
-  return access.auth ? <Outlet /> : <Navigate to="/login" />;
+
+  return isAuthenticated && user.role === 'admin' ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default Protected;

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const User = require("./user.model");
 
 var agencySchema = new mongoose.Schema({
   agencyName: {
@@ -8,8 +8,8 @@ var agencySchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  userId :{
-    type : mongoose.Schema.Types.ObjectId,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
@@ -21,12 +21,19 @@ var agencySchema = new mongoose.Schema({
   portfolioId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Portfolio",
-   
   },
-},
-  {
-    timestamp: true,
-  });
+});
+
+agencySchema.pre("findOneAndDelete", async function (next) {
+  try {
+    const agency = await this.model.findOne({ _id: this.getFilter() });
+    await User.findByIdAndDelete({ _id: agency.userId });
+  } catch (error) {
+    console.log(error);
+  }
+  next();
+});
 
 const Agency = mongoose.model("Agency", agencySchema);
+
 module.exports = Agency;

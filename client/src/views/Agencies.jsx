@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAgencies } from "../features/agenciesSlice";
+import { fetchAgencies, deleteAgency } from "../features/agenciesSlice";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
-import { createColumnHelper } from "@tanstack/react-table";
-
 export const Agencies = () => {
 
   const { agencies, error, loading } = useSelector((state) => state.agencies);
@@ -109,12 +107,16 @@ export const Agencies = () => {
       <h1 className="font-bold text-2xl">All Agencies</h1>
       <p className="text-green-500">Active Members</p>
       {loading && <Spinner />}
-      {error && error}
+      {/* {error && error} */}
       {agencies && (
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
           <Spinner loaded={true} />
-          <TanstackTable data={agencies} columnsDef={columns} />
+          <TanstackTable data={agencies}
+           columnsDef={columns}
+           deleteCallback={(id) => {
+            dispatch(deleteAgency(id))}} 
+            />
         </>
       )}
     </div>
