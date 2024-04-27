@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,13 +10,10 @@ import logo from "../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { isAuthenticated, user, error, loading } = useSelector(
-    (state) => state.user
-  );
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { isAuthenticated, user, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const schema = z.object({
     email: z.string().email(),
     password: z.string().min(8),
@@ -28,16 +26,18 @@ const Login = () => {
   } = useForm({
     resolver: zodResolver(schema),
   });
-  const onSubmit = (e) => {
-    // e.preventDefault();
-    const newUser = { email, password };
-    dispatch(loginUser(newUser));
-    console.log(user);
-    if (user.role == "admin") {
-      navigate("/dashboard");
-    }
+
+  const onSubmit = (data) => {
+    const { email, password } = data;
+    dispatch(loginUser({ email, password }));
   };
-  useEffect(() => {}, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (user.role === "admin") navigate("/dashboard");
+      else if (user.role === "client") navigate("/");
+    }
+  }, [isAuthenticated, navigate, user]);
 
   return (
     <section className="gradient-form h-full bg-gray-300 dark:bg-neutral-700">
@@ -74,7 +74,6 @@ const Login = () => {
                           id="UserEmail"
                           placeholder="john@rhcp.com"
                           {...register("email")}
-                          onChange={(e) => setEmail(e.target.value)}
                           className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
                         />
                         {errors.email && (
@@ -93,7 +92,6 @@ const Login = () => {
                           id="UserPassword"
                           placeholder="••••••••"
                           {...register("password")}
-                          onChange={(e) => setPassword(e.target.value)}
                           className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                         />
                         {errors.password && (
@@ -112,15 +110,16 @@ const Login = () => {
                       </div>
 
                       <div className="flex items-center justify-between pb-6">
-                        <p className="mb-0 me-2">Don't have an account?</p>
-                        <button
-                          type="submit"
-                          className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
-                          data-twe-ripple-init
-                          data-twe-ripple-color="light"
-                        >
-                          Register
-                        </button>
+                        <p className="mb-0 me-2">
+                          Don't have an account?
+                          <Link
+                            className="font-semibold underline"
+                            to="/register"
+                          >
+                            {" "}
+                            Register
+                          </Link>
+                        </p>
                       </div>
                     </form>
                   </div>

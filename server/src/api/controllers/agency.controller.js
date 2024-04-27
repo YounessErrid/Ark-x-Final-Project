@@ -70,6 +70,7 @@ const destroy = async (req, res) => {
 const viewAll = async (req, res) => {
   try {
     const agencies = await Agency.find().populate('userId', 'fullname email');
+    console.log(agencies)
 
     if (agencies.length === 0) {
       return res.status(404).json({ error: "No agencies found" });

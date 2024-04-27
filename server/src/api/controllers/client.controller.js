@@ -31,7 +31,7 @@ const register = async (req, res) => {
 
     const data = await user.save();
 
-    const client = new Client({ userId: data.id, phone: phone });
+    const client = new Client({ userId: data._id, phone: phone });
     const cliData = await client.save();
 
     res.status(201).json({
