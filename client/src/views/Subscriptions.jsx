@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TanstackTable } from "../components/TanstackTable";
+import { fetchSubscriptions } from "../features/subscriptionsSlice";
 import { Spinner } from "../components/Spinner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Subscriptions = () => {
   const { subscriptions, error, loading } = useSelector(
     (state) => state.subscriptions
   );
+  const dispatch = useDispatch();
+  const columns = [
+    { activationDate: "Activation Date" },
+    { expirationDate: "Expiration Date" },
+    { activated: "Activated" },
+  ];
   const [dataLoaded, setDataLoaded] = useState(false);
+  useEffect(() => {
+    dispatch(fetchSubscriptions());
+    setDataLoaded(true);
+  }, [dispatch]);
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -36,13 +47,13 @@ const Subscriptions = () => {
           </label>
         </div>
       </div>
-      {loading && !dataLoaded && <Spinner />}
-      {error && error}
+      {loading && <Spinner />}
+      {/* {error && error} */}
       {subscriptions && (
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
-          <Spinner loaded={false} />
-          <TanstackTable data={subscriptions} />
+          <Spinner loaded={true} />
+          <TanstackTable data={subscriptions} columnsDef={columns} />
         </>
       )}
     </div>

@@ -1,22 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAgencies, deleteAgency } from "../features/agenciesSlice";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
 export const Agencies = () => {
-
   const { agencies, error, loading } = useSelector((state) => state.agencies);
   const dispatch = useDispatch();
-  
-  const columns = [ 
-    {'agencyName' : 'Agency'},
-    {'fullname' : 'Fullname'},
-    {'email' : 'Email'},
-    {'address' : 'Address'},
-  ]
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  const columns = [
+    { agencyName: "Agency" },
+    { email: "Email" },
+    { address: "Address" },
+  ];
 
   useEffect(() => {
     dispatch(fetchAgencies());
+    setDataLoaded(true);
   }, [dispatch]);
 
   return (
@@ -112,11 +112,13 @@ export const Agencies = () => {
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
           <Spinner loaded={true} />
-          <TanstackTable data={agencies}
-           columnsDef={columns}
-           deleteCallback={(id) => {
-            dispatch(deleteAgency(id))}} 
-            />
+          <TanstackTable
+            data={agencies}
+            columnsDef={columns}
+            deleteCallback={(id) => {
+              dispatch(deleteAgency(id));
+            }}
+          />
         </>
       )}
     </div>

@@ -11,6 +11,6 @@ export default configureStore({
     agencies: agenciesSlice,
     services: servicesSlice,
     subscriptions: subscriptionsSlice,
-    payments: paymentsSlice
+    payments: paymentsSlice,
   },
 });

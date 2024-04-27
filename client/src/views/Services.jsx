@@ -3,20 +3,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchServices, deleteService } from "../features/servicesSlice";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const Services = () => {
-  const { services, error, loading } = useSelector((state) => state.services);
+  const { services, error, loading, status } = useSelector(
+    (state) => state.services
+  );
   const dispatch = useDispatch();
   const [dataLoaded, setDataLoaded] = useState(false);
-
+  console.log("success",status);
   const columns = [{ title: "Title" }, { description: "Description" }];
 
   useEffect(() => {
-    dispatch(fetchServices()).then(() => {
-      // After fetching services, set dataLoaded to true
-      setDataLoaded(true);
-    });
-  }, [dispatch]);
+    dispatch(fetchServices());
+    if (status === true) {
+      toast.success("The Service Deleted Successfully");
+    } else if(status === false) {
+      toast.error('The Service Dosn\'t Deleted', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    }
+    setDataLoaded(true);
+  }, [dispatch, status]);
 
   return (
     <div className="w-full">
@@ -67,6 +83,7 @@ export const Services = () => {
           />
         </>
       )}
+      <ToastContainer />
     </div>
   );
 };

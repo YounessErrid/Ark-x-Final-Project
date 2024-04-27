@@ -33,9 +33,9 @@ const Login = () => {
     const newUser = { email, password };
     dispatch(loginUser(newUser));
     console.log(user);
-    // if (user.role == "admin") {
-    //   navigate("/dashboard");
-    // }
+    if (user.role == "admin") {
+      navigate("/dashboard");
+    }
   };
   useEffect(() => {}, [isAuthenticated, navigate]);
 

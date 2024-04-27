@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { toFormData } from "axios";
 
-const API_URL = "http://localhost:3000/api/clients/auth";
+const API_URL = "http://localhost:3000/api/admins/auth";
 // axios.defaults.withCredentials = true;
 const initialState = {
   user: null,
@@ -37,6 +37,27 @@ export const userSlice = createSlice({
           state.error = action.error.message;
         }
       })
+      // logout user
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        if (action.payload.success) {
+          state.user = null;
+          state.isAuthenticated = false;
+        }
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loading = false;
+        if (action.error.message === "Rejected") {
+          state.error = "Invalid email or password";
+        } else {
+          state.error = action.error.message;
+        }
+      })
       // register user
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
@@ -65,6 +86,27 @@ export const loginUser = createAsyncThunk(
       const request = await axios.post(
         API_URL.concat("/login"),
         userCredentials,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true, // Send cookies with the request
+        }
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+// LOGIN USER
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const request = await axios.get(
+        API_URL.concat("/logout"),
         {
           headers: {
             "Content-Type": "application/json",

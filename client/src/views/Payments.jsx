@@ -6,6 +6,11 @@ import { Spinner } from "../components/Spinner";
 const Payments = () => {
   const { payments, error, loading } = useSelector((state) => state.payments);
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  const columns = [
+    { date: "Date" },
+    { amount: "Amount" },
+  ];
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">

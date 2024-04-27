@@ -55,6 +55,7 @@ const initialState = {
   services: null,
   loading: false,
   error: null,
+  status: null,
 };
 
 export const servicesSlice = createSlice({
@@ -67,14 +68,16 @@ export const servicesSlice = createSlice({
       .addCase(fetchServices.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = null;
       })
       .addCase(fetchServices.fulfilled, (state, action) => {
         state.loading = false;
+        state.status = null;
         state.services = action.payload;
-
       })
       .addCase(fetchServices.rejected, (state, action) => {
         state.loading = false;
+        state.status = null;
         if (action.status === 404) {
           state.error = action.error.message;
         } else {
@@ -85,15 +88,18 @@ export const servicesSlice = createSlice({
       .addCase(deleteService.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = null;
       })
       .addCase(deleteService.fulfilled, (state, action) => {
         state.loading = false;
+        state.status = true;
         state.services = state.services.filter(
-          (service) => service._id!== action.payload._id
+          (service) => service._id !== action.payload._id
         );
       })
       .addCase(deleteService.rejected, (state, action) => {
         state.loading = false;
+        state.status = false;
         if (action.status === 404) {
           state.error = action.error.message;
         } else {
