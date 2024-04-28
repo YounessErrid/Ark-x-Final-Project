@@ -74,7 +74,7 @@ const Login = () => {
                           id="UserEmail"
                           placeholder="john@rhcp.com"
                           {...register("email")}
-                          className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
+                          className="mt-1 w-full  h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
                         />
                         {errors.email && (
                           <p className="text-red-400">{errors.email.message}</p>

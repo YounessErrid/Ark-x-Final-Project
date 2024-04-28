@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import loginSvg from "../assets/Login.svg";
 import { registerUser } from "../features/userSlice";
 
 const Register = () => {
-  const { error } = useSelector((state) => state.user);
+  const {  isAuthenticated, error , user} = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,10 +29,15 @@ const Register = () => {
   });
 
   const onSubmit =  (data) => {
-    const {error} =  dispatch(registerUser(data));
-    if (!error) {
-      navigate("/login");}
+
+    dispatch(registerUser(data));
+    isAuthenticated && navigate("/login");
   };
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (user.role === "client") navigate("/");
+    }
+  }, [isAuthenticated, navigate, user]);
 
   return (
     <section className="gradient-form h-full bg-gray-300 dark:bg-neutral-700">

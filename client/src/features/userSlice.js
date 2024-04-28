@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { toFormData } from "axios";
 
-const API_URL = "http://localhost:3000/api/admins/auth";
+const API_URL = "http://localhost:3000/api";
 // axios.defaults.withCredentials = true;
 
 const initialState = {
@@ -54,7 +54,7 @@ export const userSlice = createSlice({
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
         if (action.error.message === "Rejected") {
-          state.error = "Invalid email or password";
+          state.error = "Logout failed.";
         } else {
           state.error = action.error.message;
         }
@@ -66,8 +66,10 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = null;
         state.user = action.payload.user;
         state.isAuthenticated = true;
+        
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -86,7 +88,7 @@ export const loginUser = createAsyncThunk(
   async (userCredentials, { rejectWithValue }) => {
     try {
       const request = await axios.post(
-        API_URL.concat("/login"),
+        API_URL.concat("/admins/auth/login"),
         userCredentials,
         {
           headers: {
@@ -130,7 +132,7 @@ export const registerUser = createAsyncThunk(
       // Create a new FormData object
       const formData = toFormData(userCredentials);
       // Send the request with FormData instead of the raw userCredentials object
-      const request = await axios.post(API_URL.concat("/register"), formData, {
+      const request = await axios.post(API_URL.concat("/clients/auth/register"), formData, {
         headers: {
           "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
         },
