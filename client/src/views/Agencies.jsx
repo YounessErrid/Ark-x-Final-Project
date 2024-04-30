@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchAgencies, deleteAgency } from "../features/agenciesSlice";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
+
 export const Agencies = () => {
-  const { agencies, error, loading } = useSelector((state) => state.agencies);
+  const { agencies, error, loading, status } = useSelector(
+    (state) => state.agencies
+  );
   const dispatch = useDispatch();
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -116,7 +119,7 @@ export const Agencies = () => {
             data={agencies}
             columnsDef={columns}
             deleteCallback={(id) => {
-              dispatch(deleteAgency(id));
+              dispatch(deleteAgency(id))
             }}
           />
         </>

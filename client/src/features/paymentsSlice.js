@@ -30,9 +30,10 @@ export const fetchPayments = createAsyncThunk(
 );
 
 const initialState = {
-  subscriptions: null,
+  payments: [],
   loading: false,
   error: null,
+  status: null,
 };
 
 export const paymentsSlice = createSlice({

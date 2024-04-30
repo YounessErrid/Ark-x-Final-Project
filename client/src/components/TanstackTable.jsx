@@ -18,17 +18,16 @@ const columnHelper = createColumnHelper();
 
 export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
   const dispatch = useDispatch();
-  const { status } = useSelector((state) => state.services);
+  const { status } = useSelector((state) => state.agencies);
 
   const handleDelete = (id) => {
     // Here, you can add your logic to delete the service from the database
     // For example, you can call an API endpoint or perform any necessary database operation
     deleteCallback(id);
-    
+
     // Once the deletion is successful, dispatch the deleteService action with the id
     // dispatch(deleteService(id));
   };
-  
 
   const [columns, setColumns] = useState([]);
   // const [columns, setColumns] = useState([]);
@@ -44,7 +43,8 @@ export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
     },
     onSortingChange: setSorting,
   });
-
+  console.log(data);
+  console.log(columnsDef);
   useEffect(() => {
     const mappedColumns = columnsDef.map((def) =>
       columnHelper.accessor(Object.keys(def)[0], {

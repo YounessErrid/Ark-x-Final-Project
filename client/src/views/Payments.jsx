@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
+import { fetchPayments } from "../features/paymentsSlice";
 
 const Payments = () => {
   const { payments, error, loading } = useSelector((state) => state.payments);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const dispatch = useDispatch();
 
-  const columns = [
-    { date: "Date" },
-    { amount: "Amount" },
-  ];
+  const columns = [{ date: "Date" }, { amount: "Amount" }];
+  useEffect(() => {
+    dispatch(fetchPayments());
+    setDataLoaded(true);
+  }, [dispatch]);
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -40,12 +43,12 @@ const Payments = () => {
         </div>
       </div>
       {loading && !dataLoaded && <Spinner />}
-      {error && error}
+      {/* {error && error} */}
       {payments && (
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
           <Spinner loaded={false} />
-          <TanstackTable data={payments} />
+          <TanstackTable data={payments} columnsDef={columns} />
         </>
       )}
     </div>
