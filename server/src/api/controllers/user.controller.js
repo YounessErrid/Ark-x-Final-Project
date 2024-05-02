@@ -4,14 +4,17 @@ const login = (req, res) => {
   res.status(200).json({
     success: true,
     message: "Successfully logged in",
-    user : {role: req.user.role , fullname: req.user.fullname},
+    user: {
+      role: req.user.role,
+      fullname: req.user.fullname,
+    },
   });
 };
 
 const register = async (req, res) => {
   const { email, password, fullname, role } = req.body;
   try {
-    if (!email || !password || !fullname ) {
+    if (!email || !password || !fullname) {
       return res.status(400).json({
         error: "Client creation failed: Missing required information!",
       });

@@ -1,11 +1,6 @@
-import React from 'react'
+import React from "react";
+import Header from "../components/Header";
 
 export const Main = () => {
-  return (
-    <div>
-        <h1 className="text-3xl font-bold underline bg-slate-500">
-        Hello world! from main
-      </h1>
-    </div>
-  )
-}
+  return <Header />;
+};

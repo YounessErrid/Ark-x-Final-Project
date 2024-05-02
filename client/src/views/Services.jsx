@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchServices, deleteService } from "../features/servicesSlice";
 import { TanstackTable } from "../components/TanstackTable";
 import { Spinner } from "../components/Spinner";
-import { fetchPayments } from "../features/paymentsSlice";
 
-const Payments = () => {
-  const { payments, error, loading } = useSelector((state) => state.payments);
-  const [dataLoaded, setDataLoaded] = useState(false);
+export const Services = () => {
+  const { services, error, loading, status } = useSelector(
+    (state) => state.services
+  );
   const dispatch = useDispatch();
+  const [dataLoaded, setDataLoaded] = useState(false);
+  console.log("success", status);
+  const columns = [{ title: "Title" }, { description: "Description" }];
 
-  const columns = [{ date: "Date" }, { amount: "Amount" }];
   useEffect(() => {
-    dispatch(fetchPayments());
+    dispatch(fetchServices());
     setDataLoaded(true);
   }, [dispatch]);
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center">
@@ -22,8 +26,8 @@ const Payments = () => {
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-6">
           <div>
-            <h1 className="font-bold text-2xl">All Payments</h1>
-            <p className="text-green-500">Active Payments</p>
+            <h1 className="font-bold text-2xl">All Services</h1>
+            <p className="text-green-500">Active Services</p>
           </div>
           <label className="input input-bordered flex items-center gap-2">
             <input type="text" className="grow" placeholder="Search" />
@@ -41,18 +45,28 @@ const Payments = () => {
             </svg>
           </label>
         </div>
+
+        <div className="">
+          <button className="btn bg-primary text-whiteDirty hover:bg-whiteDirty hover:text-textGray">
+            Add Service
+          </button>
+        </div>
       </div>
       {loading && !dataLoaded && <Spinner />}
       {/* {error && error} */}
-      {payments && (
+      {services && (
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
-          <Spinner loaded={false} />
-          <TanstackTable data={payments} columnsDef={columns} />
+          <Spinner loaded={true} />
+          <TanstackTable
+            data={services}
+            columnsDef={columns}
+            deleteCallback={(id) => {
+              dispatch(deleteService(id));
+            }}
+          />
         </>
       )}
     </div>
   );
 };
-
-export default Payments;

@@ -6,6 +6,7 @@ import { Sidebar } from "../components/Sidebar";
 import Subscriptions from "./Subscriptions";
 import Payments from "./Payments";
 import Login from "./Login";
+import { ToastContainer } from "react-toastify";
 
 export const Dashboard = () => {
   return (
@@ -29,6 +30,7 @@ export const Dashboard = () => {
         </div>
         <Sidebar />
       </div>
+      <ToastContainer />
     </div>
   );
 };

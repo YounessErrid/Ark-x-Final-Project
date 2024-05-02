@@ -8,7 +8,7 @@ import Protected from "./routes/Protected";
 
 function App() {
   return (
-    <>
+    <div data-theme="dark">
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
@@ -19,7 +19,7 @@ function App() {
         </Route>
         
       </Routes>
-    </>
+    </div>
   );
 }
 

@@ -42,7 +42,6 @@ export const TanstackTable = ({ data, columnsDef, deleteCallback, updateCallback
     },
     onSortingChange: setSorting,
   });
-
   useEffect(() => {
     const mappedColumns = columnsDef.map((def) =>
       columnHelper.accessor(Object.keys(def)[0], {

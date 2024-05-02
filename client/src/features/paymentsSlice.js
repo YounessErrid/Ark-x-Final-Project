@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:3000/api/";
 
@@ -30,9 +32,10 @@ export const fetchPayments = createAsyncThunk(
 );
 
 const initialState = {
-  subscriptions: null,
+  payments: [],
   loading: false,
   error: null,
+  status: null,
 };
 
 export const paymentsSlice = createSlice({

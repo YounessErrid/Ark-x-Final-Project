@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:3000/api/";
 
@@ -34,7 +36,7 @@ export const fetchServices = createAsyncThunk(
     try {
       const response = await axios.get(API_URL.concat("services"));
 
-      if (response.status === 404) {
+      if (response.error) {
         // If no services are found, handle it gracefully
         console.log(response);
         return [];
@@ -86,7 +88,7 @@ export const updateService = createAsyncThunk(
 );
 
 const initialState = {
-  services: null,
+  services: [],
   loading: false,
   error: null,
   status: null,
@@ -127,6 +129,7 @@ export const servicesSlice = createSlice({
       .addCase(deleteService.fulfilled, (state, action) => {
         state.loading = false;
         state.status = true;
+        toast.success("The Serves Deleted Successfully");
         state.services = state.services.filter(
           (service) => service._id !== action.payload._id
         );
@@ -134,6 +137,7 @@ export const servicesSlice = createSlice({
       .addCase(deleteService.rejected, (state, action) => {
         state.loading = false;
         state.status = false;
+        toast.error("The Serves doesn't Deleted");
         if (action.status === 404) {
           state.error = action.error.message;
         } else {
