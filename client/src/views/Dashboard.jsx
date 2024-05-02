@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Agencies } from "./Agencies";
-import { Services } from "./Services";
+import { Services } from "./backOffice/Services";
 import { Sidebar } from "../components/Sidebar";
 import Subscriptions from "./Subscriptions";
 import Payments from "./Payments";

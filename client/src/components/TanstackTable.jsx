@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
-  BiDotsVerticalRounded,
+  BiEdit,
   BiSolidDownArrow,
+  BiSolidTrash,
   BiSolidUpArrow,
 } from "react-icons/bi";
 import {
@@ -16,23 +17,20 @@ import { useDispatch, useSelector } from "react-redux";
 
 const columnHelper = createColumnHelper();
 
-export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
-  const dispatch = useDispatch();
-  const { status } = useSelector((state) => state.services);
+export const TanstackTable = ({ data, columnsDef, deleteCallback, updateCallback }) => {
+  
+  const [filterValue, setFilterValue] = useState("");
 
   const handleDelete = (id) => {
-    // Here, you can add your logic to delete the service from the database
-    // For example, you can call an API endpoint or perform any necessary database operation
     deleteCallback(id);
-    
-    // Once the deletion is successful, dispatch the deleteService action with the id
-    // dispatch(deleteService(id));
   };
-  
+  const handleUpdate = (data) => {
+    updateCallback(data);
+  };
 
   const [columns, setColumns] = useState([]);
-  // const [columns, setColumns] = useState([]);
   const [sorting, setSorting] = useState([]);
+  
   const table = useReactTable({
     data,
     columns,
@@ -61,21 +59,13 @@ export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
     columnHelper.accessor("action", {
       header: "Action",
       cell: (info) => (
-        <div className="dropdown dropdown-left dropdown-end">
-          <div tabIndex={0} role="button">
-            <BiDotsVerticalRounded className="text-xl" />
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <a onClick={() => handleDelete(info.row.original._id)}>Delete</a>
-            </li>
-            <li>
-              <a>Update</a>
-            </li>
-          </ul>
+        <div className="flex text-xl gap-2 text-primary">
+            <span className="cursor-pointer">
+              <a onClick={() => handleUpdate(info.row.original)}><BiEdit /></a>
+            </span>
+          <span className="cursor-pointer">
+              <a onClick={() => handleDelete(info.row.original._id)}><BiSolidTrash /></a>
+            </span>
         </div>
       ),
     })

@@ -59,7 +59,7 @@ const Login = () => {
                       </h4>
                     </div>
                     <form action="submit" onSubmit={handleSubmit(onSubmit)}>
-                      <p class="mb-8 font-medium text-xl">
+                      <p className="mb-8 font-medium text-xl">
                         Continue to your account
                       </p>
                       <div className="mb-8">
@@ -72,6 +72,7 @@ const Login = () => {
                         <input
                           type="text"
                           id="UserEmail"
+                          name="email"
                           placeholder="john@rhcp.com"
                           {...register("email")}
                           className="mt-1 w-full  h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
@@ -89,6 +90,7 @@ const Login = () => {
                         </label>
                         <input
                           type="password"
+                          name="password"
                           id="UserPassword"
                           placeholder="••••••••"
                           {...register("password")}

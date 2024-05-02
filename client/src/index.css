@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ag-theme-quartz {
+    /* Adjust the height of the grid */
+    height: calc(100vh - 200px);
+  
+    /* Changes the color of the grid text */
+    /* --ag-foreground-color: rgb(14, 68, 145); */
+    --ag-foreground-color: rgb(14, 68, 145);
+    /* Changes the color of the grid background */
+    --ag-background-color: #F4F7FD;
+    /* Changes the header color of the top row */
+    --ag-header-background-color: #F4F7FD;
+    /* Changes the hover color of the row*/
+    --ag-row-hover-color: #CEEAF7;
+  }
+  

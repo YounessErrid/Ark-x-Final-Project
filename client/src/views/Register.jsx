@@ -35,7 +35,7 @@ const Register = () => {
   };
   useEffect(() => {
     if (isAuthenticated) {
-      if (user.role === "client") navigate("/");
+      if (user.role === "client") navigate("/login");
     }
   }, [isAuthenticated, navigate, user]);
 
@@ -59,6 +59,7 @@ const Register = () => {
                       </h4>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
+                        {error && <p className="text-red-400">{error}</p>}
                       <p className="mb-8 text-xl">Continue to your account</p>
                       {/* FullName input */}
                       <div className="mb-8">
@@ -145,7 +146,6 @@ const Register = () => {
                         <button className="btn btn-block bg-primary text-whiteDirty border-0">
                           Register
                         </button>
-                        {error && <p className="text-red-400">{error}</p>}
                         <a href="#!">Forgot password?</a>
                       </div>
 

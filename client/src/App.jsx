@@ -13,9 +13,11 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
         <Route element={<Protected />}>
           <Route path="/dashboard/*" element={<Dashboard />} />
         </Route>
+        
       </Routes>
     </>
   );
