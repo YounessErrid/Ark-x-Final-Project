@@ -1,38 +1,52 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
-var userSchema = new mongoose.Schema({
-  fullname: {
-    type: String,
-    required: true,
-    trim: true,
+var userSchema = new mongoose.Schema(
+  {
+    fullname: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    profile_image: {
+      type: String,
+      // unique: true,
+    },
+    role: {
+      type: String,
+      required: true,
+      trim: true,
+      enum: ["admin", "client", "agency"],
+      default: "client",
+    },
+    passwordResetToken: String,
+    passwordResetTokenExpire: Date,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  profile_image: {
-    type: String,
-    // unique: true,
-  },
-  role: {
-    type: String,
-    required: true,
-    trim: true,
-    enum: ["admin", "client", "agency"],
-    default: "client",
-  },
-},
-{
-  timestamps: true,
-}
+  {
+    timestamps: true,
+  }
 );
+userSchema.methods.createResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.passwordResetTokenExpire = Date.now() + 10 * 60 * 1000;
+  console.log(resetToken, this.passwordResetToken);
+  return resetToken.toString();
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

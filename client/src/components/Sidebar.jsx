@@ -12,10 +12,10 @@ import { logoutUser } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export const Sidebar = () => {
+  const imageApi = "http://localhost:3000/"
   const { user } = useSelector(
     (state) => state.user
   );
-  console.log(user)
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -86,11 +86,11 @@ export const Sidebar = () => {
                 <div className="w-10 rounded-full">
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                    src={`${imageApi}${user.profile}`}
                   />
                 </div>
               </div>
-              <div>Zakaria</div>
+              <div>{`${user.fullname}`}</div>
               <ul
                 tabIndex={0}
                 className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"

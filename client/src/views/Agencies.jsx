@@ -119,7 +119,7 @@ export const Agencies = () => {
             data={agencies}
             columnsDef={columns}
             deleteCallback={(id) => {
-              dispatch(deleteAgency(id))
+              dispatch(deleteAgency(id));
             }}
           />
         </>

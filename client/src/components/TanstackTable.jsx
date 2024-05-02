@@ -17,9 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 const columnHelper = createColumnHelper();
 
 export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
-  const dispatch = useDispatch();
-  const { status } = useSelector((state) => state.agencies);
-
   const handleDelete = (id) => {
     // Here, you can add your logic to delete the service from the database
     // For example, you can call an API endpoint or perform any necessary database operation
@@ -43,8 +40,6 @@ export const TanstackTable = ({ data, columnsDef, deleteCallback }) => {
     },
     onSortingChange: setSorting,
   });
-  console.log(data);
-  console.log(columnsDef);
   useEffect(() => {
     const mappedColumns = columnsDef.map((def) =>
       columnHelper.accessor(Object.keys(def)[0], {

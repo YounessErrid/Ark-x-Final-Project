@@ -104,12 +104,12 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-// LOGIN USER
+// LOGOUT USER
 export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await axios.get(API_URL.concat("/logout"), {
+      const request = await axios.get(API_URL.concat("/admins/auth/logout"), {
         headers: {
           "Content-Type": "application/json",
         },
