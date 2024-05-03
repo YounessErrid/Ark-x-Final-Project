@@ -7,6 +7,7 @@ import Subscriptions from "./Subscriptions";
 import Payments from "./Payments";
 import { ToastContainer } from "react-toastify";
 import { Clients } from "./Clients";
+import { Status } from "./Status";
 
 export const Dashboard = () => {
   return (
@@ -53,6 +54,7 @@ export const Dashboard = () => {
           
           {/* Page content here */}
           <Routes>
+            <Route path="/" element={<Status />} />
             <Route path="/agencies" element={<Agencies />} />
             <Route path="/clients" element={<Clients />} />
             <Route path="/services" element={<Services />} />

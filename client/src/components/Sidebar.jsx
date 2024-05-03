@@ -33,7 +33,7 @@ export const Sidebar = () => {
           {/* Sidebar content here */}
           <label className="btn btn-circle swap swap-rotate lg:hidden"  htmlFor="my-drawer-2">
             {/* this hidden checkbox controls the state */}
-            <input type="checkbox" id="my-drawer-checkbox" />
+            {/* <input type="checkbox" id="my-drawer-checkbox" /> */}
 
             {/* hamburger icon */}
             <svg
@@ -59,6 +59,15 @@ export const Sidebar = () => {
           </label>
           <img src={Logo} className="my-10" alt="React Logo" />
           <li className="text-textGray text-lg w-full ">
+            <Link
+              className="hover:bg-primary hover:text-whiteDirty"
+              to={"/dashboard/"}
+            >
+              <BiBuildingHouse />
+              Dashboard 
+            </Link>
+          </li>
+          <li className="text-textGray text-lg w-full pt-2 mt-2 border-t-2">
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/agencies"}
@@ -94,7 +103,7 @@ export const Sidebar = () => {
               Subscriptions
             </Link>
           </li>
-          <li className="text-textGray text-lg w-full">
+          <li className="text-textGray text-lg w-full pb-2 border-b-2">
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/payments"}
@@ -103,7 +112,9 @@ export const Sidebar = () => {
               Payments
             </Link>
           </li>
-          <li className="text-textGray text-lg w-full">
+          <div className="fixed bottom-2 w-full border-t-2">
+
+          <li className="text-textGray text-lg ">
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/setting"}
@@ -113,15 +124,17 @@ export const Sidebar = () => {
             </Link>
           </li>
 
-          <li className="text-textGray text-lg fixed bottom-8">
+          <li className="text-textGray text-lg  ">
+            
             <a
               className="hover:bg-primary hover:text-whiteDirty"
               onClick={handleLogout}
             >
               <BiLogOut />
-              Log Out
+              Logout
             </a>
           </li>
+          </div>
         </ul>
       </div>
     </>
