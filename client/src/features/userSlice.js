@@ -78,6 +78,24 @@ export const userSlice = createSlice({
         } else {
           state.error = action.error.message;
         }
+      })
+      .addCase(forgetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(forgetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload.user;
+        
+      })
+      .addCase(forgetPassword.rejected, (state, action) => {
+        state.loading = false;
+        if (action.error.message === "Rejected") {
+          state.error = "Can't find this email";
+        } else {
+          state.error = action.error.message;
+        }
       });
   },
 });
@@ -133,6 +151,26 @@ export const registerUser = createAsyncThunk(
       const formData = toFormData(userCredentials);
       // Send the request with FormData instead of the raw userCredentials object
       const request = await axios.post(API_URL.concat("/clients/auth/register"), formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
+        },
+        withCredentials: true, // Send cookies with the request
+      });
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const forgetPassword = createAsyncThunk(
+  "user/forgetPassword",
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      // Create a new FormData object
+      const formData = toFormData(userCredentials);
+      // Send the request with FormData instead of the raw userCredentials object
+      const request = await axios.post(API_URL.concat("/admins/auth/forgotPassword"), formData, {
         headers: {
           "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
         },

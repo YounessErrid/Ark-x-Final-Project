@@ -7,6 +7,7 @@ import Subscriptions from "./Subscriptions";
 import Payments from "./Payments";
 import Login from "./Login";
 import { ToastContainer } from "react-toastify";
+import Setting from "./Setting";
 
 export const Dashboard = () => {
   return (
@@ -20,6 +21,7 @@ export const Dashboard = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/subscriptions" element={<Subscriptions />} />
             <Route path="/payments" element={<Payments />} />
+            <Route path="/setting" element={<Setting />}></Route>
           </Routes>
           <label
             htmlFor="my-drawer-2"

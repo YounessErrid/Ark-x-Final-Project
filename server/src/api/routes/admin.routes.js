@@ -19,8 +19,8 @@ router.post(
 
 router.post("/auth/login", [validateLoginUser], authenticate, controller.login);
 router.get("/auth/logout", controller.destroy);
-router.post("/auth/forgotPassword", controller.forgotPassword)
-router.put("/auth/resetPassword/:token", controller.resetPassword)
+router.post("/auth/forgotPassword", controller.forgotPassword);
+router.put("/auth/resetPassword/:token", controller.resetPassword);
 // CRUD routes for Post
 // router.post('/', controller.create)
 // router.get('/', controller.viewAll)

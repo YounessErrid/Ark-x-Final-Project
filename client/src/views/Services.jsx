@@ -16,6 +16,7 @@ export const Services = () => {
   useEffect(() => {
     dispatch(fetchServices());
     setDataLoaded(true);
+    console.log(services);
   }, [dispatch]);
 
   return (

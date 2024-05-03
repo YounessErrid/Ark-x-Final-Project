@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const Admin = require("../models/admin.model");
 const User = require("../models/user.model");
 const sendEmail = require("../helpers/email");
+const crypto = require("crypto");
 
 const register = async (req, res) => {
   const { email, password, fullname } = req.body;
@@ -81,7 +82,7 @@ const forgotPassword = async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
   const resetUrl = `${req.protocol}://${req.get(
     "host"
-  )}/api/admins/auth/resetPassword/${resetToken}`;
+  )}/resetPassword/${resetToken}`;
   const message = `Click the following link to reset your password:\n\n ${resetUrl} \n\n`;
   console.log(message);
   try {
@@ -101,7 +102,44 @@ const forgotPassword = async (req, res, next) => {
     res.status(500).json({ message: "Internal Server Error", error });
   }
 };
-const resetPassword = async (req, res, next) => {};
+const resetPassword = async (req, res, next) => {
+  try {
+    const token = req.params.token;
+    const user = await User.findOne({
+      passwordResetToken: token,
+      passwordResetTokenExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Token is Invalid or Expired",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    user.password = hashedPassword;
+
+    // Reset token and expiration
+    user.passwordResetToken = undefined;
+    user.passwordResetTokenExpire = undefined;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password successfully reset",
+      // Ensure req.user is properly set up in your middleware or previous routes
+      user: {
+        role: req.user ? req.user.role : user.role,
+        fullname: req.user ? req.user.fullname : user.fullname,
+        profile: req.user ? req.user.profile_image : user.profile_image,
+      },
+    });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   register,
   login,
