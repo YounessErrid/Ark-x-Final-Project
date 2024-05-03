@@ -7,15 +7,15 @@ import {
   BiDollarCircle,
   BiSelectMultiple,
   BiUser,
+  BiLogOut,
+  BiCog,
 } from "react-icons/bi";
 import { logoutUser } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export const Sidebar = () => {
-  const imageApi = "http://localhost:3000/"
-  const { user } = useSelector(
-    (state) => state.user
-  );
+  const imageApi = "http://localhost:3000/";
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -94,7 +94,7 @@ export const Sidebar = () => {
               Subscriptions
             </Link>
           </li>
-          <li className="text-textGray text-lg w-full ">
+          <li className="text-textGray text-lg w-full">
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/payments"}
@@ -103,36 +103,24 @@ export const Sidebar = () => {
               Payments
             </Link>
           </li>
-          <li className="text-textGray text-lg w-full fixed bottom-8">
-            <div className="dropdown dropdown-top">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
-              >
-                <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src={`${imageApi}${user.profile}`}
-                  />
-                </div>
-              </div>
-              <div>{`${user.fullname}`}</div>
-              <ul
-                tabIndex={0}
-                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <a>Profile</a>
-                </li>
-                <li>
-                  <a>Settings</a>
-                </li>
-                <li>
-                  <a onClick={handleLogout}>Logout</a>
-                </li>
-              </ul>
-            </div>
+          <li className="text-textGray text-lg w-full">
+            <Link
+              className="hover:bg-primary hover:text-whiteDirty"
+              to={"/dashboard/setting"}
+            >
+              <BiCog />
+              Setting
+            </Link>
+          </li>
+
+          <li className="text-textGray text-lg fixed bottom-8">
+            <a
+              className="hover:bg-primary hover:text-whiteDirty"
+              onClick={handleLogout}
+            >
+              <BiLogOut />
+              Log Out
+            </a>
           </li>
         </ul>
       </div>
