@@ -102,6 +102,7 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 const resetPassword = async (req, res, next) => {};
+
 module.exports = {
   register,
   login,

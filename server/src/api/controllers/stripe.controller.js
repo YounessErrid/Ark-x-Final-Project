@@ -59,11 +59,12 @@ const handleStripeEvents = async (req, res) => {
               userId,
             });
             const data = await newSubscription.save();
-
+            console.log('price subs:', amount_total);
+            
             // Create new payment document
             const newPayment = new Payment({
               date: activationDate,
-              amount: amount_total,
+              amount: amount_total/100,
               subscriptionId: data._id,
             });
             const payData = await newPayment.save();

@@ -82,7 +82,8 @@ export const Services = () => {
   const [colDefs, setColDefs] = useState([
     { field: "title", flex: 2, filter: true, floatingFilter: true },
     { field: "description", flex: 4, filter: true, floatingFilter: true },
-    { field: "Actions",
+    {
+      field: "Actions",
       cellRenderer: (params) => {
         const handleUpdateClick = () => {
           console.log("Edit clicked for row data:", params.data);
@@ -97,14 +98,20 @@ export const Services = () => {
         return (
           <div className="flex text-xl gap-2 text-primary">
             {/* <span > */}
-              <a className="cursor-pointer mt-3" onClick={() => handleUpdateClick()}>
-                <BiEdit />
-              </a>
+            <a
+              className="cursor-pointer mt-3"
+              onClick={() => handleUpdateClick()}
+            >
+              <BiEdit />
+            </a>
             {/* </span> */}
             {/* <span className="cursor-pointer"> */}
-              <a className="cursor-pointer mt-3" onClick={() => handleDeleteClick()}>
-                <BiSolidTrash />
-              </a>
+            <a
+              className="cursor-pointer mt-3"
+              onClick={() => handleDeleteClick()}
+            >
+              <BiSolidTrash />
+            </a>
             {/* </span> */}
           </div>
         );
@@ -135,21 +142,6 @@ export const Services = () => {
             <h1 className="font-bold text-2xl">All Services</h1>
             <p className="text-green-500">Active Services</p>
           </div>
-          {/* <label className="input input-bordered flex items-center gap-2">
-            <input type="text" className="grow" placeholder="Search" />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              className="w-4 h-4 opacity-70"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </label> */}
         </div>
 
         <div className="">

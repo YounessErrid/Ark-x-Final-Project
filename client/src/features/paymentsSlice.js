@@ -5,26 +5,48 @@ import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:3000/api/";
 
-
+// Async thunk to fetch all payments
 export const fetchPayments = createAsyncThunk(
   "payments/fetchPayments",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL.concat("payments"));
-      
-      // if (response.status === 404) {
-      //   // If no services are found, handle it gracefully
-      //   console.log(data);
-      //   return [];
-      // }
-      console.log(response);
-      
+      const response = await axios.get(API_URL.concat("payments"),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true, // Send cookies with the request
+      });
+
       if (response.status !== 200) {
-        // Throw an error with the response status text
         throw new Error(response.statusText);
       }
-      const data = await response.data;
-      return data;
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Async thunk to delete a payment by ID
+export const deletePayment = createAsyncThunk(
+  "payments/deletePayment",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(API_URL.concat("payments/", id,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true, // Send cookies with the request
+      }));
+
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      return id; // Return the deleted payment ID
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -44,25 +66,37 @@ export const paymentsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // get services
+    // Fetch payments reducers
       .addCase(fetchPayments.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchPayments.fulfilled, (state, action) => {
         state.loading = false;
-        state.subscriptions = action.payload;
+        state.payments = action.payload;
       })
       .addCase(fetchPayments.rejected, (state, action) => {
         state.loading = false;
-        if (action.status === 404) {
-          state.error = action.error.message ;
-        } else {
-          state.error = action.error.message;
-        }
+        state.error = action.error.message;
       })
+      // Delete payment reducers
+      .addCase(deletePayment.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deletePayment.fulfilled, (state, action) => {
+        state.loading = false;
+        toast.success("The Client Deleted Successfully");        
+        state.payments = state.payments.filter(
+          (payment) => payment.id !== action.payload
+        );
+      })
+      .addCase(deletePayment.rejected, (state, action) => {
+        state.loading = false;
+        toast.error("The Client wasn't Deleted");
+        state.error = action.error.message;
+      });
   },
 });
-
 
 export default paymentsSlice.reducer;

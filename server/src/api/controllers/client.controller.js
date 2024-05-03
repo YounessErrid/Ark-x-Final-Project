@@ -24,7 +24,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       fullname: fullname,
     });
-    
+
     if (path) {
       user.profile_image = path;
     }
@@ -50,12 +50,11 @@ const register = async (req, res) => {
   }
 };
 
-
 const login = (req, res) => {
   res.status(200).json({
     success: true,
     message: "Successfully logged in",
-    user : {role: req.user.role , fullname: req.user.fullname},
+    user: { role: req.user.role, fullname: req.user.fullname },
   });
 };
 const destroy = async (req, res) => {
@@ -120,20 +119,27 @@ const findOne = async (req, res) => {
 
 const viewAll = async (req, res) => {
   try {
-    const clients = await Client.find();
+    const clients = await Client.find().populate("userId", "fullname email");
 
-    if (clients.length > 0) {
-      return res.status(200).json(clients);
-    } else {
+    if (clients.length === 0) {
       return res.status(404).json({ error: "No clients found!" });
     }
+
+    // Construct the response object with the desired fields
+    const responseData = clients.map((client) => ({
+      _id: client._id,
+      fullname: client.userId ? client.userId.fullname : null,
+      email: client.userId ? client.userId.email : null,
+      phone: client.phone,
+      // Add other fields as needed
+    }));
+
+    return res.status(200).json(responseData);
   } catch (error) {
-    return res
-      .status(500)
-      .json([
-        { error: "Internal server error" },
-        { message: `Error retrieving clients: ${error.message}` },
-      ]);
+    return res.status(500).json({
+      error: "Internal server error",
+      message: `Error retrieving clients: ${error.message}`,
+    });
   }
 };
 
@@ -192,6 +198,7 @@ const remove = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Client deleted successfully",
+      data: deletedClient
     });
   } catch (error) {
     return res

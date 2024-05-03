@@ -1,26 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:3000/api/";
 
-// Delete Services
+// Async thunk for deleting a service
 export const deleteService = createAsyncThunk(
   "services/deleteService",
   async (id, { rejectWithValue }) => {
-
     try {
       const response = await axios.delete(API_URL.concat("services/", id));
-
-      if (response.status === 404) {
-        // If no services are found, handle it gracefully
-        console.log(response);
-        return;
-      }
-
-      console.log(response);
-
       const data = await response.data;
       return data;
     } catch (error) {
@@ -29,19 +18,12 @@ export const deleteService = createAsyncThunk(
   }
 );
 
-// Fetch Services
+// Async thunk for fetching services
 export const fetchServices = createAsyncThunk(
   "services/fetchServices",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(API_URL.concat("services"));
-
-      if (response.error) {
-        // If no services are found, handle it gracefully
-        console.log(response);
-        return [];
-      }
-
       const data = await response.data;
       return data;
     } catch (error) {
@@ -50,16 +32,13 @@ export const fetchServices = createAsyncThunk(
   }
 );
 
-// Create Services
-
+// Async thunk for creating a service
 export const createService = createAsyncThunk(
   "services/createService",
   async (service, { rejectWithValue }) => {
     try {
-
       const response = await axios.post(API_URL.concat("services"), service);
       const data = await response.data;
-      
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -67,19 +46,16 @@ export const createService = createAsyncThunk(
   }
 );
 
-// Update Services
-
+// Async thunk for updating a service
 export const updateService = createAsyncThunk(
   "services/updateService",
   async (service, { rejectWithValue }) => {
     try {
-      
       const response = await axios.put(
         API_URL.concat("services/", service._id),
         service
       );
       const data = await response.data;
-      
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -87,6 +63,7 @@ export const updateService = createAsyncThunk(
   }
 );
 
+// Initial state of the services slice
 const initialState = {
   services: [],
   loading: false,
@@ -94,6 +71,7 @@ const initialState = {
   status: null,
 };
 
+// Services slice definition
 export const servicesSlice = createSlice({
   name: "services",
   initialState,
@@ -114,13 +92,9 @@ export const servicesSlice = createSlice({
       .addCase(fetchServices.rejected, (state, action) => {
         state.loading = false;
         state.status = null;
-        if (action.status === 404) {
-          state.error = action.error.message;
-        } else {
-          state.error = action.error.message;
-        }
+        state.error = action.error.message;
       })
-      // Delete services
+      // Delete service
       .addCase(deleteService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -129,7 +103,7 @@ export const servicesSlice = createSlice({
       .addCase(deleteService.fulfilled, (state, action) => {
         state.loading = false;
         state.status = true;
-        toast.success("The Serves Deleted Successfully");
+        toast.success("The service was deleted successfully");
         state.services = state.services.filter(
           (service) => service._id !== action.payload._id
         );
@@ -137,14 +111,10 @@ export const servicesSlice = createSlice({
       .addCase(deleteService.rejected, (state, action) => {
         state.loading = false;
         state.status = false;
-        toast.error("The Serves doesn't Deleted");
-        if (action.status === 404) {
-          state.error = action.error.message;
-        } else {
-          state.error = action.error.message;
-        }
+        toast.error("Failed to delete the service");
+        state.error = action.error.message;
       })
-      // Create services
+      // Create service
       .addCase(createService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -152,19 +122,21 @@ export const servicesSlice = createSlice({
       })
       .addCase(createService.fulfilled, (state, action) => {
         state.loading = false;
-        state.status = true;        
-        state.error = null;
-        state.services = [...state.services, action.payload];
+        state.status = true;
+        toast.success("The service was created successfully");
+        state.services.push(action.payload);
       })
       .addCase(createService.rejected, (state, action) => {
         state.loading = false;
+        state.status = false;
+        toast.error("Failed to create the service");
         if (action.payload.error.response.status === 409) {
           state.error = action.payload.error.message;
         } else {
           state.error = action.error.message || "Unknown error occurred";
         }
       })
-      // Update services
+      // Update service
       .addCase(updateService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -173,7 +145,7 @@ export const servicesSlice = createSlice({
       .addCase(updateService.fulfilled, (state, action) => {
         state.loading = false;
         state.status = true;
-        state.error = null;
+        toast.success("The service was updated successfully");
         state.services = state.services.map((service) =>
           service._id === action.payload._id ? action.payload : service
         );
@@ -181,8 +153,7 @@ export const servicesSlice = createSlice({
       .addCase(updateService.rejected, (state, action) => {
         state.loading = false;
         state.status = false;
-        console.log('action: ');
-        console.log(action);
+        toast.error("Failed to update the service");
         if (action.error && action.payload.error.response.status === 409) {
           state.error = action.payload.error.message;
         } else {
@@ -192,5 +163,5 @@ export const servicesSlice = createSlice({
   },
 });
 
-// export const {deleteService} = servicesSlice.actions;
+// Export actions and reducer
 export default servicesSlice.reducer;
