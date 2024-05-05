@@ -129,6 +129,7 @@ const remove = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Subscription deleted successfully",
+      data: deletedSubscription,
     });
   } catch (error) {
     return res

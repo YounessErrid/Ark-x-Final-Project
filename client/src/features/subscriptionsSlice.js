@@ -9,14 +9,19 @@ export const fetchSubscriptions = createAsyncThunk(
   "subscriptions/fetchSubscriptions",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL.concat("subscriptions"));
+      const response = await axios.get(API_URL.concat("subscriptions"),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true, // Send cookies with the request
+      });
 
       // if (response.status === 404) {
       //   // If no services are found, handle it gracefully
       //   console.log(data);
       //   return [];
       // }
-      console.log(response);
 
       if (response.status !== 200) {
         // Throw an error with the response status text
@@ -34,7 +39,6 @@ const initialState = {
   subscriptions: [],
   loading: false,
   error: null,
-  status: null,
 };
 
 export const subscriptionsSlice = createSlice({

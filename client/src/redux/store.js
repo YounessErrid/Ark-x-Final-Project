@@ -4,11 +4,13 @@ import agenciesSlice from "../features/agenciesSlice";
 import servicesSlice from "../features/servicesSlice";
 import subscriptionsSlice from "../features/subscriptionsSlice";
 import paymentsSlice from "../features/paymentsSlice";
+import clientsSlice from "../features/clientsSlice";
 
 export default configureStore({
   reducer: {
     user: userSlice,
     agencies: agenciesSlice,
+    clients: clientsSlice,
     services: servicesSlice,
     subscriptions: subscriptionsSlice,
     payments: paymentsSlice,

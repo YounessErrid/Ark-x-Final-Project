@@ -75,13 +75,18 @@ const viewAll = async (req, res) => {
       return res.status(404).json({ error: "No agencies found" });
     }
     // Construct the response object with the desired fields
-    const responseData = agencies.map(agency => ({
+    const responseData = agencies.map(agency => {
+      
+      
+      return ({
+      
+      
       _id:agency._id,
-      fullname: agency.userId.fullname,
-      email: agency.userId.email,
+      fullname: agency.userId === null ? null : agency.userId.fullname,
+      email: agency.userId === null ? null : agency.userId.email,
       agencyName: agency.agencyName,
       address: agency.addresse // Corrected typo
-    }));
+    })});
     return res.status(200).json(responseData);
     
   } catch (error) {
