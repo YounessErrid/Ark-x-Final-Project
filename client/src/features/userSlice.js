@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { toFormData } from "axios";
+import { useParams } from "react-router-dom";
 
 const API_URL = "http://localhost:3000/api";
 // axios.defaults.withCredentials = true;
@@ -8,6 +9,7 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   loading: false,
+  success: null,
   error: null,
 };
 
@@ -69,7 +71,6 @@ export const userSlice = createSlice({
         state.error = null;
         state.user = action.payload.user;
         state.isAuthenticated = true;
-        
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -79,23 +80,47 @@ export const userSlice = createSlice({
           state.error = action.error.message;
         }
       })
+      //forget Password
       .addCase(forgetPassword.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = null;
       })
       .addCase(forgetPassword.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         state.user = action.payload.user;
-        
+        state.success = true;
       })
       .addCase(forgetPassword.rejected, (state, action) => {
         state.loading = false;
+        state.success = false;
         if (action.error.message === "Rejected") {
           state.error = "Can't find this email";
         } else {
           state.error = action.error.message;
         }
+      })
+      // reset Password
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        // state.success = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload.user;
+        // state.success = true;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        // state.success = false;
+        // if (action.error.message === "Rejected") {
+        //   state.error = "Can't find this email";
+        // } else {
+        //   state.error = action.error.message;
+        // }
       });
   },
 });
@@ -150,12 +175,16 @@ export const registerUser = createAsyncThunk(
       // Create a new FormData object
       const formData = toFormData(userCredentials);
       // Send the request with FormData instead of the raw userCredentials object
-      const request = await axios.post(API_URL.concat("/clients/auth/register"), formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
-        },
-        withCredentials: true, // Send cookies with the request
-      });
+      const request = await axios.post(
+        API_URL.concat("/clients/auth/register"),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
+          },
+          withCredentials: true, // Send cookies with the request
+        }
+      );
       const response = await request.data;
       return response;
     } catch (error) {
@@ -167,15 +196,39 @@ export const forgetPassword = createAsyncThunk(
   "user/forgetPassword",
   async (userCredentials, { rejectWithValue }) => {
     try {
-      // Create a new FormData object
-      const formData = toFormData(userCredentials);
-      // Send the request with FormData instead of the raw userCredentials object
-      const request = await axios.post(API_URL.concat("/admins/auth/forgotPassword"), formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
-        },
-        withCredentials: true, // Send cookies with the request
-      });
+      const frontendHost = window.location.host;
+      const request = await axios.post(
+        API_URL.concat("/admins/auth/forgotPassword"),
+        userCredentials,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-Frontend-Host": frontendHost, // Custom header for frontend host
+          },
+          withCredentials: true, // Send cookies with the request
+        }
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async ({ token, userCredentials }, { rejectWithValue }) => {
+    try {
+      const request = await axios.put(
+        API_URL.concat(`/admins/auth/resetPassword/${token}`),
+        userCredentials,
+        {
+          headers: {
+            "Content-Type": "application/json", // Custom header for frontend host
+          },
+          withCredentials: true, // Send cookies with the request
+        }
+      );
       const response = await request.data;
       return response;
     } catch (error) {
