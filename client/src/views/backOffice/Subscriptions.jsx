@@ -14,7 +14,12 @@ const Subscriptions = () => {
 
   const [colDefs, setColDefs] = useState([
     {
+      field: "email",
+      flex: 2,
+    },
+    {
       field: "activationDate",
+      sort: 'asc',
       cellRenderer: (params) => {
         const formattedDate = new Date(params.value).toLocaleDateString(
           "en-US",
@@ -74,24 +79,24 @@ const Subscriptions = () => {
       flex: 2,
       filter: true,
     },
-    {
-      field: "Actions",
-      cellRenderer: (params) => {
-        const handleDeleteClick = () => {
-          console.log("Delete clicked for row data:", params.data);
-          // dispatch(deleteClient(params.data._id));
-        };
+    // {
+    //   field: "Actions",
+    //   cellRenderer: (params) => {
+    //     const handleDeleteClick = () => {
+    //       console.log("Delete clicked for row data:", params.data);
+    //       // dispatch(deleteClient(params.data._id));
+    //     };
 
-        return (
-          <div className="flex text-xl gap-2 text-primary">
-            <a className="cursor-pointer mt-3" onClick={handleDeleteClick}>
-              <BiSolidTrash />
-            </a>
-          </div>
-        );
-      },
-      flex: 1,
-    },
+    //     return (
+    //       <div className="flex text-xl gap-2 text-primary">
+    //         <a className="cursor-pointer mt-3" onClick={handleDeleteClick}>
+    //           <BiSolidTrash />
+    //         </a>
+    //       </div>
+    //     );
+    //   },
+    //   flex: 1,
+    // },
   ]);
 
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -99,13 +104,10 @@ const Subscriptions = () => {
   useEffect(() => {
     dispatch(fetchSubscriptions());
     setDataLoaded(true);
-  }, [dispatch, error]);
+  }, [dispatch]);
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Hello Evano,👋🏼</h1>
-      </div>
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-6">
           <div>

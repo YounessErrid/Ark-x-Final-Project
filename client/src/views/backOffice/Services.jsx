@@ -11,7 +11,7 @@ import {
 } from "../../features/servicesSlice";
 import { AgGridTable } from "../../components/ReactAgGrid";
 import { Spinner } from "../../components/Spinner";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BiEdit, BiSolidTrash } from "react-icons/bi";
 
@@ -60,7 +60,6 @@ export const Services = () => {
       dispatch(updateService({ _id: formData._id, ...data })).then((result) => {
         // Check if the action was fulfilled
         if (result.meta.requestStatus === "fulfilled") {
-          console.log("Update service fulfilled");
           // Do something if dispatch was successful
           closeModal();
         }
@@ -80,13 +79,12 @@ export const Services = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [colDefs, setColDefs] = useState([
-    { field: "title", flex: 2, filter: true, floatingFilter: true },
+    { field: "title", flex: 2,sort: 'asc', filter: true, floatingFilter: true },
     { field: "description", flex: 4, filter: true, floatingFilter: true },
     {
       field: "Actions",
       cellRenderer: (params) => {
         const handleUpdateClick = () => {
-          console.log("Edit clicked for row data:", params.data);
           openUpdateModal(params.data);
         };
 
@@ -133,9 +131,6 @@ export const Services = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Hello Evano,👋🏼</h1>
-      </div>
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-6">
           <div>
@@ -222,7 +217,6 @@ export const Services = () => {
         </div>
       </div>
       {loading && !dataLoaded && <Spinner />}
-      {/* {error && error} */}
       {services && (
         <>
           {/* Pass loaded=true to indicate data has been loaded */}

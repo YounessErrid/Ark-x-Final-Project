@@ -4,8 +4,8 @@ const User = require("../models/user.model");
 
 const register = async (req, res) => {
   const { email, password, fullname, phone } = req.body;
-  let path = req.file ? req.file.path : null; // Check if req.file exists before accessing path
   try {
+    let path = req.file ? req.file.path : null; // Check if req.file exists before accessing path
     if (!email || !password || !fullname || !phone) {
       return res.status(400).json({
         error: "User creation failed: Missing required information!",

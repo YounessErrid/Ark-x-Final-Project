@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./user.model");
 
-var agencySchema = new mongoose.Schema({
+const agencySchema = new mongoose.Schema({
   agencyName: {
     type: String,
     required: true,
@@ -26,8 +26,11 @@ var agencySchema = new mongoose.Schema({
 
 agencySchema.pre("findOneAndDelete", async function (next) {
   try {
-    const agency = await this.model.findOne({ _id: this.getFilter() });
-    await User.findByIdAndDelete({ _id: agency.userId });
+    const agency = await Agency.findOne({ _id: this.getFilter()._id });
+    if(agency){
+      await User.findByIdAndDelete({ _id: agency.userId });
+    }
+
   } catch (error) {
     console.log(error);
   }

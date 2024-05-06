@@ -1,21 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
-const API_URL = "http://localhost:3000/api/";
 
 export const fetchSubscriptions = createAsyncThunk(
   "subscriptions/fetchSubscriptions",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL.concat("subscriptions"),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true, // Send cookies with the request
-      });
+      const response = await axiosInstance.get("/subscriptions");
 
       // if (response.status === 404) {
       //   // If no services are found, handle it gracefully

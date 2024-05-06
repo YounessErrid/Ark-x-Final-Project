@@ -34,7 +34,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (user.role === "admin") navigate("/dashboard");
+      if (user.role === "admin" || user.role === "superadmin") navigate("/dashboard");
       else if (user.role === "client") navigate("/");
     }
   }, [isAuthenticated, navigate, user]);

@@ -1,16 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
-
-// API base URL
-const API_URL = "http://localhost:3000/api/";
 
 // Async thunk to delete a client by ID
 export const deleteClient = createAsyncThunk(
   "clients/deleteClient",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(API_URL.concat("clients/", id));
+      const response = await axiosInstance.delete("/clients/"+ id);
       const data = await response.data;
       return data;
     } catch (error) {
@@ -24,7 +21,7 @@ export const fetchClients = createAsyncThunk(
   "clients/fetchClients",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL.concat("clients"));
+      const response = await axiosInstance.get("/clients");
       const data = await response.data;
       return data;
     } catch (error) {

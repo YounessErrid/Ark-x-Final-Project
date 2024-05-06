@@ -13,6 +13,7 @@ const Payments = () => {
   const [colDefs, setColDefs] = useState([
     {
       field: "date",
+      sort: 'asc',
       cellRenderer: (params) => {
         // Format date using JavaScript's Date object methods
         const formattedDate = new Date(params.value).toLocaleDateString(
@@ -45,23 +46,23 @@ const Payments = () => {
       filter: true,
       floatingFilter: true,
     },
-    {
-      field: "Actions",
-      cellRenderer: (params) => {
-        const handleDeleteClick = () => {
-          console.log("Delete clicked for row data:", params.data);
-          dispatch(deletePayment(params.data._id));
-        };
-        return (
-          <div className="flex text-xl gap-2 text-primary">
-            <a className="cursor-pointer mt-3" onClick={handleDeleteClick}>
-              <BiSolidTrash />
-            </a>
-          </div>
-        );
-      },
-      flex: 1,
-    },
+    // {
+    //   field: "Actions",
+    //   cellRenderer: (params) => {
+    //     const handleDeleteClick = () => {
+    //       console.log("Delete clicked for row data:", params.data);
+    //       dispatch(deletePayment(params.data._id));
+    //     };
+    //     return (
+    //       <div className="flex text-xl gap-2 text-primary">
+    //         <a className="cursor-pointer mt-3" onClick={handleDeleteClick}>
+    //           <BiSolidTrash />
+    //         </a>
+    //       </div>
+    //     );
+    //   },
+    //   flex: 1,
+    // },
   ]);
 
   useEffect(() => {
@@ -70,16 +71,12 @@ const Payments = () => {
   }, [dispatch]);
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Hello Evano,👋🏼</h1>
-      </div>
       <div className="flex justify-between items-center mt-8">
         <div className="flex gap-6">
           <div>
             <h1 className="font-bold text-2xl">All Payments</h1>
             <p className="text-green-500">Active Payments</p>
           </div>
-          
         </div>
       </div>
       {loading && !dataLoaded && <Spinner />}
@@ -87,7 +84,7 @@ const Payments = () => {
       {payments && (
         <>
           {/* Pass loaded=true to indicate data has been loaded */}
-          <Spinner loaded={false} />
+          <Spinner loaded={true} />
           <AgGridTable data={payments} columnsDef={colDefs} />
         </>
       )}

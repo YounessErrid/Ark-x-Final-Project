@@ -9,12 +9,13 @@ import {
   BiUser,
   BiLogOut,
   BiCog,
+  BiSolidDashboard,
+  BiSolidGroup,
 } from "react-icons/bi";
 import { logoutUser } from "../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export const Sidebar = () => {
-  const imageApi = "http://localhost:3000/";
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const handleLogout = () => {
@@ -23,7 +24,6 @@ export const Sidebar = () => {
   return (
     <>
       <div className="drawer-side">
-        
         <label
           htmlFor="my-drawer-2"
           aria-label="close sidebar"
@@ -31,7 +31,10 @@ export const Sidebar = () => {
         ></label>
         <ul className="menu p-4 w-80 min-h-full bg-whiteDirty content-start text-base-content">
           {/* Sidebar content here */}
-          <label className="btn btn-circle swap swap-rotate lg:hidden"  htmlFor="my-drawer-2">
+          <label
+            className="btn btn-circle swap swap-rotate lg:hidden"
+            htmlFor="my-drawer-2"
+          >
             {/* this hidden checkbox controls the state */}
             {/* <input type="checkbox" id="my-drawer-checkbox" /> */}
 
@@ -63,8 +66,8 @@ export const Sidebar = () => {
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/"}
             >
-              <BiBuildingHouse />
-              Dashboard 
+              <BiSolidDashboard />
+              Dashboard
             </Link>
           </li>
           <li className="text-textGray text-lg w-full pt-2 mt-2 border-t-2">
@@ -112,28 +115,48 @@ export const Sidebar = () => {
               Payments
             </Link>
           </li>
-          <div className="fixed bottom-2 w-full border-t-2">
-
-          <li className="text-textGray text-lg ">
+          {/* <li className="text-textGray text-lg w-full ">
+          {user.role === 'superadmin' && (disabled="disabled")} 
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
-              to={"/dashboard/setting"}
+              to={"/dashboard/admins"}
             >
-              <BiCog />
-              Setting
+              <BiSolidGroup />
+              Admins
             </Link>
+          </li> */}
+            {user.role === "superadmin" && (
+          <li className="text-textGray text-lg w-full">
+              <Link
+                className="hover:bg-primary hover:text-whiteDirty"
+                to={"/dashboard/admins"}
+                disabled
+              >
+                <BiSolidGroup /> Admins
+              </Link>
           </li>
+            )}
 
-          <li className="text-textGray text-lg  ">
-            
-            <a
-              className="hover:bg-primary hover:text-whiteDirty"
-              onClick={handleLogout}
-            >
-              <BiLogOut />
-              Logout
-            </a>
-          </li>
+          <div className="fixed bottom-2 w-full border-t-2">
+            <li className="text-textGray text-lg ">
+              <Link
+                className="hover:bg-primary hover:text-whiteDirty"
+                to={"/dashboard/setting"}
+              >
+                <BiCog />
+                Setting
+              </Link>
+            </li>
+
+            <li className="text-textGray text-lg ">
+              <a
+                className="hover:bg-primary hover:text-whiteDirty"
+                onClick={handleLogout}
+              >
+                <BiLogOut />
+                Logout
+              </a>
+            </li>
           </div>
         </ul>
       </div>

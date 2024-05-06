@@ -4,8 +4,8 @@ const User = require("../models/user.model");
 
 const register = async (req, res) => {
   const { email, password, fullname, addresse , agencyName} = req.body;
-  const path = req.file.path;
   try {
+    const path = req.file ? req.file.path : null;
     if (!email || !password || !fullname || !addresse || !agencyName) {
       return res.status(400).json({
         error: "Agency creation failed: Missing required information!",
@@ -69,14 +69,13 @@ const destroy = async (req, res) => {
 
 const viewAll = async (req, res) => {
   try {
-    const agencies = await Agency.find().populate('userId', 'fullname email');
+    const agencies = await Agency.find().populate('userId', ' fullname email');
 
     if (agencies.length === 0) {
       return res.status(404).json({ error: "No agencies found" });
     }
     // Construct the response object with the desired fields
     const responseData = agencies.map(agency => {
-      
       
       return ({
       

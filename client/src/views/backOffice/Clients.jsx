@@ -11,7 +11,7 @@ export const Clients = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [colDefs, setColDefs] = useState([
-    { field: "fullname", flex: 2, filter: true, floatingFilter: true },
+    { field: "fullname", flex: 2,sort: 'asc', filter: true, floatingFilter: true },
     { field: "email", flex: 2, filter: true, floatingFilter: true },
     { field: "phone", flex: 2, filter: true, floatingFilter: true },
     {
@@ -41,9 +41,6 @@ export const Clients = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Hello Evano,👋🏼</h1>        
-      </div>
       <div className="flex gap-6 mt-8">
           <div>
             <h1 className="font-bold text-2xl">All Clients</h1>

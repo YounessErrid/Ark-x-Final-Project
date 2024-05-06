@@ -13,9 +13,10 @@ export const Agencies = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [colDefs, setColDefs] = useState([
-    { field: "email", flex: 2, filter: true, floatingFilter: true },
-    { field: "agencyName", flex: 2, filter: true, floatingFilter: true },
+    { field: "email", flex: 2,sort: 'asc', filter: true, floatingFilter: true },
     { field: "fullname", flex: 2, filter: true, floatingFilter: true },
+    { field: "agencyName", flex: 2, filter: true, floatingFilter: true },
+    { field: "address", flex: 2, filter: true, floatingFilter: true },
     {
       field: "Actions",
       cellRenderer: (params) => {
@@ -47,13 +48,6 @@ export const Agencies = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Hello Evano,👋🏼</h1>
-      </div>
-
-      {/* <h1 className="font-bold text-2xl">All Agencies</h1>
-      <p className="text-green-500">Active Members</p> */}
-
       <div className="flex gap-6 mt-8">
         <div>
         <h1 className="font-bold text-2xl">All Agencies</h1>

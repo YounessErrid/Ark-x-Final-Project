@@ -3,9 +3,6 @@ import React from "react";
 export const Status = () => {
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Hello Evano,👋🏼</h1>
-      </div>
 
       <div className="stats shadow w-full my-8">
         <div className="stat ">

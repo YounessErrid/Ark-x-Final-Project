@@ -5,10 +5,12 @@ import servicesSlice from "../features/servicesSlice";
 import subscriptionsSlice from "../features/subscriptionsSlice";
 import paymentsSlice from "../features/paymentsSlice";
 import clientsSlice from "../features/clientsSlice";
+import adminsSlice from "../features/adminsSlice";
 
 export default configureStore({
   reducer: {
     user: userSlice,
+    admins: adminsSlice,
     agencies: agenciesSlice,
     clients: clientsSlice,
     services: servicesSlice,

@@ -2,12 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
 
-// Async thunk for deleting a service
-export const deleteService = createAsyncThunk(
-  "services/deleteService",
+// Async thunk for deleting an admin
+export const deleteAdmin = createAsyncThunk(
+  "admins/deleteAdmin",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.delete("/services/"+ id);
+      const response = await axiosInstance.delete("/admins/"+ id);
       const data = await response.data;
       return data;
     } catch (error) {
@@ -16,12 +16,12 @@ export const deleteService = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching services
-export const fetchServices = createAsyncThunk(
-  "services/fetchServices",
+// Async thunk for fetching admins
+export const fetchAdmins = createAsyncThunk(
+  "admins/fetchAdmins",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/services");
+      const response = await axiosInstance.get("/admins");
       const data = await response.data;
       return data;
     } catch (error) {
@@ -30,12 +30,12 @@ export const fetchServices = createAsyncThunk(
   }
 );
 
-// Async thunk for creating a service
-export const createService = createAsyncThunk(
-  "services/createService",
-  async (service, { rejectWithValue }) => {
+// Async thunk for creating an admin
+export const createAdmin = createAsyncThunk(
+  "admins/createAdmin",
+  async (admin, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/services", service);
+      const response = await axiosInstance.post("/admins/createAdmin", admin);
       const data = await response.data;
       return data;
     } catch (error) {
@@ -44,12 +44,12 @@ export const createService = createAsyncThunk(
   }
 );
 
-// Async thunk for updating a service
-export const updateService = createAsyncThunk(
-  "services/updateService",
-  async (service, { rejectWithValue }) => {
+// Async thunk for updating an admin
+export const updateAdmin = createAsyncThunk(
+  "admins/updateAdmin",
+  async (admin, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put("/services/"+ service._id , service);
+      const response = await axiosInstance.put("/admins/"+ admin._id , admin);
       const data = await response.data;
       return data;
     } catch (error) {
@@ -58,97 +58,99 @@ export const updateService = createAsyncThunk(
   }
 );
 
-// Initial state of the services slice
+// Initial state of the admins slice
 const initialState = {
-  services: [],
+  admins: [],
   loading: false,
   error: null,
   status: null,
 };
 
-// Services slice definition
-export const servicesSlice = createSlice({
-  name: "services",
+// Admins slice definition
+export const adminsSlice = createSlice({
+  name: "admins",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch services
-      .addCase(fetchServices.pending, (state) => {
+      // Fetch admins
+      .addCase(fetchAdmins.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = null;
       })
-      .addCase(fetchServices.fulfilled, (state, action) => {
+      .addCase(fetchAdmins.fulfilled, (state, action) => {
         state.loading = false;
         state.status = null;
-        state.services = action.payload;
+        state.admins = action.payload;
       })
-      .addCase(fetchServices.rejected, (state, action) => {
+      .addCase(fetchAdmins.rejected, (state, action) => {
         state.loading = false;
         state.status = null;
         state.error = action.error.message;
       })
-      // Delete service
-      .addCase(deleteService.pending, (state) => {
+      // Delete admin
+      .addCase(deleteAdmin.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = null;
       })
-      .addCase(deleteService.fulfilled, (state, action) => {
+      .addCase(deleteAdmin.fulfilled, (state, action) => {
         state.loading = false;
         state.status = true;
-        toast.success("The service was deleted successfully");
-        state.services = state.services.filter(
-          (service) => service._id !== action.payload._id
+        toast.success("The admin was deleted successfully");
+        console.log("action.payload", action.payload);
+        state.admins = state.admins.filter(
+          (admin) => admin._id !== action.payload.userId
         );
       })
-      .addCase(deleteService.rejected, (state, action) => {
+      .addCase(deleteAdmin.rejected, (state, action) => {
         state.loading = false;
         state.status = false;
-        toast.error("Failed to delete the service");
+        toast.error("Failed to delete the admin");
         state.error = action.error.message;
       })
-      // Create service
-      .addCase(createService.pending, (state) => {
+      // Create admin
+      .addCase(createAdmin.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = null;
       })
-      .addCase(createService.fulfilled, (state, action) => {
+      .addCase(createAdmin.fulfilled, (state, action) => {
         state.loading = false;
         state.status = true;
-        toast.success("The service was created successfully");
-        state.services.push(action.payload);
+        toast.success("The admin was created successfully");
+        state.admins.push(action.payload);
       })
-      .addCase(createService.rejected, (state, action) => {
+      .addCase(createAdmin.rejected, (state, action) => {
         state.loading = false;
         state.status = false;
-        toast.error("Failed to create the service");
+        toast.error("Failed to create the admin");
         if (action.payload.error.response.status === 409) {
           state.error = action.payload.error.message;
         } else {
           state.error = action.error.message || "Unknown error occurred";
         }
       })
-      // Update service
-      .addCase(updateService.pending, (state) => {
+      // Update admin
+      .addCase(updateAdmin.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.status = null;
       })
-      .addCase(updateService.fulfilled, (state, action) => {
+      .addCase(updateAdmin.fulfilled, (state, action) => {
         state.loading = false;
         state.status = true;
-        toast.success("The service was updated successfully");
-        state.services = state.services.map((service) =>
-          service._id === action.payload._id ? action.payload : service
+        toast.success("The admin was updated successfully");
+        console.log("action.payload", action.payload);
+        state.admins = state.admins.map((admin) =>
+          admin._id === action.payload._id ? action.payload : admin
         );
       })
-      .addCase(updateService.rejected, (state, action) => {
+      .addCase(updateAdmin.rejected, (state, action) => {
         state.loading = false;
         state.status = false;
-        toast.error("Failed to update the service");
+        toast.error("Failed to update the admin");
         if (action.error && action.payload.error.response.status === 409) {
           state.error = action.payload.error.message;
         } else {
@@ -159,4 +161,4 @@ export const servicesSlice = createSlice({
 });
 
 // Export actions and reducer
-export default servicesSlice.reducer;
+export default adminsSlice.reducer;

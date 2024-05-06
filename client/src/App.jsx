@@ -8,17 +8,18 @@ import Protected from "./routes/Protected";
 import ForgetPassword from "./views/ForgetPassword";
 
 function App() {
+
   return (
     <div data-theme="dark">
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgetPassword" element={<ForgetPassword />} />
-        <Route element={<Protected />}>
-          <Route path="/dashboard/*" element={<Dashboard />} />
-        </Route>
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route element={<Protected />}>
+            <Route path="/dashboard/*" element={<Dashboard />} />
+          </Route>
+        </Routes>
     </div>
   );
 }

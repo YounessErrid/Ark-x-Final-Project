@@ -30,8 +30,16 @@ const Register = () => {
 
   const onSubmit =  (data) => {
 
-    dispatch(registerUser(data));
-    isAuthenticated && navigate("/login");
+    // dispatch(registerUser(data));
+    // isAuthenticated && navigate("/login");
+
+    dispatch(registerUser(data)).then((result) => {
+      // Check if the action was fulfilled
+      if (result.meta.requestStatus === "fulfilled") {
+        // Do something if dispatch was successful
+        navigate("/login");
+      }
+    });
   };
   useEffect(() => {
     if (isAuthenticated) {

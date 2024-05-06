@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { toFormData } from "axios";
+import { toFormData } from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
-const API_URL = "http://localhost:3000/api";
-// axios.defaults.withCredentials = true;
 
 const initialState = {
   user: null,
@@ -17,6 +16,31 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Handle checkSession action
+      .addCase(checkSession.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(checkSession.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        // If session is valid, update user state
+        if (action.payload.success) {
+          state.user = action.payload.user;
+          state.isAuthenticated = true;
+        } else {
+          // If session is not valid, clear user state
+          state.user = null;
+          state.isAuthenticated = false;
+        }
+      })
+      // .addCase(checkSession.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.error = action.error.message;
+      //   // If session validation fails, clear user state
+      //   state.user = null;
+      //   state.isAuthenticated = false;
+      // })
       // login user
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -67,9 +91,8 @@ export const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
-        
+        // state.user = action.payload.user;
+        // state.isAuthenticated = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -87,7 +110,6 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.user = action.payload.user;
-        
       })
       .addCase(forgetPassword.rejected, (state, action) => {
         state.loading = false;
@@ -100,21 +122,26 @@ export const userSlice = createSlice({
   },
 });
 
+// Action to check session validity
+export const checkSession = createAsyncThunk(
+  "user/checkSession",
+  async (_, { rejectWithValue }) => {
+    try {
+      const request = await axiosInstance.get("/admins/auth/checkSession");
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // LOGIN USER
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userCredentials, { rejectWithValue }) => {
     try {
-      const request = await axios.post(
-        API_URL.concat("/admins/auth/login"),
-        userCredentials,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true, // Send cookies with the request
-        }
-      );
+      const request = await axiosInstance.post("/admins/auth/login", userCredentials);
       const response = await request.data;
       return response;
     } catch (error) {
@@ -127,12 +154,7 @@ export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await axios.get(API_URL.concat("/admins/auth/logout"), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true, // Send cookies with the request
-      });
+      const request = await axiosInstance.get("/admins/auth/logout");
       const response = await request.data;
       return response;
     } catch (error) {
@@ -150,12 +172,14 @@ export const registerUser = createAsyncThunk(
       // Create a new FormData object
       const formData = toFormData(userCredentials);
       // Send the request with FormData instead of the raw userCredentials object
-      const request = await axios.post(API_URL.concat("/clients/auth/register"), formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
-        },
-        withCredentials: true, // Send cookies with the request
-      });
+      const request = await axiosInstance.post("/clients/auth/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
+          },
+        }
+      );
       const response = await request.data;
       return response;
     } catch (error) {
@@ -170,12 +194,15 @@ export const forgetPassword = createAsyncThunk(
       // Create a new FormData object
       const formData = toFormData(userCredentials);
       // Send the request with FormData instead of the raw userCredentials object
-      const request = await axios.post(API_URL.concat("/admins/auth/forgotPassword"), formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
-        },
-        withCredentials: true, // Send cookies with the request
-      });
+      const request = await axiosInstance.post(
+        "/admins/auth/forgotPassword",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
+          },
+        }
+      );
       const response = await request.data;
       return response;
     } catch (error) {

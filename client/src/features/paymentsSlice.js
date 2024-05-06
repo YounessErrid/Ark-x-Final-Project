@@ -1,22 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
-const API_URL = "http://localhost:3000/api/";
 
 // Async thunk to fetch all payments
 export const fetchPayments = createAsyncThunk(
   "payments/fetchPayments",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API_URL.concat("payments"),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true, // Send cookies with the request
-      });
+      const response = await axiosInstance.get("/payments");
 
       if (response.status !== 200) {
         throw new Error(response.statusText);
@@ -34,14 +27,7 @@ export const deletePayment = createAsyncThunk(
   "payments/deletePayment",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(API_URL.concat("payments/", id,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true, // Send cookies with the request
-      }));
-
+      const response = await axiosInstance.delete("payments/"+ id);
       if (response.status !== 200) {
         throw new Error(response.statusText);
       }

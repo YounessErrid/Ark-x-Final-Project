@@ -56,10 +56,23 @@ const findOne = async (req, res) => {
 
 const viewAll = async (req, res) => {
   try {
-    const subscription = await Subscription.find();
+    const subscription = await Subscription.find().populate('userId', 'fullname email');
+
+    const responseData = subscription.map(subscription => {
+      
+      return ({
+      
+      _id:subscription._id,
+      fullname: subscription.userId === null ? null : subscription.userId.fullname,
+      email: subscription.userId === null ? null : subscription.userId.email,
+
+      activationDate: subscription.activationDate,
+      expirationDate: subscription.expirationDate,
+      activated: subscription.activated,
+    })});
 
     if (subscription.length > 0) {
-      return res.status(200).json(subscription);
+      return res.status(200).json(responseData);
     } else {
       return res.status(404).json({ error: "No subscription found!" });
     }

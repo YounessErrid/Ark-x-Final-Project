@@ -21,13 +21,12 @@ var userSchema = new mongoose.Schema(
     },
     profile_image: {
       type: String,
-      // unique: true,
     },
     role: {
       type: String,
       required: true,
       trim: true,
-      enum: ["admin", "client", "agency"],
+      enum: ["superadmin","admin", "client", "agency"],
       default: "client",
     },
     passwordResetToken: String,
