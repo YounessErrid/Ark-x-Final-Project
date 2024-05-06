@@ -10,6 +10,7 @@ import { Clients } from "./Clients";
 import { Status } from "./Status";
 import { useSelector } from "react-redux";
 import { Admins } from "./Admins";
+import Setting from "../Setting";
 
 export const Dashboard = () => {
   const user = useSelector((state) => state.user.user);
@@ -69,6 +70,7 @@ export const Dashboard = () => {
             </div>
             <Routes>
               <Route path="/" element={<Status />} />
+              <Route path="/settings" element={<Setting />} />
               <Route path="/agencies" element={<Agencies />} />
               <Route path="/clients" element={<Clients />} />
               <Route path="/services" element={<Services />} />

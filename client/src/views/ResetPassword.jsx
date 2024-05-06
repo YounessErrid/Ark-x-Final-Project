@@ -1,20 +1,21 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { forgetPassword } from "../features/userSlice";
+import React from "react";
+import { resetPassword } from "../features/userSlice";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/logo.svg";
 import loginSvg from "../assets/Login.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
-const ForgetPassword = () => {
-  const { error, success } = useSelector((state) => state.user);
+const ResetPassword = () => {
+  const { token } = useParams();
+  const { isAuthenticated, user, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const schema = z.object({
-    email: z.string().email(),
+    password: z.string().min(8),
   });
 
   const {
@@ -25,15 +26,16 @@ const ForgetPassword = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (email) => {
-    dispatch(forgetPassword(email));
-  };
-  useEffect(() => {
-    console.log(success);
-    if (success) {
-      navigate("/emailSent");
+  const onSubmit = async ({ password }) => {
+    try {
+      await dispatch(
+        resetPassword({ token, userCredentials: { password } })
+      ).unwrap();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
     }
-  }, [success]);
+  };
   return (
     <section className="gradient-form h-full bg-gray-300 dark:bg-neutral-700">
       <div className="container w-full m-auto h-full p-10">
@@ -59,26 +61,28 @@ const ForgetPassword = () => {
                       </p>
                       <div className="mb-8">
                         <label
-                          htmlFor="UserEmail"
+                          htmlFor="UserPassword"
                           className="block text-base font-normal text-gray-700 dark:text-gray-200"
                         >
-                          Please enter your email for your account
+                          Password
                         </label>
                         <input
-                          type="text"
-                          id="UserEmail"
-                          name="email"
-                          placeholder="john@rhcp.com"
-                          {...register("email")}
-                          className="mt-1 w-full  h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue"
+                          type="password"
+                          name="password"
+                          id="UserPassword"
+                          placeholder="••••••••"
+                          {...register("password")}
+                          className="mt-1 w-full h-12 p-2 rounded-md border-gray-200 shadow-sm sm:text-sm bg-lightBlue dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                         />
-                        {errors.email && (
-                          <p className="text-red-400">{errors.email.message}</p>
+                        {errors.password && (
+                          <p className="text-red-400">
+                            {errors.password.message}
+                          </p>
                         )}
                       </div>
                       <div className="mb-12 pb-1 pt-1 text-center">
                         <button className="btn btn-block bg-primary text-whiteDirty border-0">
-                          Send Mail
+                          Save
                         </button>
                         {error && <p className="text-red-400">{error}</p>}
                       </div>
@@ -99,4 +103,4 @@ const ForgetPassword = () => {
   );
 };
 
-export default ForgetPassword;
+export default ResetPassword;
