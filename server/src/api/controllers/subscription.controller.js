@@ -70,7 +70,7 @@ const viewAll = async (req, res) => {
       
       _id:subscription._id,
       // fullname: subscription.userId === null ? null : subscription.userId.fullname,
-      email: subscription.agencyId === null ? null : subscription.agencyId.userId.email,
+      email: subscription.agencyId === null ? null : subscription.agencyId?.userId?.email,
       activationDate: subscription.activationDate,
       expirationDate: subscription.expirationDate,
       activated: subscription.activated,
