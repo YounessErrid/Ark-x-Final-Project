@@ -11,12 +11,12 @@ const validateRegisterAgency = [
     .withMessage('Fullname must be at least 4 characters long'),
 
     // Validate Phone
-  body('phone')
-  .trim()
-  .notEmpty()
-  .withMessage('Phone is required')
-  .isLength({ min: 10 })
-  .withMessage('Phone must be at least 10 characters long'),
+  // body('phone')
+  // .trim()
+  // .notEmpty()
+  // .withMessage('Phone is required')
+  // .isLength({ min: 10 })
+  // .withMessage('Phone must be at least 10 characters long'),
 
   // Validate Email
   body('email')

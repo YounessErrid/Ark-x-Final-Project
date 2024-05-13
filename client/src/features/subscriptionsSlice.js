@@ -48,6 +48,7 @@ export const subscriptionsSlice = createSlice({
       .addCase(fetchSubscriptions.fulfilled, (state, action) => {
         state.loading = false;
         state.subscriptions = action.payload;
+        // console.log(action.payload);
       })
       .addCase(fetchSubscriptions.rejected, (state, action) => {
         state.loading = false;

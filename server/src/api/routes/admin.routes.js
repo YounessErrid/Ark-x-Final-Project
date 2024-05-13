@@ -36,4 +36,6 @@ router.get('/', controller.viewAll)
 router.put('/:id', [ isSuperAdmin], controller.update)
 router.delete('/:id',  [ isSuperAdmin], controller.remove)
 
+
+
 module.exports = router;
