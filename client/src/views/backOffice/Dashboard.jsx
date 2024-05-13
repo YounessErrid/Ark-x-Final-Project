@@ -10,7 +10,7 @@ import { Clients } from "./Clients";
 import { Status } from "./Status";
 import { useSelector } from "react-redux";
 import { Admins } from "./Admins";
-import Setting from "../Setting";
+import Setting from "./Setting";
 
 export const Dashboard = () => {
   const user = useSelector((state) => state.user.user);

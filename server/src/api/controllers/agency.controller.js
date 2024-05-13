@@ -4,6 +4,7 @@ const User = require("../models/user.model");
 
 const register = async (req, res) => {
   const { email, password, fullname, addresse , agencyName} = req.body;
+  
   try {
     const path = req.file ? req.file.path : null;
     if (!email || !password || !fullname || !addresse || !agencyName) {

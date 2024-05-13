@@ -179,13 +179,13 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FiUpload } from 'react-icons/fi';
 
 const ProfilePage = () => {
-  const [profileImage, setProfileImage] = useState(null);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const userState = useSelector((state) => state.user);
+  
+  // const [profileImage, setProfileImage] = useState(null);
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const userState = useSelector((state) => state.user);
 
   useEffect(() => {}, []);
 

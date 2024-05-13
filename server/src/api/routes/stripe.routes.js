@@ -29,7 +29,9 @@ const controller = require("../controllers/stripe.controller");
 
 // route to create a checkout session
 router.post("/create-checkout-session", controller.checkout);
+
 router.get("/subscriptions/:id", controller.getSubscription);
+
 // route to handle webhook events
 router.post(
   "/webhook",
