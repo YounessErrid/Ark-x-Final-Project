@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toFormData } from "axios";
 import axiosInstance from "../utils/axiosInstance";
-import axios, { toFormData } from "axios";
-
 
 const initialState = {
   user: null,
@@ -104,6 +102,27 @@ export const userSlice = createSlice({
           state.error = action.error.message;
         }
       })
+      //Update User
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload.user;
+        state.success = true;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        if (action.error.message === "Rejected") {
+          state.error = "Can't find this email";
+        } else {
+          state.error = action.error.message;
+        }
+      })
       //forget Password
       .addCase(forgetPassword.pending, (state) => {
         state.loading = true;
@@ -168,7 +187,10 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userCredentials, { rejectWithValue }) => {
     try {
-      const request = await axiosInstance.post("/admins/auth/login", userCredentials);
+      const request = await axiosInstance.post(
+        "/admins/auth/login",
+        userCredentials
+      );
       const response = await request.data;
       return response;
     } catch (error) {
@@ -199,7 +221,8 @@ export const registerUser = createAsyncThunk(
       // Create a new FormData object
       const formData = toFormData(userCredentials);
       // Send the request with FormData instead of the raw userCredentials object
-      const request = await axiosInstance.post("/clients/auth/register",
+      const request = await axiosInstance.post(
+        "/clients/auth/register",
         formData,
         {
           headers: {
@@ -214,12 +237,44 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+// Update User
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async ({ id, userCredentials }, { rejectWithValue }) => {
+    try {
+      const { fullname, selectedfile } = userCredentials;
+      console.log(fullname, selectedfile);
+      // Create a new FormData object
+      // const formData = toFormData(userCredentials);
+      const formData = new FormData();
+      formData.append("fullname", fullname);
+      formData.append("profile_image", selectedfile);
+      console.log(formData);
+      // Send the request with FormData instead of the raw userCredentials object
+      const request = await axiosInstance.put(
+        `admins/auth/update/${id}`,
+        formData
+        // {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
+        //   },
+        // }
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const forgetPassword = createAsyncThunk(
   "user/forgetPassword",
   async (userCredentials, { rejectWithValue }) => {
     try {
       const frontendHost = window.location.host;
-      const request = await axiosInstance.post("/admins/auth/forgotPassword",
+      const request = await axiosInstance.post(
+        "/admins/auth/forgotPassword",
         userCredentials,
         {
           headers: {
@@ -239,12 +294,13 @@ export const resetPassword = createAsyncThunk(
   "user/resetPassword",
   async ({ token, userCredentials }, { rejectWithValue }) => {
     try {
-      const request = await axiosInstance.put(`/admins/auth/resetPassword/${token}`,
+      const request = await axiosInstance.put(
+        `/admins/auth/resetPassword/${token}`,
         userCredentials,
         {
           headers: {
             "Content-Type": "application/json", // Custom header for frontend host
-          }
+          },
         }
       );
       const response = await request.data;

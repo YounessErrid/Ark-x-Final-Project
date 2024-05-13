@@ -28,12 +28,11 @@ router.post("/auth/login", [validateLoginUser], authenticate, controller.login);
 router.get("/auth/logout", controller.destroy);
 router.get("/auth/checkSession", controller.checkSession);
 router.post("/auth/forgotPassword", controller.forgotPassword);
+router.put("/auth/update/:id", upload.single("profile_image"), controller.update);
 router.put("/auth/resetPassword/:token", controller.resetPassword);
-// CRUD routes for Post
 // router.post('/', controller.create)
-router.get('/', controller.viewAll)
+router.get("/", controller.viewAll);
 // router.get('/:id', controller.findOne)
-router.put('/:id', [ isSuperAdmin], controller.update)
-router.delete('/:id',  [ isSuperAdmin], controller.remove)
+router.delete("/:id", [isSuperAdmin], controller.remove);
 
 module.exports = router;

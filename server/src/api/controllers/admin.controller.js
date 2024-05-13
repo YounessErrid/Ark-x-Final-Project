@@ -3,6 +3,7 @@ const Admin = require("../models/admin.model");
 const User = require("../models/user.model");
 const sendEmail = require("../helpers/email");
 const crypto = require("crypto");
+const fs = require("fs");
 
 const register = async (req, res) => {
   const { email, password, fullname } = req.body;
@@ -87,7 +88,7 @@ const createAdmin = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Admin created successfully",
-      data: data
+      data: data,
     });
   } catch (error) {
     return res
@@ -103,6 +104,7 @@ const login = (req, res) => {
     success: true,
     message: "Successfully logged in",
     user: {
+      id: req.user._id,
       role: req.user.role,
       fullname: req.user.fullname,
       profile: req.user.profile_image,
@@ -162,7 +164,7 @@ const forgotPassword = async (req, res, next) => {
 };
 const resetPassword = async (req, res) => {
   try {
-    console.log(req.params.token)
+    console.log(req.params.token);
     const token = crypto
       .createHash("sha256")
       .update(req.params.token)
@@ -177,7 +179,7 @@ const resetPassword = async (req, res) => {
         message: "Token is Invalid or Expired",
       });
     }
-    console.log('password',req.body.password);
+    console.log("password", req.body.password);
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
     user.password = hashedPassword;
@@ -214,6 +216,7 @@ const checkSession = (req, res) => {
         success: true,
         message: "Successfully logged in",
         user: {
+          id: req.user._id,
           role: req.user.role,
           fullname: req.user.fullname,
           profile: req.user.profile_image,
@@ -298,41 +301,66 @@ const remove = async (req, res) => {
 };
 const update = async (req, res) => {
   try {
+    let updatedAdmin;
     const { id } = req.params;
-    const {role, createdAt,userId, _id, ...newAdminData } = req.body; // Exclude createdAt from newPostData
-
+    const { role, createdAt, userId, _id, ...newAdminData } = req.body; // Exclude createdAt from newPostData
+    const path = req.file ? req.file.path : null;
+    newAdminData.profile_image = path
     if (!id || !newAdminData) {
       return res
         .status(400)
         .json({ error: "Admin update failed: Missing required fields!" });
     }
 
-    const admin = await Admin.findById(id);
-    if (!admin) {
-      return res.status(404).json({ error: "Admin not found!" });
+    // const admin = await Admin.findById(id);
+    // if (!admin) {
+    //   return res.status(404).json({ error: "Admin not found!" });
+    // }
+    const user = await User.findById(id);
+    if (user.profile_image && newAdminData.profile_image) {
+      fs.unlink(user.profile_image, (err) => {
+        if (err) {
+          console.error("Error deleting previous image:", err);
+        } else {
+          console.log("Previous image deleted successfully");
+        }
+      });
     }
-    if(newAdminData.password){
-      
+    if (newAdminData.password) {
       // const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = await bcrypt.hashSync(newAdminData.password, 10);
+      const hashedPassword = bcrypt.hashSync(newAdminData.password, 10);
       newAdminData.password = hashedPassword;
-    // const hashedPassword = bcrypt.hashSync(password, salt);
+      // const hashedPassword = bcrypt.hashSync(password, salt);
     }
+    console.log(newAdminData);
     // Update the client with the given ID
-    const updatedAdmin = await User.findByIdAndUpdate(
-      admin.userId,
+    updatedAdmin = await User.findByIdAndUpdate(
+      id,
       {
         ...newAdminData,
         $set: { updatedAt: new Date() },
       },
       { new: true }
     );
+    // if (path) {
+    // } else if (path && newAdminData) {
+    //   updatedAdmin = await User.findByIdAndUpdate(
+    //     id,
+    //     {
+    //       ...newAdminData,
+    //       profile_image: path,
+    //       $set: { updatedAt: new Date() },
+    //     },
+    //     { new: true }
+    //   );
+    // }
 
     if (!updatedAdmin) {
-      return res.status(404).json({ error: "Admin not found!" });
+      return res.status(404).json({ error: "User not found!" });
     }
+    res.status(202).json({ user: updatedAdmin });
 
-    return res.status(200).json(updatedAdmin);
+    // return res.status(200).json(updatedAdmin);
   } catch (error) {
     return res
       .status(500)

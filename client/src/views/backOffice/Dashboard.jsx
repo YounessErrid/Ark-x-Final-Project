@@ -10,14 +10,16 @@ import { Clients } from "./Clients";
 import { Status } from "./Status";
 import { useSelector } from "react-redux";
 import { Admins } from "./Admins";
-import Setting from "../Setting";
+import Setting from "./Setting";
 
 export const Dashboard = () => {
+  const [profile, setProfile] = useState();
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     document.title = "Dashboard";
-  }, []);
+    setProfile(user.profile);
+  }, [user]);
   return (
     <div className=" bg-lightBlue" data-theme="light">
       <label
@@ -61,16 +63,18 @@ export const Dashboard = () => {
               <div className="avatar online">
                 <div className="w-10 rounded-full">
                   <img
-                    src={`http://localhost:3000/${user?.profile}` ||"https://placehold.co/600x400"}
+                    src={
+                      `http://localhost:3000/${profile}` ||
+                      "https://placehold.co/600x400"
+                    }
                     alt="Profile"
                   />
                 </div>
-                
               </div>
             </div>
             <Routes>
               <Route path="/" element={<Status />} />
-              <Route path="/settings" element={<Setting />} />
+              <Route path="/setting" element={<Setting />} />
               <Route path="/agencies" element={<Agencies />} />
               <Route path="/clients" element={<Clients />} />
               <Route path="/services" element={<Services />} />

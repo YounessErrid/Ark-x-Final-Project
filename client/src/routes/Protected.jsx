@@ -30,7 +30,6 @@ const Protected = () => {
     return <Spinner loaded={dataLoaded} />;
   }
 
-  console.log(isAuthenticated, user?.role);
   // After data is loaded, check for authentication
   // return isAuthenticated && user?.role === 'admin' ? <Outlet /> : <Navigate to="/login" />;
   const isAdminOrSuperAdmin = isAuthenticated && (user?.role === 'admin' || user?.role === 'superadmin');

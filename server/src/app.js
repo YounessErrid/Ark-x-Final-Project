@@ -68,7 +68,7 @@ const main = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/uploads", express.static("uploads"));
-  app.use(cors(corsOptions));
+  // app.use(cors(corsOptions));
 
   //put the routes here
   app.use("/api/clients", clientRouter);

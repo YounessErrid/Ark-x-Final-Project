@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux"
 import logo from "../assets/logo.svg";
 import loginSvg from "../assets/Login.svg";
 import { registerUser } from "../features/userSlice";
