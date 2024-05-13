@@ -87,7 +87,7 @@ const createAdmin = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Admin created successfully",
-      data: data
+      data: data,
     });
   } catch (error) {
     return res
@@ -162,7 +162,7 @@ const forgotPassword = async (req, res, next) => {
 };
 const resetPassword = async (req, res) => {
   try {
-    console.log(req.params.token)
+    console.log(req.params.token);
     const token = crypto
       .createHash("sha256")
       .update(req.params.token)
@@ -177,7 +177,7 @@ const resetPassword = async (req, res) => {
         message: "Token is Invalid or Expired",
       });
     }
-    console.log('password',req.body.password);
+    console.log("password", req.body.password);
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
     user.password = hashedPassword;
@@ -299,7 +299,7 @@ const remove = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const {role, createdAt,userId, _id, ...newAdminData } = req.body; // Exclude createdAt from newPostData
+    const { role, createdAt, userId, _id, ...newAdminData } = req.body; // Exclude createdAt from newPostData
 
     if (!id || !newAdminData) {
       return res
@@ -311,12 +311,11 @@ const update = async (req, res) => {
     if (!admin) {
       return res.status(404).json({ error: "Admin not found!" });
     }
-    if(newAdminData.password){
-      
+    if (newAdminData.password) {
       // const salt = bcrypt.genSaltSync(10);
       const hashedPassword = await bcrypt.hashSync(newAdminData.password, 10);
       newAdminData.password = hashedPassword;
-    // const hashedPassword = bcrypt.hashSync(password, salt);
+      // const hashedPassword = bcrypt.hashSync(password, salt);
     }
     // Update the client with the given ID
     const updatedAdmin = await User.findByIdAndUpdate(
@@ -342,6 +341,8 @@ const update = async (req, res) => {
       ]);
   }
 };
+
+
 module.exports = {
   register,
   createAdmin,
@@ -353,37 +354,6 @@ module.exports = {
   forgotPassword,
   resetPassword,
   checkSession,
+ 
 };
 
-// const viewAll = async (req, res) => {
-//   try {
-//     const admins = await Admin.find({ userId: { $ne: null } })
-//   .populate({
-//     path: "userId",
-//     match: { role: "admin" },
-//     select: "fullname profile_image email role"
-//   })
-//   .exec();
-
-//     if (admins.length === 0) {
-//       return res.status(404).json({ error: "No admins found" });
-//     }
-//     const filteredAdmins = admins.filter(admin => admin.userId);
-//     const responseData = filteredAdmins.map(admin => ({
-//       _id: admin.userId._id,
-//       admin_id: admin._id,
-//       fullname: admin.userId.fullname,
-//       email: admin.userId.email,
-//       role: admin.userId.role,
-//       createdAt: admin.createdAt,
-//       updatedAt: admin.updatedAt
-//     }));
-//     // Construct the response object with the desired fields
-//     return res.status(200).json(responseData);
-//   } catch (error) {
-//     return res.status(500).json({
-//       error: "Internal server error",
-//       message: `Error retrieving admins: ${error.message}`,
-//     });
-//   }
-// };

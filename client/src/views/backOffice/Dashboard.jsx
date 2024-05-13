@@ -11,6 +11,7 @@ import { Status } from "./Status";
 import { useSelector } from "react-redux";
 import { Admins } from "./Admins";
 import Setting from "../Setting";
+import Statistics from "../dashboardStats/statistics";
 
 export const Dashboard = () => {
   const user = useSelector((state) => state.user.user);
@@ -52,7 +53,8 @@ export const Dashboard = () => {
       <div className="flex">
         <div className="drawer lg:drawer-open">
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content flex flex-col items-center  mx-12 my-8">
+          {/* removed  items-center*/}
+          <div className="drawer-content flex flex-col  mx-12 my-8">
             {/* Page content here */}
             <div className="flex justify-between items-center w-full">
               <h1 className="font-bold text-2xl">
@@ -69,7 +71,7 @@ export const Dashboard = () => {
               </div>
             </div>
             <Routes>
-              <Route path="/" element={<Status />} />
+              <Route path="/" element={<Statistics />} />
               <Route path="/settings" element={<Setting />} />
               <Route path="/agencies" element={<Agencies />} />
               <Route path="/clients" element={<Clients />} />
