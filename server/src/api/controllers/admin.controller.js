@@ -305,7 +305,8 @@ const update = async (req, res) => {
     const { id } = req.params;
     const { role, createdAt, userId, _id, ...newAdminData } = req.body; // Exclude createdAt from newPostData
     const path = req.file ? req.file.path : null;
-    newAdminData.profile_image = path
+    newAdminData.profile_image = path;
+
     if (!id || !newAdminData) {
       return res
         .status(400)
@@ -370,6 +371,7 @@ const update = async (req, res) => {
       ]);
   }
 };
+
 module.exports = {
   register,
   createAdmin,
@@ -382,36 +384,3 @@ module.exports = {
   resetPassword,
   checkSession,
 };
-
-// const viewAll = async (req, res) => {
-//   try {
-//     const admins = await Admin.find({ userId: { $ne: null } })
-//   .populate({
-//     path: "userId",
-//     match: { role: "admin" },
-//     select: "fullname profile_image email role"
-//   })
-//   .exec();
-
-//     if (admins.length === 0) {
-//       return res.status(404).json({ error: "No admins found" });
-//     }
-//     const filteredAdmins = admins.filter(admin => admin.userId);
-//     const responseData = filteredAdmins.map(admin => ({
-//       _id: admin.userId._id,
-//       admin_id: admin._id,
-//       fullname: admin.userId.fullname,
-//       email: admin.userId.email,
-//       role: admin.userId.role,
-//       createdAt: admin.createdAt,
-//       updatedAt: admin.updatedAt
-//     }));
-//     // Construct the response object with the desired fields
-//     return res.status(200).json(responseData);
-//   } catch (error) {
-//     return res.status(500).json({
-//       error: "Internal server error",
-//       message: `Error retrieving admins: ${error.message}`,
-//     });
-//   }
-// };

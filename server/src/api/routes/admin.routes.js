@@ -35,4 +35,6 @@ router.get("/", controller.viewAll);
 // router.get('/:id', controller.findOne)
 router.delete("/:id", [isSuperAdmin], controller.remove);
 
+
+
 module.exports = router;

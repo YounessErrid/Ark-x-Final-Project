@@ -56,16 +56,21 @@ const findOne = async (req, res) => {
 
 const viewAll = async (req, res) => {
   try {
-    const subscription = await Subscription.find().populate('userId', 'fullname email');
+    const subscription = await Subscription.find().populate({
+      path: "agencyId",
+      populate: {
+        path: "userId",
+        model: "User",
+      },
+    });
 
-    const responseData = subscription.map(subscription => {
+     const responseData = subscription.map(subscription => {
       
       return ({
       
       _id:subscription._id,
-      fullname: subscription.userId === null ? null : subscription.userId.fullname,
-      email: subscription.userId === null ? null : subscription.userId.email,
-
+      // fullname: subscription.userId === null ? null : subscription.userId.fullname,
+      email: subscription.agencyId === null ? null : subscription.agencyId?.userId?.email,
       activationDate: subscription.activationDate,
       expirationDate: subscription.expirationDate,
       activated: subscription.activated,

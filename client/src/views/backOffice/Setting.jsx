@@ -174,6 +174,7 @@
 // };
 
 // export default Setting;
+
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -238,7 +239,7 @@ const ProfilePage = () => {
     // const formData = toFormData({fullname, selectedfile})
     // formData.append("fullname", fullname);
     // formData.append("profileImage", selectedfile);
-    dispatch(updateUser({ id, userCredentials: {fullname, selectedfile}}));
+    dispatch(updateUser({ id, userCredentials: { fullname, selectedfile } }));
     navigate("/dashboard");
   };
 

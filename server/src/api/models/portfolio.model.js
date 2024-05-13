@@ -22,12 +22,6 @@ const portfolioSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "PortfolioService",
   }],
-  // services: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Service",
-  //   },
-  // ],
 });
 const Portfolio = mongoose.model("Portfolio", portfolioSchema);
 module.exports = Portfolio;

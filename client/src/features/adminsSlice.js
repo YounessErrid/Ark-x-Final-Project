@@ -99,7 +99,7 @@ export const adminsSlice = createSlice({
         state.loading = false;
         state.status = true;
         toast.success("The admin was deleted successfully");
-        console.log("action.payload", action.payload);
+        // console.log("action.payload", action.payload);
         state.admins = state.admins.filter(
           (admin) => admin._id !== action.payload.userId
         );
@@ -142,7 +142,7 @@ export const adminsSlice = createSlice({
         state.loading = false;
         state.status = true;
         toast.success("The admin was updated successfully");
-        console.log("action.payload", action.payload);
+        // console.log("action.payload", action.payload);
         state.admins = state.admins.map((admin) =>
           admin._id === action.payload._id ? action.payload : admin
         );
