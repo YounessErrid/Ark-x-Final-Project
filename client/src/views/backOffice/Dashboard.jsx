@@ -75,7 +75,7 @@ export const Dashboard = () => {
             </div>
             <Routes>
               <Route path="/" element={<Statistics />} />
-              <Route path="/settings" element={<Setting />} />
+              <Route path="/setting" element={<Setting />} />
               <Route path="/agencies" element={<Agencies />} />
               <Route path="/clients" element={<Clients />} />
               <Route path="/services" element={<Services />} />
