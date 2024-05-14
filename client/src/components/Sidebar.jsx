@@ -141,7 +141,7 @@ export const Sidebar = () => {
             <li className="text-textGray text-lg ">
               <Link
                 className="hover:bg-primary hover:text-whiteDirty"
-                to={"/dashboard/setting"}
+                to={"/dashboard/updateuser"}
               >
                 <BiCog />
                 Setting

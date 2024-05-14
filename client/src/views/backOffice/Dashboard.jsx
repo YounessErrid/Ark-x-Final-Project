@@ -11,15 +11,17 @@ import { useSelector } from "react-redux";
 import { Admins } from "./Admins";
 import Setting from "./Setting";
 import Statistics from "../dashboardStats/statistics";
+import UpdateUser from "./UpdateUser";
+import UpdatePassword from "./UpdatePassword";
 
 export const Dashboard = () => {
-  const [profile, setProfile] = useState();
   const user = useSelector((state) => state.user.user);
+  // const [profile, setProfile] = useState(user.profile);
 
   useEffect(() => {
     document.title = "Dashboard";
-    setProfile(user.profile);
-  }, [user]);
+    // setProfile(user.profile);
+  }, []);
   return (
     <div className=" bg-lightBlue" data-theme="light">
       <label
@@ -65,7 +67,7 @@ export const Dashboard = () => {
                 <div className="w-10 rounded-full">
                   <img
                     src={
-                      `http://localhost:3000/${profile}` ||
+                      `http://localhost:3000/${user.profile}` ||
                       "https://placehold.co/600x400"
                     }
                     alt="Profile"
@@ -82,6 +84,8 @@ export const Dashboard = () => {
               <Route path="/subscriptions" element={<Subscriptions />} />
               <Route path="/payments" element={<Payments />} />
               <Route path="/admins" element={<Admins />} />
+              <Route path="/updateuser" element={<UpdateUser />} />
+              <Route path="/updatepassword" element={<UpdatePassword />} />
             </Routes>
           </div>
           <Sidebar />

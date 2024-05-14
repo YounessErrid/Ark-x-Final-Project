@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import { toFormData } from "axios";
 import axiosInstance from "../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const initialState = {
   user: null,
@@ -164,6 +164,28 @@ export const userSlice = createSlice({
         // } else {
         //   state.error = action.error.message;
         // }
+      })
+      // Change Password
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        // state.success = null;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        toast.success("The Password Changed Successfully");
+        state.error = null;
+        state.user = action.payload.user;
+        // state.success = true;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = false;
+        // toast.error("The Password Didn't Chnge");
+        if (action.error.message === "Rejected") {
+          state.error = "Old Password is in correct";
+        } else {
+          state.error = action.error.message;
+        }
       });
   },
 });
@@ -296,6 +318,26 @@ export const resetPassword = createAsyncThunk(
     try {
       const request = await axiosInstance.put(
         `/admins/auth/resetPassword/${token}`,
+        userCredentials,
+        {
+          headers: {
+            "Content-Type": "application/json", // Custom header for frontend host
+          },
+        }
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const changePassword = createAsyncThunk(
+  "user/changePassword",
+  async ({ id, userCredentials }, { rejectWithValue }) => {
+    try {
+      const request = await axiosInstance.put(
+        `/admins/auth/changePassword/${id}`,
         userCredentials,
         {
           headers: {
