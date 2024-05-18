@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { searchAgencies } from "../../../features/agenciesSlice";
+import { Spinner } from "../../../components/Spinner";
+
 
 export const Agencies = () => {
-  
+  const { loading, error, agencies } = useSelector((state) => state.agencies);
+  const dispatch = useDispatch();
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearch = () => {
+    // Dispatch search action with searchQuery
+    dispatch(searchAgencies(searchQuery));
+  };
+
+  useEffect(() => {
+    dispatch(searchAgencies(searchQuery));
+    setDataLoaded(true);
+  }, [dispatch]);
+
   return (
     <div>
       <div className="bg-secondary">
@@ -19,24 +42,18 @@ export const Agencies = () => {
             </div>
             <div className="flex w-11/12 md:w-8/12 xl:w-6/12">
               <div className="flex rounded-md w-full">
-                <select
-                  id="pricingType"
-                  name="pricingType"
-                  class=" bg-white border-2  focus:outline-none rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
-                >
-                  <option value="All" selected="">
-                    All
-                  </option>
-                  <option value="Freemium">Freemium</option>
-                  <option value="Free">Free</option>
-                  <option value="Paid">Paid</option>
-                </select>
                 <input
                   type="text"
                   name="q"
-                  className="w-full p-3  bg-whiteDirty placeholder-current focus:outline-none focus:text-gray-900 font-medium"
+                  value={searchQuery}
+                  onChange={handleInputChange}
+                  className="w-full p-3 bg-whiteDirty rounded-l placeholder-current focus:outline-none focus:text-gray-900 font-medium"
                 />
-                <button className="inline-flex items-center gap-2 bg-primary  text-primary text-lg font-semibold py-3 px-6 rounded-r-md">
+                
+                <button
+                  onClick={handleSearch}
+                  className="inline-flex items-center gap-2 bg-primary  text-primary text-lg font-semibold py-3 px-6 rounded-r-md"
+                >
                   <span className="text-white">Find</span>
                   <svg
                     className="text-gray-200 h-5 w-5 p-0 fill-current"
@@ -74,25 +91,30 @@ export const Agencies = () => {
             </p>
           </div>
           <div className="flex flex-wrap -m-4">
-            <div className="xl:w-1/4 md:w-1/2 p-4">
-              <div className="bg-gray-100 p-6 rounded-lg">
-                <img
-                  className="h-40 rounded w-full object-cover object-center mb-6"
-                  src="https://dummyimage.com/720x400"
-                  alt="content"
-                />
-                <h3 className="tracking-widest text-indigo-500 text-xs font-medium title-font">
-                  SUBTITLE
-                </h3>
-                <h2 className="text-lg text-gray-900 font-medium title-font mb-4">
-                  Chichen Itza
-                </h2>
-                <p className="leading-relaxed text-base">
-                  Fingerstache flexitarian street art 8-bit waistcoat.
-                  Distillery hexagon disrupt edison bulbche.
-                </p>
-              </div>
-            </div>
+            {loading && !dataLoaded && <Spinner />}
+            {agencies &&
+              agencies.map((agency) => (
+                <div key={agency._id} className="xl:w-1/4 md:w-1/2 p-4">
+                  <div className="bg-gray-100 p-6 rounded-lg">
+                    <img
+                      className="h-40 rounded w-full object-cover object-center mb-6"
+                      src={"http://localhost:3000/"+agency.portfolio[0]?.cover}
+                      alt="content"
+                    />
+                    {console.log(agency)}
+                    <h3 className="tracking-widest text-indigo-500 text-xs font-medium title-font">
+                      {agency.portfolio.description}
+                    </h3>
+                    <h2 className=" text-gray-900 font-medium  mb-4">
+                      {agency.agencyName}
+                    </h2>
+                    <p className="leading-relaxed text-base">
+                      {agency.portfolio[0]?.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+
             {/* Répétez la structure ci-dessus pour chaque produit */}
           </div>
         </div>

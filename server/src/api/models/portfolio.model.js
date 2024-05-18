@@ -23,5 +23,10 @@ const portfolioSchema = new mongoose.Schema({
     ref: "PortfolioService",
   }],
 });
+
+
 const Portfolio = mongoose.model("Portfolio", portfolioSchema);
+
+Portfolio.schema.index({ description: 'text' });  // Text index for searching
+
 module.exports = Portfolio;

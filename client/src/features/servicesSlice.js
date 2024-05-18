@@ -39,6 +39,7 @@ export const createService = createAsyncThunk(
       const data = await response.data;
       return data;
     } catch (error) {
+      
       return rejectWithValue(error.response.data);
     }
   }

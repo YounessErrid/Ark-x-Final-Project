@@ -40,7 +40,7 @@ export const Admins = () => {
     resolver: zodResolver(adminSchema),
   });
 
-  const { admins, error, loading, status } = useSelector(
+  const { admins, error, loading } = useSelector(
     (state) => state.admins
   );
   const dispatch = useDispatch();
@@ -179,7 +179,7 @@ export const Admins = () => {
       setValue("email", formData.email || "");
       setValue("password", formData.password || "");
     }
-  }, [dispatch, formData, error, status]);
+  }, [dispatch, formData]);
 
   return (
     <div className="w-full">

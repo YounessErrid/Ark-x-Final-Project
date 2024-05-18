@@ -19,10 +19,15 @@ const portfolioserviceSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+
 const portfolioservice = mongoose.model(
   "portfolioservice",
   portfolioserviceSchema
 );
+
+portfolioservice.schema.index({ name: 'text', description: 'text' });  // Text index for searching
+
 module.exports = portfolioservice;
 /*const mongoose = require("mongoose");
 const portfolioserviceSchema = new mongoose.Schema({

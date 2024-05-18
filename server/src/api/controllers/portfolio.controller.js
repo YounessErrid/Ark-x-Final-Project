@@ -2,8 +2,8 @@ const Portfolio = require("../models/portfolio.model");
 
 const create = async (req, res) => {
   const { description } = req.body;
-  const logo = req.files["logo"][0].path;
-  const cover = req.files["cover"][0].path;
+  const logo = req.files ? req.files["logo"][0]?.path : null;
+  const cover = req.files ? req.files["cover"][0]?.path : null;
 
   try {
     if (!description || !logo || !cover) {
@@ -17,10 +17,11 @@ const create = async (req, res) => {
       logo,
       cover,
     });
-    await newPortfolio.save();
+    const data = await newPortfolio.save();
     return res.status(201).json({
       success: true,
       message: "Successfully created portfolio",
+      data : data
     });
   } catch (error) {
     return res.status(500).json({
@@ -44,6 +45,7 @@ const viewAll = async (req, res) => {
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .sort({ createdAt: -1 });
+
     if (portfolios.length > 0) {
       return res.status(200).json(portfolios);
     } else {

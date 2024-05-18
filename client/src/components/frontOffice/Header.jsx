@@ -30,7 +30,8 @@ const Header = () => {
         </ul>
       </div>
       <div className="flex-none">
-        <button><Link to="/login">Login</Link></button>
+        <button className="text-primary "><Link to="/login">SIGN IN</Link></button>
+        <button className="btn bg-primary hover:bg-primary border-none rounded text-white ms-4"><Link to="/register">GET STARTED</Link></button>
       </div>
     </div>
     </div>

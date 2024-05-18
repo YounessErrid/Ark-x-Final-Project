@@ -3,8 +3,8 @@ import Logo from "../../assets/logo.svg";
 
 export const Footer = () => {
   return (
-    <div className="">
-      <footer className="footer p-10 bg-base-200 text-base-content ">
+    <div className="bg-base-200 ">
+      <footer className=" container mx-auto footer p-10  text-base-content ">
         <nav>
           <h6 className="footer-title">Services</h6>
           <a className="link link-hover">Branding</a>
@@ -26,7 +26,7 @@ export const Footer = () => {
           <a className="link link-hover">Cookie policy</a>
         </nav>
       </footer>
-      <footer className="footer px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
+      <footer className=" container mx-auto footer px-10 py-4 border-t  text-base-content border-base-300">
         <aside className="items-center grid-flow-col">
           <img src={Logo} className="w-10 inline" alt="React Logo" />
           <p>

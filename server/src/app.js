@@ -69,9 +69,8 @@ const main = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/uploads", express.static("uploads"));
-  // app.use(cors(corsOptions));
 
-  //put the routes here
+  // Input the routes here
   app.use("/api/clients", clientRouter);
   app.use("/api/agencies", agencyRouter);
   app.use("/api/admins", adminRouter);
@@ -89,7 +88,7 @@ const main = async () => {
 };
 
 try {
-  //run the main function
+  // Run the main function
   main();
 } catch (error) {
   console.log(error);
