@@ -28,13 +28,16 @@ router.post("/auth/login", [validateLoginUser], authenticate, controller.login);
 router.get("/auth/logout", controller.destroy);
 router.get("/auth/checkSession", controller.checkSession);
 router.post("/auth/forgotPassword", controller.forgotPassword);
-router.put("/auth/update/:id", upload.single("profile_image"), controller.update);
+router.put(
+  "/auth/update/:id",
+  upload.single("profile_image"),
+  controller.update
+);
 router.put("/auth/resetPassword/:token", controller.resetPassword);
+router.put("/auth/changePassword/:id", controller.changePassword);
 // router.post('/', controller.create)
 router.get("/", controller.viewAll);
 // router.get('/:id', controller.findOne)
 router.delete("/:id", [isSuperAdmin], controller.remove);
-
-
 
 module.exports = router;
