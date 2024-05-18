@@ -11,6 +11,7 @@ const upload = require("../middlewares/upload");
 
 // Auth routes
 router.post("/auth/register",[upload.single("profile_image"), validateRegisterAgency],controller.register);
+router.post("/auth/check-email",controller.checkAgencyEmail);
 router.post("/auth/login",[validateLoginInput],authenticate,controller.login);
 router.get("/auth/logout", controller.destroy);
 router.delete('/:id',controller.remove)

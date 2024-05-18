@@ -11,6 +11,7 @@ import ResetPassword from "./views/ResetPassword";
 import { Contact } from "./views/frontOffice/Contact";
 import { Front } from "./views/Front";
 import { Agencies } from "./views/frontOffice/Agencies/Agencies";
+import RegisterAgency from "./views/RegisterAgency";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/agency/register" element={<RegisterAgency />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
         <Route path="/emailSent" element={<EmailSent />} />
         <Route path="/resetPassword/:token" element={<ResetPassword />} />
