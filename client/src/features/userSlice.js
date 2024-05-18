@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import { toFormData } from "axios";
 import axiosInstance from "../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const initialState = {
   user: null,
@@ -96,6 +96,40 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
+        console.log(action.payload);
+        if (action.error.message === "Rejected") {
+          state.error = "Email already exists.";
+        } else {
+          state.error = action.error.message;
+        }
+      })
+      // check agency email
+      .addCase(checkAgencyEmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(checkAgencyEmail.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(checkAgencyEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to check email";
+      })
+      // register agency
+      .addCase(registerAgency.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerAgency.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        // state.user = action.payload
+        console.log(action.payload);
+      })
+      .addCase(registerAgency.rejected, (state, action) => {
+        state.loading = false;
+        // console.log(action.payload.error);
         if (action.error.message === "Rejected") {
           state.error = "Email already exists.";
         } else {
@@ -164,6 +198,28 @@ export const userSlice = createSlice({
         // } else {
         //   state.error = action.error.message;
         // }
+      })
+      // Change Password
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        // state.success = null;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        toast.success("The Password Changed Successfully");
+        state.error = null;
+        state.user = action.payload.user;
+        // state.success = true;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = false;
+        // toast.error("The Password Didn't Chnge");
+        if (action.error.message === "Rejected") {
+          state.error = "Old Password is in correct";
+        } else {
+          state.error = action.error.message;
+        }
       });
   },
 });
@@ -303,6 +359,60 @@ export const resetPassword = createAsyncThunk(
           },
         }
       );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const changePassword = createAsyncThunk(
+  "user/changePassword",
+  async ({ id, userCredentials }, { rejectWithValue }) => {
+    try {
+      const request = await axiosInstance.put(
+        `/admins/auth/changePassword/${id}`,
+        userCredentials,
+        {
+          headers: {
+            "Content-Type": "application/json", // Custom header for frontend host
+          },
+        }
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// register agency
+export const checkAgencyEmail = createAsyncThunk(
+  "user/checkAgencyEmail",
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      const request = await axiosInstance.post("/agencies/auth/check-email", userCredentials
+      )
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data);;
+    }
+  }
+);
+// register agency
+export const registerAgency = createAsyncThunk(
+  "user/registerAgency",
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      const request = await axiosInstance.post("/agencies/auth/register", userCredentials,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
+        },
+      }
+      )
       const response = await request.data;
       return response;
     } catch (error) {

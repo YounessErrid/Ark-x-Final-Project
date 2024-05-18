@@ -161,7 +161,7 @@ const statistics = async (req, res) => {
         .limit(5);
   
       if (latesTransations.length === 0) {
-        res.status(404).json({ error: "No transaction found!" });
+        return res.status(404).json({ error: "No transaction found!" });
       }
   
       const latesTransationsData = latesTransations.map((transaction) => {

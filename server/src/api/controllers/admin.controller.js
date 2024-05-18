@@ -301,11 +301,10 @@ const remove = async (req, res) => {
 };
 const update = async (req, res) => {
   try {
-    let updatedAdmin;
     const { id } = req.params;
-    const { role, createdAt, userId, _id, ...newAdminData } = req.body; // Exclude createdAt from newPostData
-    const path = req.file ? req.file.path : null;
-    newAdminData.profile_image = path;
+    const { ...newAdminData } = req.body; // Exclude createdAt from newPostData
+    const path = req.file || null;
+    // newAdminData.profile_image = path;
 
     if (!id || !newAdminData) {
       return res
@@ -318,7 +317,7 @@ const update = async (req, res) => {
     //   return res.status(404).json({ error: "Admin not found!" });
     // }
     const user = await User.findById(id);
-    if (user.profile_image && newAdminData.profile_image) {
+    if (user.profile_image && path !== null) {
       fs.unlink(user.profile_image, (err) => {
         if (err) {
           console.error("Error deleting previous image:", err);
@@ -326,40 +325,26 @@ const update = async (req, res) => {
           console.log("Previous image deleted successfully");
         }
       });
+      user.profile_image = path.path;
     }
-    if (newAdminData.password) {
-      // const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(newAdminData.password, 10);
-      newAdminData.password = hashedPassword;
-      // const hashedPassword = bcrypt.hashSync(password, salt);
+    if (newAdminData.fullname) {
+      user.fullname = newAdminData.fullname;
     }
-    console.log(newAdminData);
-    // Update the client with the given ID
-    updatedAdmin = await User.findByIdAndUpdate(
-      id,
-      {
-        ...newAdminData,
-        $set: { updatedAt: new Date() },
-      },
-      { new: true }
-    );
-    // if (path) {
-    // } else if (path && newAdminData) {
-    //   updatedAdmin = await User.findByIdAndUpdate(
-    //     id,
-    //     {
-    //       ...newAdminData,
-    //       profile_image: path,
-    //       $set: { updatedAt: new Date() },
-    //     },
-    //     { new: true }
-    //   );
-    // }
+    const updatedAdmin = await user.save();
 
     if (!updatedAdmin) {
       return res.status(404).json({ error: "User not found!" });
     }
-    res.status(202).json({ user: updatedAdmin });
+    res.status(202).json({
+      success: true,
+      message: "Admin successfully updated",
+      user: {
+        id: user._id,
+        role: user.role,
+        fullname: user.fullname,
+        profile: user.profile_image,
+      },
+    });
 
     // return res.status(200).json(updatedAdmin);
   } catch (error) {
@@ -369,6 +354,45 @@ const update = async (req, res) => {
         { error: "Internal server error" },
         { message: `Error updating admin: ${error.message}` },
       ]);
+  }
+};
+const changePassword = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { oldPassword, newPassword } = req.body;
+    if (!oldPassword || !newPassword) {
+      return res
+        .status(400)
+        .json({ error: "Change password failed: Missing required fields!" });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+    // Verify old password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Old password is incorrect!" });
+    }
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    // Update the password in the database
+    user.password = hashedPassword;
+    await user.save();
+    res.status(202).json({
+      success: true,
+      message: "Admin successfully updated",
+      user: {
+        id: user._id,
+        role: user.role,
+        fullname: user.fullname,
+        profile: user.profile_image,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -383,4 +407,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   checkSession,
+  changePassword,
 };

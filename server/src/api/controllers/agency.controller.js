@@ -18,7 +18,7 @@ const register = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(403).json({ error: "Email already exists" });
     }
 
     const salt = bcrypt.genSaltSync(10);
@@ -35,11 +35,11 @@ const register = async (req, res) => {
 
     const agency = new Agency({ userId: userData.id, addresse, agencyName });
     const agencyData = await agency.save();
-
+    // console.log({...user,...agency });
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: { ...userData, agencyData },
+      data: {...userData,...agencyData }
     });
   } catch (error) {
     return res
@@ -50,6 +50,29 @@ const register = async (req, res) => {
       ]);
   }
 };
+
+const checkAgencyEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const agency = await User.findOne({ email });
+    
+    if (agency) {
+      return res.status(403).json({ message: "Email already exists" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Email is available",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      message: `Error checking email: ${error.message}`,
+    });
+  }
+};
+
 
 const login = (req, res) => {
   res.status(200).json({
@@ -322,5 +345,7 @@ module.exports = {
   destroy,
   viewAll,
   globalSearch,
+  // remove,
   remove,
+  checkAgencyEmail
 };
