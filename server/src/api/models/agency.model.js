@@ -37,6 +37,11 @@ agencySchema.pre("findOneAndDelete", async function (next) {
   next();
 });
 
+// Agency.js
+
+
 const Agency = mongoose.model("Agency", agencySchema);
+
+Agency.schema.index({ agencyName: 'text', addresse: 'text' });  // Text index for searching
 
 module.exports = Agency;

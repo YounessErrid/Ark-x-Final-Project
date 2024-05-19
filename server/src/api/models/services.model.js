@@ -11,6 +11,9 @@ const serviceSchema = new mongoose.Schema({
     trim: true,
   },
 });
-const Service = mongoose.model("Service", serviceSchema);
-module.exports = Service;
 
+const Service = mongoose.model("Service", serviceSchema);
+
+Service.schema.index({ title: "text", description: "text" }); // Text index for searching
+
+module.exports = Service;

@@ -17,6 +17,6 @@ export default configureStore({
     services: servicesSlice,
     subscriptions: subscriptionsSlice,
     payments: paymentsSlice,
-    statistics: statisticSlice
+    statistics: statisticSlice,
   },
 });

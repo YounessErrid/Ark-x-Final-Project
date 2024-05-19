@@ -129,7 +129,7 @@ const forgotPassword = async (req, res, next) => {
       return res.status(400).json({ message: "Frontend host not provided" });
     }
 
-    const user = await User.findOne({ email: req.body.email });
+    var user = await User.findOne({ email: req.body.email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -159,7 +159,7 @@ const forgotPassword = async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     console.error("Error:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: `Internal Server Error : ${error.message}` });
   }
 };
 const resetPassword = async (req, res) => {

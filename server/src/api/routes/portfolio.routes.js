@@ -9,6 +9,7 @@ const uploadFields = upload.fields([
 ]);
 
 router.post("/", uploadFields, controller.create);
+// router.post("/", controller.create);
 router.get("/:id", controller.findOne);
 router.get("/", controller.viewAll);
 router.put("/:id", controller.update);

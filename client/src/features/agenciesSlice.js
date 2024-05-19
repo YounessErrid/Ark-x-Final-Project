@@ -31,6 +31,23 @@ export const fetchAgencies = createAsyncThunk(
   }
 );
 
+// Async thunk to search in agencies
+export const searchAgencies = createAsyncThunk(
+  "agencies/searchAgencies",
+  async (searchQuery, { rejectWithValue }) => { // Include the search query parameter
+    try {
+      const response = await axiosInstance.get("/agencies/search", {
+        params: { search: searchQuery } // Pass the search query as a parameter
+      });
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
 // Initial state for agencies slice
 const initialState = {
   agencies: [],
@@ -81,8 +98,23 @@ export const agenciesSlice = createSlice({
         state.status = false;
         toast.error("The Agency wasn't Deleted");
         state.error = action.error.message;
-      });
-  },
+      })
+      // Search agency reducers
+      .addCase(searchAgencies.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchAgencies.fulfilled, (state, action) => {
+        state.loading = false;
+        state.agencies = action.payload.agencies; // Update the agencies array with the fetched data
+        // Update other state properties if necessary (e.g., totalCount, currentPage, totalPages)
+      })
+      .addCase(searchAgencies.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // Update error with the error message
+      })
+      
+    },
 });
 
 export default agenciesSlice.reducer;

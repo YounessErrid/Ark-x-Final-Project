@@ -1,10 +1,13 @@
 const bcrypt = require("bcrypt");
 const Agency = require("../models/agency.model");
 const User = require("../models/user.model");
+const portfolioservice = require("../models/portfolioServices.model");
+const Service = require("../models/services.model");
+const Portfolio = require("../models/portfolio.model");
 
 const register = async (req, res) => {
-  const { email, password, fullname, addresse , agencyName} = req.body;
-  
+  const { email, password, fullname, addresse, agencyName } = req.body;
+
   try {
     const path = req.file ? req.file.path : null;
     if (!email || !password || !fullname || !addresse || !agencyName) {
@@ -15,7 +18,7 @@ const register = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(403).json({ error: "Email already exists" });
     }
 
     const salt = bcrypt.genSaltSync(10);
@@ -32,11 +35,11 @@ const register = async (req, res) => {
 
     const agency = new Agency({ userId: userData.id, addresse, agencyName });
     const agencyData = await agency.save();
-
+    // console.log({...user,...agency });
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: {...userData,agencyData }
+      data: {...userData,...agencyData }
     });
   } catch (error) {
     return res
@@ -48,11 +51,34 @@ const register = async (req, res) => {
   }
 };
 
+const checkAgencyEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const agency = await User.findOne({ email });
+    
+    if (agency) {
+      return res.status(403).json({ message: "Email already exists" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Email is available",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      message: `Error checking email: ${error.message}`,
+    });
+  }
+};
+
+
 const login = (req, res) => {
   res.status(200).json({
     success: true,
     message: "Successfully logged in",
-    user : {role: req.user.role , fullname: req.user.fullname},
+    user: { role: req.user.role, fullname: req.user.fullname },
   });
 };
 
@@ -70,32 +96,218 @@ const destroy = async (req, res) => {
 
 const viewAll = async (req, res) => {
   try {
-    const agencies = await Agency.find().populate('userId', ' fullname email');
+    const agencies = await Agency.find().populate("userId", " fullname email");
 
     if (agencies.length === 0) {
       return res.status(404).json({ error: "No agencies found" });
     }
     // Construct the response object with the desired fields
-    const responseData = agencies.map(agency => {
-      
-      return ({
-      
-      
-      _id:agency._id,
-      fullname: agency.userId === null ? null : agency.userId.fullname,
-      email: agency.userId === null ? null : agency.userId.email,
-      agencyName: agency.agencyName,
-      address: agency.addresse // Corrected typo
-    })});
+    const responseData = agencies.map((agency) => {
+      return {
+        _id: agency._id,
+        fullname: agency.userId === null ? null : agency.userId.fullname,
+        email: agency.userId === null ? null : agency.userId.email,
+        agencyName: agency.agencyName,
+        address: agency.addresse, // Corrected typo
+      };
+    });
     return res.status(200).json(responseData);
-    
   } catch (error) {
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: "Internal server error",
-      message: `Error retrieving agencies: ${error.message}` 
+      message: `Error retrieving agencies: ${error.message}`,
     });
   }
 };
+
+/**
+ * db.agencies.aggregate([ {
+    $lookup: {
+      from: 'portfolios',
+      localField: 'portfolioId',
+      foreignField: '_id',
+      as: 'portfolio'
+    }
+  },
+{
+        $lookup: {
+          from: 'portfolioservices',
+          localField: 'portfolio.portfolioServices',
+          foreignField: '_id',
+          as: 'portfolioServices',
+        },
+      },
+{
+        $lookup: {
+          from: 'services',
+          localField: 'portfolioServices.service',
+          foreignField: '_id',
+          as: 'service',
+        },
+      },
+      {$match: { $or : [{"portfolio.description" : "International"}]}}
+  ])
+ * Global search function to retrieve agencies with pagination, sorting, and filtering based on search criteria.
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ * @returns {object} - JSON response with paginated agencies, total count, current page, and total pages.
+ */
+// const globalSearch = async (req, res) => {
+//   // Extract pagination and search parameters from query string
+//   const pageSize = parseInt(req.query.pageSize) || 10;
+//   const page = parseInt(req.query.page) || 1;
+//   const search = req.query.search;
+
+//   try {
+//     let query = {};
+
+//     // If search text is provided, create a regex pattern to match any text
+//     if (search) {
+//       const searchRegex = new RegExp(search, 'i');
+//       query.$or = [
+//         { agencyName: searchRegex },
+//         { addresse: searchRegex },
+//         { 'portfolioId.description': searchRegex },
+//         { 'portfolioId.portfolioServices.name': searchRegex },
+//         { 'portfolioId.portfolioServices.description': searchRegex },
+//         { 'portfolioId.portfolioServices.service.title': searchRegex },
+//         { 'portfolioId.portfolioServices.service.description': searchRegex },
+//       ];
+//     }
+//     // if (search) {
+//     //   const searchRegex = new RegExp(search, 'i');
+//     //   query = {
+//     //     $or: [
+//     //       { agencyName: searchRegex },
+//     //       { address: searchRegex },
+//     //       {
+//     //         portfolioId: {
+//     //           $elemMatch: {
+//     //             $or: [
+//     //               { 'description': searchRegex },
+//     //               { 'portfolioServices.name': searchRegex },
+//     //               { 'portfolioServices.description': searchRegex },
+//     //               { 'portfolioServices.service.title': searchRegex },
+//     //               { 'portfolioServices.service.description': searchRegex },
+//     //             ],
+//     //           },
+//     //         },
+//     //       },
+//     //     ],
+//     //   };
+//     // }
+
+//     // Total count of matching documents
+//     const totalCount = await Agency.countDocuments(query);
+
+//     // Fetch agencies with pagination, sorting, and filtering
+//     const agencies = await Agency.find(query, { userId: 0, __v: 0 })
+//     .populate({
+//       path: "portfolioId",
+//       model: "Portfolio",
+//       select: { _id: 0, __v: 0 },
+//       populate: {
+//         path: "portfolioServices",
+//         model: "portfolioservice",
+//         select: { name: 1, description: 1, _id: 0 },
+//         populate: {
+//           path: "service",
+//           model: "Service",
+//           select: { title: 1, description: 1, _id: 0 },
+//         },
+//       },
+//     }) // You can change the sorting criteria if needed
+
+//     if (agencies.length > 0) {
+//       return res.status(200).json({
+//         agencies,
+//         totalCount,
+//         currentPage: page,
+//         totalPages: Math.ceil(totalCount / pageSize),
+//       });
+//     } else {
+//       return res.status(404).json({
+//         message: 'Agencies not found',
+//       });
+//     }
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: 'Internal server error',
+//       message: `Error retrieving agencies: ${error.message}`,
+//     });
+//   }
+// };
+
+const globalSearch = async (req, res) => {
+  const { search, ...pagination } = req.query;
+  const searchRegex = new RegExp(search, "i");
+  const aggregation = [
+    {
+      $lookup: {
+        from: "portfolios",
+        localField: "portfolioId",
+        foreignField: "_id",
+        as: "portfolio",
+      },
+    },
+    {
+      $lookup: {
+        from: "portfolioservices",
+        localField: "portfolio.portfolioServices",
+        foreignField: "_id",
+        as: "portfolioServices",
+      },
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "portfolioServices.service",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $match: {
+        $or: [
+          { agencyName: searchRegex },
+          { address: searchRegex },
+          { "portfolio.description": searchRegex },
+          { "portfolioServices.name": searchRegex },
+          { "portfolioServices.description": searchRegex },
+          { "service.title": searchRegex },
+          { "service.description": searchRegex },
+        ],
+      },
+    },
+  ];
+
+  try {
+    // const [agencies, totalCount] = await Promise.all([
+    //   Agency.aggregate(aggregation),
+    //   Agency.countDocuments(aggregation), // Text search for top-level fields
+    // ]);
+    const agencies = await Agency.aggregate(aggregation);
+    const totalCount = agencies.length;
+
+    const currentPage = parseInt(pagination.page) || 1;
+    const pageSize = parseInt(pagination.pageSize) || 10;
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    if (agencies.length > 0) {
+      return res
+        .status(200)
+        .json({ agencies, totalCount, currentPage, totalPages });
+    } else {
+      return res.status(404).json({ message: "Agencies not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      message: `Error retrieving agencies: ${error.message}`,
+    });
+  }
+};
+
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
@@ -115,7 +327,7 @@ const remove = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Agency deleted successfully",
-      data: deletedAgency
+      data: deletedAgency,
     });
   } catch (error) {
     return res
@@ -127,11 +339,13 @@ const remove = async (req, res) => {
   }
 };
 
-
 module.exports = {
   register,
   login,
   destroy,
   viewAll,
-  remove
+  globalSearch,
+  // remove,
+  remove,
+  checkAgencyEmail
 };

@@ -4,34 +4,26 @@ export const Hero = () => {
   return (
     <>
       {/* start hero */}
-      <div className="flex flex-wrap">
-        <div className="w-full sm:w-8/12 mb-10">
-          <div className="container mx-auto h-full sm:p-10">
-            <nav className="flex px-4 justify-between items-center">
-              <div className="text-4xl font-bold text-gray-600">
-                uEvent<span className="text-secondary ">.</span>
-              </div>
-              <div>
-                <img
-                  src="https://image.flaticon.com/icons/svg/497/497348.svg"
-                  alt=""
-                  className="w-8"
-                />
-              </div>
-            </nav>
+      <div className=" flex flex-wrap bg-gradient-to-t from-lightBlue via-orange-100  to-whiteDirty  ">
+        <div className=" w-full sm:w-8/12 mb-10">
+          <div className=" h-full sm:p-10">
             <header className="container px-4 lg:flex mt-10 items-center h-full lg:mt-0">
               <div className="w-full">
-                <h1 className="text-4xl lg:text-6xl font-bold text-gray-600">
-                  Find your future{" "}
-                  <span className="text-secondary">Event Manager </span>
-                  in one place
+                <div className="text-3xl font-bold text-primary">
+                  ALL<span className="text-secondary ">-</span>IN
+                  <span className="text-secondary ">-</span>ONE EVENT MANAGEMENT
+                  <span className="text-secondary ">.</span>
+                </div>
+                <h1 className="text-4xl lg:text-6xl font-bold text-gray-600 my-6">
+                  Manage your events <br />
+                  of today—and
+                  <br />
+                  <span className="text-secondary">tomorrow</span>
                 </h1>
-                <div className="w-20 h-2 bg-secondary my-4"></div>
-                <p className="text-xl mb-10">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Recusandae maiores neque eaque ea odit placeat, tenetur illum
-                  distinctio nulla voluptatum a corrupti beatae tempora aperiam
-                  quia id aliquam possimus aut.
+                <div className="w-20 h-2 bg-secondary my-6 "></div>
+                <p className="text-xl mb-10 max-w-lg text-gray-500">
+                  Everything you need to craft impactful event experiences all
+                  while staying technologically relevant, now and always.
                 </p>
                 <button className="bg-secondary text-white text-2xl font-medium px-4 py-2 rounded shadow">
                   Discover Events
@@ -42,24 +34,15 @@ export const Hero = () => {
         </div>
 
         <div className="w-full  object-cover sm:h-screen sm:w-4/12 carousel rounded-box max-h-dvh overflow-hidden ">
-          <div className="carousel-item w-full">
+          <div className="carousel-item w-full items-center">
             <img
               src="https://images.pexels.com/photos/1940583/pexels-photo-1940583.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              className="w-full"
-              alt="Tailwind CSS Carousel component"
-            />
-          </div>
-          <div className="carousel-item w-full">
-            <img
-              src="https://images.pexels.com/photos/1940583/pexels-photo-1940583.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              className="w-full"
+              className="h-3/4 w-full object-cover rounded"
               alt="Tailwind CSS Carousel component"
             />
           </div>
         </div>
       </div>
-      {/* end hero */}
-      
 
       <section className="text-gray-600 body-font bg-white">
         <div className="container px-5 py-24 mx-auto">
@@ -67,8 +50,8 @@ export const Hero = () => {
             <h2 className="text-xs text-secondary tracking-widest font-medium title-font mb-1">
               ROOF PARTY POLAROID
             </h2>
-            <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-              Master Cleanse Reliac Heirloom
+            <h1 className="sm:text-3xl text-3xl font-medium title-font mb-4 text-gray-900">
+            The simplest way to host all your events
             </h1>
             <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
               Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical
