@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
+
 const login = (req, res) => {
   res.status(200).json({
     success: true,
@@ -49,7 +50,7 @@ const register = async (req, res) => {
   }
 };
 
-const destroy = async (req, res) => {
+const destroy = async (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);

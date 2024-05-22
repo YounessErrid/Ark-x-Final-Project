@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const Client = require("../models/client.model");
 const User = require("../models/user.model");
+const sendContactEmail = require("../helpers/contacUsService");
 
 const register = async (req, res) => {
   const { email, password, fullname, phone } = req.body;
@@ -198,7 +199,7 @@ const remove = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Client deleted successfully",
-      data: deletedClient
+      data: deletedClient,
     });
   } catch (error) {
     return res
@@ -207,6 +208,19 @@ const remove = async (req, res) => {
         { error: "Internal server error" },
         { message: `Error deleting agency: ${error.message}` },
       ]);
+  }
+};
+const contact = async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+      return res.status(200).send("All Field are required");
+    }
+    await sendContactEmail(name, email, message);
+    return res.status(200).send("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return res.status(500).send("Error sending email");
   }
 };
 
@@ -219,4 +233,5 @@ module.exports = {
   viewAll,
   update,
   remove,
+  contact,
 };
