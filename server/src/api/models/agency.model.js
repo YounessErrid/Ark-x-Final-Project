@@ -22,6 +22,11 @@ const agencySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Portfolio",
   },
+  hasAccess: {
+    type: Boolean,
+    required : true,
+    default: false
+  }
 });
 
 agencySchema.pre("findOneAndDelete", async function (next) {

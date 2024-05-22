@@ -229,7 +229,7 @@ export const checkSession = createAsyncThunk(
   "user/checkSession",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await axiosInstance.get("/admins/auth/checkSession");
+      const request = await axiosInstance.get("/auth/check-session");
       const response = await request.data;
       return response;
     } catch (error) {
@@ -244,7 +244,7 @@ export const loginUser = createAsyncThunk(
   async (userCredentials, { rejectWithValue }) => {
     try {
       const request = await axiosInstance.post(
-        "/admins/auth/login",
+        "/auth/login",
         userCredentials
       );
       const response = await request.data;

@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const Admin = require("../models/admin.model");
+const Client = require("../models/client.model");
 const User = require("../models/user.model");
+const Agency = require("../models/agency.model");
 const sendEmail = require("../helpers/email");
 const crypto = require("crypto");
 const fs = require("fs");
@@ -48,6 +50,7 @@ const register = async (req, res) => {
       ]);
   }
 };
+
 const createAdmin = async (req, res) => {
   const { email, password, fullname } = req.body;
   try {
@@ -99,6 +102,7 @@ const createAdmin = async (req, res) => {
       ]);
   }
 };
+
 const login = (req, res) => {
   res.status(200).json({
     success: true,
@@ -108,9 +112,11 @@ const login = (req, res) => {
       role: req.user.role,
       fullname: req.user.fullname,
       profile: req.user.profile_image,
+      email: req.user.email
     },
   });
 };
+
 const destroy = async (req, res) => {
   req.logout(function (err) {
     if (err) {

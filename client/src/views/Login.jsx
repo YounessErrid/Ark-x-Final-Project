@@ -36,6 +36,7 @@ const Login = () => {
     if (isAuthenticated) {
       if (user.role === "admin" || user.role === "superadmin") navigate("/dashboard");
       else if (user.role === "client") navigate("/");
+      else navigate("/subscription");
     }
   }, [isAuthenticated, navigate, user]);
 

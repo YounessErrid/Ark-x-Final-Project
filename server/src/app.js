@@ -8,6 +8,7 @@ const connect = require("./config/db_config");
 const bodyParser = require("body-parser");
 
 // routes
+const authRouter = require("./api/routes/auth.routes");
 const clientRouter = require("./api/routes/client.routes");
 const agencyRouter = require("./api/routes/agency.routes");
 const adminRouter = require("./api/routes/admin.routes");
@@ -49,13 +50,13 @@ const main = async () => {
   app.use(cookieParser());
   app.use(
     session({
-      secret: process.env.SECRET_KEY_SESSION, // Secret key used to sign the session ID cookie
-      resave: false, // Whether to save the session for every request, even if it hasn't changed
-      saveUninitialized: true, // Whether to save uninitialized sessions (new but not modified)
+      secret: process.env.SECRET_KEY_SESSION,
+      resave: false, 
+      saveUninitialized: true, 
       cookie: {
-        maxAge: 24 * 60 * 60 * 1000, // Session expiration time in milliseconds (1 day)
-        secure: false, // Set to true if your app is served over HTTPS
-        httpOnly: true, // Ensures that the cookie is only accessible via HTTP(S) and not JavaScript
+        maxAge: 24 * 60 * 60 * 1000, 
+        secure: false, 
+        httpOnly: true, 
       },
     })
   );
@@ -64,19 +65,22 @@ const main = async () => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.use("/api/stripe", stripeRouter);
+  // stripe webhook
+  app.use("/api/webhook/stripe", stripeRouter);
+
   // Middlewares
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/uploads", express.static("uploads"));
-
+  
   // Input the routes here
+  app.use("/api", stripeRouter);
+  app.use("/api/auth", authRouter);
   app.use("/api/clients", clientRouter);
   app.use("/api/agencies", agencyRouter);
   app.use("/api/admins", adminRouter);
   app.use("/api/subscriptions", subscriptionRouter);
   app.use("/api/payments", paymentRouter);
-  app.use("/api/stripe", stripeRouter);
   app.use("/api/portfolioServices", portfolioServiceRouter);
   app.use("/api/services", serviceRouter);
   app.use("/api/portfolio", portfolioRouter);

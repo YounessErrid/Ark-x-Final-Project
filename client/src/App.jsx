@@ -12,8 +12,23 @@ import { Contact } from "./views/frontOffice/Contact";
 import { Front } from "./views/Front";
 import { Agencies } from "./views/frontOffice/Agencies/Agencies";
 import RegisterAgency from "./views/RegisterAgency";
+import Subscription from "./views/frontOffice/Subscription";
+import SuccessPage from "./views/frontOffice/SuccessPage";
+import { checkSession } from "./features/userSlice";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import Portfolio from "./views/frontOffice/Agencies/Portfolio";
+
+
+
 
 function App() {
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    // Dispatch checkSession action on component mount
+    dispatch(checkSession());
+  }, [dispatch]);
 
   return (
     <div data-theme="dark">
@@ -25,7 +40,10 @@ function App() {
 
         </Route>
         
+        <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/subscription" element={<Subscription />} />
+        <Route path="/successful-payment" element={<SuccessPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/agency/register" element={<RegisterAgency />} />
         <Route path="/forgetPassword" element={<ForgetPassword />} />
@@ -40,3 +58,6 @@ function App() {
 }
 
 export default App;
+
+
+

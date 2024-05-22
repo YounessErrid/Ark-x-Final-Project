@@ -28,13 +28,13 @@ const controller = require("../controllers/stripe.controller");
 // Define route to create a checkout session
 
 // route to create a checkout session
-router.post("/create-checkout-session", controller.checkout);
+router.post("/checkout", controller.checkout);
 
 router.get("/subscriptions/:id", controller.getSubscription);
 
 // route to handle webhook events
 router.post(
-  "/webhook",
+  "/",
   express.raw({ type: "application/json" }),
   controller.handleStripeEvents
 );

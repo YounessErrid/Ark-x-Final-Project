@@ -39,7 +39,7 @@ const register = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: {...userData,...agencyData }
+      data: { ...userData, ...agencyData },
     });
   } catch (error) {
     return res
@@ -56,7 +56,7 @@ const checkAgencyEmail = async (req, res) => {
 
   try {
     const agency = await User.findOne({ email });
-    
+
     if (agency) {
       return res.status(403).json({ message: "Email already exists" });
     }
@@ -73,12 +73,16 @@ const checkAgencyEmail = async (req, res) => {
   }
 };
 
-
 const login = (req, res) => {
+  
   res.status(200).json({
     success: true,
     message: "Successfully logged in",
-    user: { role: req.user.role, fullname: req.user.fullname },
+    user: {
+      role: req.user.role,
+      fullname: req.user.fullname,
+      email: req.user.email,
+    },
   });
 };
 
@@ -347,5 +351,5 @@ module.exports = {
   globalSearch,
   // remove,
   remove,
-  checkAgencyEmail
+  checkAgencyEmail,
 };
