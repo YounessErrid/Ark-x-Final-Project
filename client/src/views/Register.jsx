@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/logo.svg";
 import loginSvg from "../assets/Login.svg";
 import { registerUser } from "../features/userSlice";
@@ -69,7 +69,7 @@ const Register = () => {
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {error && <p className="text-red-400">{error}</p>}
-                      <p className="mb-8 text-xl">Continue to your account</p>
+                      <p className="mb-8 text-xl">Create your account</p>
                       {/* FullName input */}
                       <div className="mb-8">
                         <label
@@ -150,20 +150,27 @@ const Register = () => {
                           </p>
                         )}
                       </div>
-
                       <div className="mb-12 pb-1 pt-1 text-center">
                         <button className="btn btn-block bg-primary text-whiteDirty border-0">
                           Register
                         </button>
                         <a href="#!">Forgot password?</a>
                       </div>
-
                       <div className="flex items-center justify-between pb-6">
                         <p className="mb-0 me-2">
-                          You have an account?
+                          You have an account?{" "}
                           <Link className="font-semibold underline" to="/login">
                             Login
                           </Link>
+                        </p>
+                        <p>
+                          <Link
+                            className="font-semibold underline"
+                            to={"/agency/register"}
+                          >
+                            Register
+                          </Link>{" "}
+                          as an Agency
                         </p>
                       </div>
                     </form>

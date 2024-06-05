@@ -35,7 +35,6 @@ agencySchema.pre("findOneAndDelete", async function (next) {
     if(agency){
       await User.findByIdAndDelete({ _id: agency.userId });
     }
-
   } catch (error) {
     console.log(error);
   }

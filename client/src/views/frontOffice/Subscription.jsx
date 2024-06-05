@@ -4,7 +4,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useSelector } from "react-redux";
 import axiosInstance from "../../utils/axiosInstance";
 
-const stripePromise = loadStripe("pk_test_51P2yVE06sb7pwrAB80oCcrMIdYHKaqejx4ekh4fXPKspuwU7gPgLUbPBbGJHjXlHycUfYUZdv4QUKcJl1tyYMuRl00unWBOHw3");
+const stripePromise = loadStripe(
+  "pk_test_51P2yVE06sb7pwrAB80oCcrMIdYHKaqejx4ekh4fXPKspuwU7gPgLUbPBbGJHjXlHycUfYUZdv4QUKcJl1tyYMuRl00unWBOHw3"
+);
 
 const plans = [
   {
@@ -23,7 +25,10 @@ const Subscription = () => {
   const user = useSelector((state) => state.user.user);
   const [plan, setPlan] = useState(plans[0]);
   const [error, setError] = useState("");
-  const [userCredential, setUserCredential] = useState({ priceId: '', email: '' });
+  const [userCredential, setUserCredential] = useState({
+    priceId: "",
+    email: "",
+  });
 
   // useEffect(()=>{
   //   console.log("uuserCredential",userCredential);
@@ -35,19 +40,21 @@ const Subscription = () => {
     }
   }, [user, plan]);
 
-
   const handleSubscribe = async () => {
     try {
-      const { data } = await axiosInstance.post("/checkout", userCredential);
+      console.log(userCredential);
+      const { data } = await axiosInstance.post(
+        "/checkout",
+        userCredential
+      );
 
       // console.log(data);
 
       const stripe = await stripePromise;
 
       await stripe.redirectToCheckout({ sessionId: data.sessionId });
-
     } catch (err) {
-        console.log(err);
+      console.log(err);
       setError(err.response?.data?.error || "An error occurred");
     }
   };

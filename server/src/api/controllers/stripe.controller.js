@@ -6,7 +6,6 @@ const Payment = require("../models/payment.model"); // Import the Payment model
 const User = require("../models/user.model"); // Import the User model
 const Agency = require("../models/agency.model"); // Import the User model
 
-
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_KEY;
 
@@ -21,39 +20,44 @@ const handleStripeEvents = async (req, res) => {
     switch (event.type) {
       // for checkout completion
       case "checkout.session.completed": {
-        const { subscription: subscriptionId, customer_details, amount_total } = event.data.object;
+        const {
+          subscription: subscriptionId,
+          customer_details,
+          amount_total,
+        } = event.data.object;
 
         try {
           if (subscriptionId) {
-            
-            const subscriptionDetails = await stripe.subscriptions.retrieve(subscriptionId);
-            const { status, start_date, current_period_end } = subscriptionDetails;
+            const subscriptionDetails = await stripe.subscriptions.retrieve(
+              subscriptionId
+            );
+            const { status, start_date, current_period_end } =
+              subscriptionDetails;
 
             const user = await User.findOne({ email: customer_details.email });
             if (!user) {
               throw new Error("User not found");
             }
 
-            const agency = await Agency.findOne({userId: user._id})
+            const agency = await Agency.findOne({ userId: user._id });
 
             agency.hasAccess = true;
-            await agency.save()
+            await agency.save();
 
             const newSubscription = new Subscription({
               agencyId: agency._id,
               activationDate: new Date(start_date * 1000),
               expirationDate: new Date(current_period_end * 1000),
-              activated: status === "active"
+              activated: status === "active",
             });
             const savedSubscription = await newSubscription.save();
 
             const newPayment = new Payment({
               subscriptionId: savedSubscription._id,
               date: new Date(start_date * 1000),
-              amount: amount_total / 100
+              amount: amount_total / 100,
             });
             await newPayment.save();
-           
           }
         } catch (error) {
           console.error("Error processing subscription event:", error);
@@ -64,22 +68,28 @@ const handleStripeEvents = async (req, res) => {
       case "invoice.payment_succeeded": {
         const invoice = event.data.object;
         const subscriptionId = invoice.subscription;
-        const subscriptionDetails = await stripe.subscriptions.retrieve(subscriptionId);
+        const subscriptionDetails = await stripe.subscriptions.retrieve(
+          subscriptionId
+        );
 
         const user = await User.findOne({ email: invoice.customer_email });
         if (!user) {
           throw new Error("User not found");
         }
 
-        const existingSubscription = await Subscription.findOne({ userId: user._id });
+        const existingSubscription = await Subscription.findOne({
+          userId: user._id,
+        });
         if (existingSubscription) {
-          existingSubscription.expirationDate = new Date(subscriptionDetails.current_period_end * 1000);
+          existingSubscription.expirationDate = new Date(
+            subscriptionDetails.current_period_end * 1000
+          );
           await existingSubscription.save();
 
           const newPayment = new Payment({
             subscriptionId: existingSubscription._id,
             date: new Date(invoice.created * 1000),
-            amount: invoice.amount_paid / 100
+            amount: invoice.amount_paid / 100,
           });
           await newPayment.save();
         }
@@ -140,16 +150,12 @@ const getSubscription = async (req, res) => {
   }
 };
 
-
 const checkout = async (req, res) => {
   try {
+    console.log(req.body);
     const { priceId, email } = req.body;
-
-    // console.log("emailemailemailemailemail ",email);
-
-
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ["card"],
       line_items: [
         {
           price: priceId, // Ensure this is the correct price ID from Stripe
@@ -157,15 +163,15 @@ const checkout = async (req, res) => {
         },
       ],
       customer_email: email,
-      mode: 'subscription',
-      success_url: 'http://localhost:5173/successful-payment', // Update with your success URL
-      cancel_url: 'http://localhost:5173/subscription', // Update with your cancel URL
+      mode: "subscription",
+      success_url: "http://localhost:5173/successful-payment", // Update with your success URL
+      cancel_url: "http://localhost:5173/subscription", // Update with your cancel URL
     });
 
     res.json({ sessionId: session.id });
   } catch (err) {
     console.error("Error creating checkout session:", err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -222,7 +228,7 @@ module.exports = {
 //             });
 //             const data = await newSubscription.save();
 //             console.log('price subs:', amount_total);
-            
+
 //             // Create new payment document
 //             const newPayment = new Payment({
 //               date: activationDate,
@@ -258,8 +264,6 @@ module.exports = {
 //   }
 // };
 
-
-
 // const checkout = async (req, res) => {
 //   try {
 //     // Create a checkout session
@@ -283,8 +287,6 @@ module.exports = {
 //     res.status(500).json({ error: err.message });
 //   }
 // };
-
-
 
 // require("dotenv").config();
 // const Stripe = require("stripe");

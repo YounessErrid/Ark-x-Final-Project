@@ -19,12 +19,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Portfolio from "./views/frontOffice/Agencies/Portfolio";
 
-
-
-
 function App() {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     // Dispatch checkSession action on component mount
     dispatch(checkSession());
@@ -33,14 +29,12 @@ function App() {
   return (
     <div data-theme="dark">
       <Routes>
-        <Route path="/" element={<Front />} >
+        <Route path="/" element={<Front />}>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/agenciespage" element={<Agencies />} />
-
+          <Route path="/portfolio/:id" element={<Portfolio />} />
         </Route>
-        
-        <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/login" element={<Login />} />
         <Route path="/subscription" element={<Subscription />} />
         <Route path="/successful-payment" element={<SuccessPage />} />
@@ -58,6 +52,3 @@ function App() {
 }
 
 export default App;
-
-
-

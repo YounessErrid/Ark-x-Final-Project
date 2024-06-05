@@ -53,14 +53,11 @@ const register = async (req, res) => {
 
 const checkAgencyEmail = async (req, res) => {
   const { email } = req.body;
-
   try {
     const agency = await User.findOne({ email });
-
     if (agency) {
       return res.status(403).json({ message: "Email already exists" });
     }
-
     return res.status(200).json({
       success: true,
       message: "Email is available",
@@ -74,7 +71,6 @@ const checkAgencyEmail = async (req, res) => {
 };
 
 const login = (req, res) => {
-  
   res.status(200).json({
     success: true,
     message: "Successfully logged in",
@@ -100,7 +96,10 @@ const destroy = async (req, res) => {
 
 const viewAll = async (req, res) => {
   try {
-    const agencies = await Agency.find().populate("userId", " fullname email");
+    const agencies = await Agency.find().populate(
+      "userId",
+      " fullname email profile_image"
+    );
 
     if (agencies.length === 0) {
       return res.status(404).json({ error: "No agencies found" });
@@ -111,10 +110,40 @@ const viewAll = async (req, res) => {
         _id: agency._id,
         fullname: agency.userId === null ? null : agency.userId.fullname,
         email: agency.userId === null ? null : agency.userId.email,
+        profile_image:
+          agency.userId === null ? null : agency.userId.profile_image,
         agencyName: agency.agencyName,
-        address: agency.addresse, // Corrected typo
+        address: agency.addresse,
       };
     });
+    return res.status(200).json(responseData);
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      message: `Error retrieving agencies: ${error.message}`,
+    });
+  }
+};
+const findOne = async (req, res) => {
+  try {
+    const agency = await Agency.findById(req.params.id).populate(
+      "userId",
+      " fullname email profile_image"
+    );
+
+    if (!agency) {
+      return res.status(404).json({ error: "No agencies found" });
+    }
+    // Construct the response object with the desired fields
+    const responseData = {
+      _id: agency._id,
+      fullname: agency.userId === null ? null : agency.userId.fullname,
+      email: agency.userId === null ? null : agency.userId.email,
+      profile_image:
+        agency.userId === null ? null : agency.userId.profile_image,
+      agencyName: agency.agencyName,
+      address: agency.addresse, // Corrected typo
+    };
     return res.status(200).json(responseData);
   } catch (error) {
     return res.status(500).json({
@@ -349,7 +378,7 @@ module.exports = {
   destroy,
   viewAll,
   globalSearch,
-  // remove,
+  findOne,
   remove,
   checkAgencyEmail,
 };

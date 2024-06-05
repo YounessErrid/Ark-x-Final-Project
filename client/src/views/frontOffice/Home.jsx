@@ -5,7 +5,6 @@ import { Hero } from "../../components/frontOffice/Hero";
   export const Home = () => {
   return (
     <div>
-      
       <Hero />
     </div>
   );

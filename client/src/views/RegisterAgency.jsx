@@ -118,8 +118,11 @@ function MultiStepForm() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 py-12">
       <div className="w-full max-w-xl bg-white p-8 rounded-lg shadow min-h-[600px]">
-        <div className="flex justify-center mb-8">
-          <img src={logo} alt="Logo" className="h-10" />
+        <div className="text-center">
+          <Link to={"/"}>
+            <img className="mx-auto w-20 inline" src={logo} alt="logo" />
+            <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">uEvent</h4>
+          </Link>
         </div>
 
         <ul className="relative flex flex-row gap-x-2 mb-11">
@@ -164,7 +167,6 @@ function MultiStepForm() {
             </li>
           ))}
         </ul>
-
         <form onSubmit={handleSubmit(onSubmit)}>
           {currentStep === 0 && (
             <div>
@@ -184,7 +186,9 @@ function MultiStepForm() {
                   placeholder="Full Name"
                 />
                 {errors.fullname && (
-                  <p className="text-red-500 text-sm">{errors.fullname.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.fullname.message}
+                  </p>
                 )}
               </div>
               <div className="mb-8">
@@ -241,7 +245,10 @@ function MultiStepForm() {
           {currentStep === 1 && (
             <div>
               <div className="mb-8">
-                <label className="block text-base font-normal text-gray-700 mb-2" htmlFor="agencyName">
+                <label
+                  className="block text-base font-normal text-gray-700 mb-2"
+                  htmlFor="agencyName"
+                >
                   Agency Name
                 </label>
                 <input
@@ -253,11 +260,16 @@ function MultiStepForm() {
                   placeholder="Agency Name"
                 />
                 {errors.agencyName && (
-                  <p className="text-red-500 text-sm">{errors.agencyName.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.agencyName.message}
+                  </p>
                 )}
               </div>
               <div className="mb-8">
-                <label className="block text-base font-normal text-gray-700 mb-2" htmlFor="street">
+                <label
+                  className="block text-base font-normal text-gray-700 mb-2"
+                  htmlFor="street"
+                >
                   Street
                 </label>
                 <input
@@ -269,12 +281,17 @@ function MultiStepForm() {
                   placeholder="Street"
                 />
                 {errors.street && (
-                  <p className="text-red-500 text-sm">{errors.street.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.street.message}
+                  </p>
                 )}
               </div>
               <div className="flex gap-4 mb-8">
                 <div className="w-1/2">
-                  <label className="block text-base font-normal text-gray-700 mb-2" htmlFor="city">
+                  <label
+                    className="block text-base font-normal text-gray-700 mb-2"
+                    htmlFor="city"
+                  >
                     City
                   </label>
                   <input
@@ -286,11 +303,16 @@ function MultiStepForm() {
                     placeholder="City"
                   />
                   {errors.city && (
-                    <p className="text-red-500 text-sm">{errors.city.message}</p>
+                    <p className="text-red-500 text-sm">
+                      {errors.city.message}
+                    </p>
                   )}
                 </div>
                 <div className="w-1/2">
-                  <label className="block text-base font-normal text-gray-700 mb-2" htmlFor="zipCode">
+                  <label
+                    className="block text-base font-normal text-gray-700 mb-2"
+                    htmlFor="zipCode"
+                  >
                     Zip Code
                   </label>
                   <input
@@ -302,7 +324,9 @@ function MultiStepForm() {
                     placeholder="Zip Code"
                   />
                   {errors.zipCode && (
-                    <p className="text-red-500 text-sm">{errors.zipCode.message}</p>
+                    <p className="text-red-500 text-sm">
+                      {errors.zipCode.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -320,7 +344,10 @@ function MultiStepForm() {
           {currentStep === 2 && (
             <div>
               <div className="mb-8">
-                <label className="block text-base font-normal text-gray-700 mb-2" htmlFor="password">
+                <label
+                  className="block text-base font-normal text-gray-700 mb-2"
+                  htmlFor="password"
+                >
                   Password
                 </label>
                 <input
@@ -332,11 +359,16 @@ function MultiStepForm() {
                   placeholder="Password"
                 />
                 {errors.password && (
-                  <p className="text-red-500 text-sm">{errors.password.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
               <div className="mb-8">
-                <label className="block text-base font-normal text-gray-700 mb-2" htmlFor="confirmPassword">
+                <label
+                  className="block text-base font-normal text-gray-700 mb-2"
+                  htmlFor="confirmPassword"
+                >
                   Confirm Password
                 </label>
                 <input
@@ -348,14 +380,18 @@ function MultiStepForm() {
                   placeholder="Confirm Password"
                 />
                 {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.confirmPassword.message}
+                  </p>
                 )}
               </div>
               <div className="flex float-end">
                 <button
                   type="submit"
                   className={`px-6 py-2 bg-[#f9ab77] text-white rounded-md ${
-                    errors.confirmPassword ? "cursor-not-allowed bg-gray-400" : "hover:bg-secondary"
+                    errors.confirmPassword
+                      ? "cursor-not-allowed bg-gray-400"
+                      : "hover:bg-secondary"
                   }`}
                 >
                   Sign Up
@@ -377,7 +413,7 @@ function MultiStepForm() {
           </div>
         )}
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }
