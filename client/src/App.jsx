@@ -20,12 +20,8 @@ import { useDispatch } from "react-redux";
 import Portfolio from "./views/frontOffice/Agencies/Portfolio";
 import Portfolio2 from "./views/frontOffice/Agencies/Portfolio2";
 
-
-
-
 function App() {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     // Dispatch checkSession action on component mount
     dispatch(checkSession());
@@ -34,7 +30,7 @@ function App() {
   return (
     <div data-theme="dark">
       <Routes>
-        <Route path="/" element={<Front />} >
+        <Route path="/" element={<Front />}>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/agenciespage" element={<Agencies />} />
@@ -60,6 +56,3 @@ function App() {
 }
 
 export default App;
-
-
-

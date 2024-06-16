@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import mariagePhoto from "../../../assets/mariage.jpeg";
 import Editor from "./Editor";
 
 const Portfolio = () => {
+  const { id } = useParams();
+  const { loading, error, agency } = useSelector((state) => state.agencies);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAgency(id));
+  }, [])
+  console.log(agency.agencyName);
   return (
     <div className="bg-white min-h-screen flex justify-center">
       <section className="p-5 h-full">

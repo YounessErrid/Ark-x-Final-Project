@@ -61,7 +61,7 @@ export const Sidebar = () => {
             </svg>
           </label>
           <img src={Logo} className="my-10" alt="React Logo" />
-          <li className="text-textGray text-lg w-full ">
+          <li className="text-textGray text-lg w-full">
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/"}
@@ -70,7 +70,7 @@ export const Sidebar = () => {
               Dashboard
             </Link>
           </li>
-          <li className="text-textGray text-lg w-full pt-2 mt-2 border-t-2">
+          <li className="text-textGray text-lg w-full">
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/agencies"}
@@ -106,7 +106,7 @@ export const Sidebar = () => {
               Subscriptions
             </Link>
           </li>
-          <li className="text-textGray text-lg w-full pb-2 border-b-2">
+          <li className="text-textGray text-lg w-full">
             <Link
               className="hover:bg-primary hover:text-whiteDirty"
               to={"/dashboard/payments"}
@@ -137,7 +137,7 @@ export const Sidebar = () => {
           </li>
             )}
 
-          <div className="fixed bottom-2 w-full border-t-2">
+          {/* <div className="fixed bottom-2 w-full border-t-2"> */}
             <li className="text-textGray text-lg ">
               <Link
                 className="hover:bg-primary hover:text-whiteDirty"
@@ -158,7 +158,7 @@ export const Sidebar = () => {
                 Logout
               </a>
             </li>
-          </div>
+          {/* </div> */}
         </ul>
       </div>
     </>

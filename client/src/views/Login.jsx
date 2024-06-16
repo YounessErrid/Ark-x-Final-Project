@@ -121,12 +121,11 @@ const Login = () => {
                       </div>
                       <div className="flex items-center justify-between pb-6">
                         <p className="mb-0 me-2">
-                          Don't have an account?
+                          Don't have an account?{" "}
                           <Link
                             className="font-semibold underline"
                             to="/register"
                           >
-                            {" "}
                             Register
                           </Link>
                         </p>

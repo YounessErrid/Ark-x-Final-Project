@@ -21,8 +21,8 @@ router.delete('/:id',controller.remove)
 // router.post('/', controller.create)
 router.get('/', controller.viewAll);
 router.get("/search", controller.globalSearch);
-// router.get('/:id', controller.findOne)
-// router.put('/:id', isAuthenticated, controller.update)
+router.get('/:id', controller.findOne)
+// router.put('/:id', controller.update)
 // router.delete('/:id', controller.remove)
 
 module.exports = router;

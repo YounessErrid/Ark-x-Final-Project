@@ -52,7 +52,11 @@ const Subscription = () => {
 
   const handleSubscribe = async () => {
     try {
-      const { data } = await axiosInstance.post("/checkout", userCredential);
+      console.log(userCredential);
+      const { data } = await axiosInstance.post(
+        "/checkout",
+        userCredential
+      );
 
       // console.log(data);
 

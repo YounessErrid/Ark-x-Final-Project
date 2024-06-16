@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchAgencies } from "../../../features/agenciesSlice";
+import { searchAgencies, fetchAgencies } from "../../../features/agenciesSlice";
 import { Spinner } from "../../../components/Spinner";
-
+import { Link, useNavigate } from "react-router-dom";
 
 export const Agencies = () => {
   const { loading, error, agencies } = useSelector((state) => state.agencies);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,9 +20,13 @@ export const Agencies = () => {
     // Dispatch search action with searchQuery
     dispatch(searchAgencies(searchQuery));
   };
+  const agencyHero = (id) => {
+    // dispatch(fetchAgency(id))
+    navigate(`/portfolio/${id}`);
+  };
 
   useEffect(() => {
-    dispatch(searchAgencies(searchQuery));
+    dispatch(fetchAgencies(searchQuery));
     setDataLoaded(true);
   }, [dispatch]);
 
@@ -49,7 +54,7 @@ export const Agencies = () => {
                   onChange={handleInputChange}
                   className="w-full p-3 bg-whiteDirty rounded-l placeholder-current focus:outline-none focus:text-gray-900 font-medium"
                 />
-                
+
                 <button
                   onClick={handleSearch}
                   className="inline-flex items-center gap-2 bg-primary  text-primary text-lg font-semibold py-3 px-6 rounded-r-md"
@@ -95,22 +100,26 @@ export const Agencies = () => {
             {agencies &&
               agencies.map((agency) => (
                 <div key={agency._id} className="xl:w-1/4 md:w-1/2 p-4">
-                  <div className="bg-gray-100 p-6 rounded-lg">
-                    <img
-                      className="h-40 rounded w-full object-cover object-center mb-6"
-                      src={"http://localhost:3000/"+agency.portfolio[0]?.cover}
-                      alt="content"
-                    />
-                    {console.log(agency)}
-                    <h3 className="tracking-widest text-indigo-500 text-xs font-medium title-font">
-                      {agency.portfolio.description}
-                    </h3>
-                    <h2 className=" text-gray-900 font-medium  mb-4">
-                      {agency.agencyName}
-                    </h2>
-                    <p className="leading-relaxed text-base">
-                      {agency.portfolio[0]?.description}
-                    </p>
+                  <div
+                    onClick={(e) => agencyHero(agency._id)}
+                    className="cursor-pointer"
+                  >
+                    <div className="bg-gray-100 p-6 rounded-lg">
+                      <img
+                        className="h-40 rounded w-full object-cover object-center mb-6"
+                        src={`http://localhost:3000/${agency.profile_image}`}
+                        alt="content"
+                      />
+                      <h3 className="tracking-widest text-indigo-500 text-xs font-medium title-font">
+                        {/* {agency.portfolio.description} */}
+                      </h3>
+                      <h2 className=" text-gray-900 font-medium  mb-4">
+                        {agency.agencyName}
+                      </h2>
+                      <p className="leading-relaxed text-base">
+                        {/* {agency.portfolio[0]?.description} */}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
