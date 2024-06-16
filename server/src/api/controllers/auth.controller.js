@@ -77,8 +77,15 @@ const login  = async (req, res) =>{
 }
 
 const logout = (req, res) => {
-    req.logout();
-    res.status(200).json({ message: 'Successfully logged out' });
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({
+      success: true,
+      message: "Successfully logged out",
+    });
+  });
   };
 
 const checkSession = async (req, res) => {

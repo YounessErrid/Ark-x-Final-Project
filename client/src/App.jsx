@@ -18,6 +18,7 @@ import { checkSession } from "./features/userSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Portfolio from "./views/frontOffice/Agencies/Portfolio";
+import Portfolio2 from "./views/frontOffice/Agencies/Portfolio2";
 
 
 
@@ -37,10 +38,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/agenciespage" element={<Agencies />} />
+          <Route path="/portfolio/*" element={<Portfolio2 />} />
 
         </Route>
         
-        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/portfolio2" element={<Portfolio />} />
         <Route path="/login" element={<Login />} />
         <Route path="/subscription" element={<Subscription />} />
         <Route path="/successful-payment" element={<SuccessPage />} />

@@ -259,11 +259,11 @@ export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await axiosInstance.get("/admins/auth/logout");
+      const request = await axiosInstance.get("/auth/logout");
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );

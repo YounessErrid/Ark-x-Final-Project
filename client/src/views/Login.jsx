@@ -34,9 +34,15 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if (user.role === "admin" || user.role === "superadmin") navigate("/dashboard");
-      else if (user.role === "client") navigate("/");
-      else navigate("/subscription");
+      if (user.role === "admin" || user.role === "superadmin") {
+        navigate("/dashboard");
+      } else if (user.role === "agency" && user.hasAccess === false) {
+        navigate("/subscription");
+      } else if (user.role === "agency" && user.hasAccess === true) {
+        navigate("/portfolio");
+      } else {
+        navigate("/");
+      }
     }
   }, [isAuthenticated, navigate, user]);
 
@@ -50,15 +56,15 @@ const Login = () => {
                 <div className="px-4 md:px-0 lg:w-6/12">
                   <div className="md:mx-6 md:p-12">
                     <div className="text-center">
-                      <Link to={'/'}>
-                      <img
-                        className="mx-auto w-20 inline"
-                        src={logo}
-                        alt="logo"
-                      />
-                      <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">
-                        uEvent
-                      </h4>
+                      <Link to={"/"}>
+                        <img
+                          className="mx-auto w-20 inline"
+                          src={logo}
+                          alt="logo"
+                        />
+                        <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">
+                          uEvent
+                        </h4>
                       </Link>
                     </div>
                     <form action="submit" onSubmit={handleSubmit(onSubmit)}>
@@ -110,11 +116,7 @@ const Login = () => {
                           Login
                         </button>
                         {error && <p className="text-red-400">{error}</p>}
-                        <Link
-                          to="/forgetPassword"
-                        >
-                          Forgot password ?
-                        </Link>
+                        <Link to="/forgetPassword">Forgot password ?</Link>
                         {/* <a href="/">Forgot password?</a> */}
                       </div>
                       <div className="flex items-center justify-between pb-6">
