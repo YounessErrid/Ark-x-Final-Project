@@ -2,13 +2,16 @@ const portfolioservice = require("../models/portfolioServices.model");
 
 const create = async (req, res) => {
   const { name, description, service } = req.body;
-  const path = req.files;
+  
+  const path = req.files.images;
   let images = [];
   path.forEach((element) => {
     images.push(element.path);
   });
+  let thumbnail = req.files.thumbnail[0].path
+
   try {
-    if (!name || !description || !service) {
+    if (!name || !description || !service ) {
       return res.status(400).json({
         error:
           "^portfolioService creation failed: Missing required information!",
@@ -18,10 +21,12 @@ const create = async (req, res) => {
       name,
       description,
       images,
+      thumbnail,
       service,
     });
 
     const data = await newPortfolioService.save();
+
     return res.status(200).json({
       message: "Portfolio service created successfully",
       data: data,

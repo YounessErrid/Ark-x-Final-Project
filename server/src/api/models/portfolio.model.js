@@ -3,18 +3,15 @@ var mongoose = require('mongoose');
 const portfolioSchema = new mongoose.Schema({
   description: {
     type: String,
-    required: true,
     trim: true,
   },
   logo: {
     type: String,
-    required: true,
     unique: true,
     trim: true,
   },
   cover: {
     type: String,
-    required: true,
     unique: true,
     trim: true,
   },

@@ -1,29 +1,63 @@
 import React, { useEffect } from "react";
 import mariagePhoto from "../../../assets/mariage.jpeg";
 import { BiCheckCircle } from "react-icons/bi"; // Assuming you have this imported for the icons
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
 import ServiceCards from "./ServiceCards";
 import AddService from "./AddService";
+import { fetchPortfolioServices } from "../../../features/porfolioServiceSlice";
 
 const Portfolio = () => {
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
+  const {portfolioServices} = useSelector((state) => state.portfolioservice)
   useEffect(() => {
     if (!user) {
       navigate("/login");
     }
   }, [user, navigate]);
 
+  useEffect(()=>{
+    dispatch(fetchPortfolioServices())
+  }, [])
+
+  useEffect(()=>{
+    console.log("portfolioServices", portfolioServices);
+  }, [])
+
   return (
     // <!-- component -->
     <div className="flex flex-col min-h-screen bg-white">
       <main className="flex-grow p-4">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 lg:gap-8">
-          <div className="post pr-6 pt-6 lg:p-1 rounded-md">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full mb-4">
+          <div className="post pr-6 pt-6 lg:p-1 rounded-md relative">
+            <div className="flex justify-end pr-8">
+              <Link to={"/agency/profile"}>
+                <button class=" rounded-full text-black hover:text-gray-500 font-extrabold">
+                  <div class="flex gap-3 justify-center items-center">
+                    <span>
+                      <svg
+                        class="w-8 h-8"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </button>
+              </Link>
+            </div>
+            <div className="bg-white p-8 pt-0 rounded-lg shadow-md w-full mb-4 ">
               <div className="relative">
                 <img
                   src={mariagePhoto}
@@ -94,23 +128,20 @@ const Portfolio = () => {
           </div>
 
           <div className="lg:col-span-2 p-4 bg-white mt-3  " id="posted">
-
             <div className=" flex justify-end">
-            <Link to="/portfolio/service">
-              <button
-                className="h-10 text-white flex justify-center items-center gap-2 bg-black px-3 rounded-md mb-4"
-              >
-                <CiCirclePlus className="h-6 w-6" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Add Service
-                </span>
-              </button>
-            </Link>
+              <Link to="/portfolio/service">
+                <button className="h-10 text-white flex justify-center items-center gap-2 bg-black px-3 rounded-md mb-4">
+                  <CiCirclePlus className="h-6 w-6" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Add Service
+                  </span>
+                </button>
+              </Link>
             </div>
             {/* cards */}
             <Routes>
-            <Route path="/" element={<ServiceCards/>} />
-            <Route path="/service" element={<AddService/>} />
+              <Route path="/" element={<ServiceCards />} />
+              <Route path="/service" element={<AddService />} />
             </Routes>
           </div>
         </div>

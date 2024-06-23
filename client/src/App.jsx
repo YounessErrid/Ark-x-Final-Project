@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Portfolio from "./views/frontOffice/Agencies/Portfolio";
 import Portfolio2 from "./views/frontOffice/Agencies/Portfolio2";
+import AgencyProfile from "./views/frontOffice/Agencies/AgencyProfile";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/agenciespage" element={<Agencies />} />
           <Route path="/portfolio/*" element={<Portfolio2 />} />
+          <Route path="/agency/profile" element={<AgencyProfile />} />
 
         </Route>
         

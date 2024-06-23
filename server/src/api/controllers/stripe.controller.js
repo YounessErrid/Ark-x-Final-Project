@@ -5,6 +5,7 @@ const Subscription = require("../models/subscription.model"); // Import the Subs
 const Payment = require("../models/payment.model"); // Import the Payment model
 const User = require("../models/user.model"); // Import the User model
 const Agency = require("../models/agency.model"); // Import the User model
+const Portfolio = require("../../api/models/portfolio.model");
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_KEY;
@@ -41,7 +42,14 @@ const handleStripeEvents = async (req, res) => {
 
             const agency = await Agency.findOne({ userId: user._id });
 
+            // create porfolio for agency
+            const newPortfolio = new Portfolio({
+              portfolioServices: []
+            })
+            const savedPortfolio = await newPortfolio.save()
+
             agency.hasAccess = true;
+            agency.portfolioId = savedPortfolio._id;
             await agency.save();
 
             const newSubscription = new Subscription({
@@ -58,6 +66,12 @@ const handleStripeEvents = async (req, res) => {
               amount: amount_total / 100,
             });
             await newPayment.save();
+
+            
+
+            agency.hasAccess = true;
+            await agency.save();
+
           }
         } catch (error) {
           console.error("Error processing subscription event:", error);

@@ -7,6 +7,7 @@ import paymentsSlice from "../features/paymentsSlice";
 import clientsSlice from "../features/clientsSlice";
 import adminsSlice from "../features/adminsSlice";
 import statisticSlice from "../features/statsSlice"
+import portfolioservice from "../features/porfolioServiceSlice";
 
 export default configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export default configureStore({
     subscriptions: subscriptionsSlice,
     payments: paymentsSlice,
     statistics: statisticSlice,
+    portfolioservice: portfolioservice
   },
 });
