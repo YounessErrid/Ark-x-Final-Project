@@ -6,6 +6,7 @@ const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const connect = require("./config/db_config");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 // routes
 const authRouter = require("./api/routes/auth.routes");
@@ -23,10 +24,7 @@ const statisticsRouter = require("./api/routes/statistics.routes");
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
 
-// Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
+
 
 const corsOptions = {
   origin: "http://localhost:5173", 
@@ -71,8 +69,7 @@ const main = async () => {
   // Middlewares
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use("/uploads", express.static("uploads"));
-  
+  app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
   // Input the routes here
   app.use("/api", stripeRouter);
   app.use("/api/auth", authRouter);

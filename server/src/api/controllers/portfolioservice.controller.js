@@ -1,17 +1,24 @@
+const Agency = require("../models/agency.model");
+const Portfolio = require("../models/portfolio.model");
 const portfolioservice = require("../models/portfolioServices.model");
+const User = require("../models/user.model");
 
 const create = async (req, res) => {
-  const { name, description, service } = req.body;
-  
-  const path = req.files.images;
-  let images = [];
-  path.forEach((element) => {
-    images.push(element.path);
-  });
-  let thumbnail = req.files.thumbnail[0].path
 
+  const { name, description, service } = req.body;
+  let images = [];
+  if (req.files && req.files.images) {
+    req.files.images.forEach((element) => {
+      images.push(element.path);
+    });
+  }
+
+  let thumbnail = "";
+  if (req.files && req.files.thumbnail && req.files.thumbnail[0]) {
+    thumbnail = req.files.thumbnail[0].path;
+  }
   try {
-    if (!name || !description || !service ) {
+    if (!name || !description || !service) {
       return res.status(400).json({
         error:
           "^portfolioService creation failed: Missing required information!",
@@ -26,6 +33,12 @@ const create = async (req, res) => {
     });
 
     const data = await newPortfolioService.save();
+
+    // updte the array of portfolio services
+    const agency = await Agency.findOne({ userId: req.user._id });
+    const portfolio = await Portfolio.findById(agency.portfolioId);
+    portfolio.portfolioServices.push(data._id);
+    await portfolio.save();
 
     return res.status(200).json({
       message: "Portfolio service created successfully",
@@ -77,6 +90,7 @@ const update = async (req, res) => {
     });
   }
 };
+
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
@@ -91,6 +105,34 @@ const remove = async (req, res) => {
     return res.status(200).json({
       message: "Portfolio service deleted successfully",
     });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      message: error.message,
+    });
+  }
+};
+
+const findPortfolioByAgencyId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const agencyPortfolio = await Agency.findOne({ userId: id }).populate({
+      path: 'portfolioId',
+      populate : {
+        path: "portfolioServices",
+        populate : {
+          path : 'service'
+        }
+      }
+    });
+
+    console.log("agencyPortfolio agency", agencyPortfolio);
+    if (!agencyPortfolio) {
+      return res.status(404).json({
+        message: "Portfolio service not found",
+      });
+    }
+    return res.status(200).json(agencyPortfolio);
   } catch (error) {
     return res.status(500).json({
       error: "Internal server error",
@@ -139,4 +181,5 @@ module.exports = {
   remove,
   findOne,
   viewAll,
+  findPortfolioByAgencyId,
 };

@@ -17,7 +17,7 @@ const portfolioSchema = new mongoose.Schema({
   },
   portfolioServices: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "PortfolioService",
+    ref: "Portfolioservice",
   }],
 });
 

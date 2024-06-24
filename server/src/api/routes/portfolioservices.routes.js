@@ -2,16 +2,20 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/portfolioservice.controller");
 const upload = require("../middlewares/upload");
+const { isAuthenticated } = require("../middlewares/userAuth.middleware");
+
+// router.use('/', express.static(path.join(__dirname, 'uploads')));
 
 router.post(
-  "/",
+  "/",isAuthenticated,
   upload.fields([
     { name: "images", maxCount: 10 },
     { name: "thumbnail", maxCount: 1 },
   ]),
   controller.create
 );
-router.get("/:id", controller.findOne);
+router.get("/:id", controller.findPortfolioByAgencyId);
+// router.get("/:id", controller.findOne);
 router.get("/", controller.viewAll);
 router.put("/:id", upload.array("images[]"), controller.update);
 router.delete("/:id", controller.remove);

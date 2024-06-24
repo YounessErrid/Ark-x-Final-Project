@@ -2,30 +2,32 @@ import React, { useEffect } from "react";
 import mariagePhoto from "../../../assets/mariage.jpeg";
 import { BiCheckCircle } from "react-icons/bi"; // Assuming you have this imported for the icons
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
 import ServiceCards from "./ServiceCards";
 import AddService from "./AddService";
-import { fetchPortfolioServices } from "../../../features/porfolioServiceSlice";
+import { fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
 
 const Portfolio = () => {
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const {portfolioServices} = useSelector((state) => state.portfolioservice)
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { portfolioServices } = useSelector((state) => state.portfolioservice);
   useEffect(() => {
     if (!user) {
       navigate("/login");
     }
   }, [user, navigate]);
 
-  useEffect(()=>{
-    dispatch(fetchPortfolioServices())
-  }, [])
+  useEffect(() => {
+    dispatch(fetchAgencyPortfolio(id));
+  }, [dispatch, navigate]);
 
-  useEffect(()=>{
-    console.log("portfolioServices", portfolioServices);
-  }, [])
+  // useEffect(() => {
+  //   console.log("portfolioServices", portfolioServices);
+  //   // console.log(id);
+  // }, []);
 
   return (
     // <!-- component -->
@@ -35,20 +37,20 @@ const Portfolio = () => {
           <div className="post pr-6 pt-6 lg:p-1 rounded-md relative">
             <div className="flex justify-end pr-8">
               <Link to={"/agency/profile"}>
-                <button class=" rounded-full text-black hover:text-gray-500 font-extrabold">
-                  <div class="flex gap-3 justify-center items-center">
+                <button className=" rounded-full text-black hover:text-gray-500 font-extrabold">
+                  <div className="flex gap-3 justify-center items-center">
                     <span>
                       <svg
-                        class="w-8 h-8"
+                        className="w-8 h-8"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="1.5"
+                        strokeWidth="1.5"
                         stroke="currentColor"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
                         />
                       </svg>
@@ -60,21 +62,23 @@ const Portfolio = () => {
             <div className="bg-white p-8 pt-0 rounded-lg shadow-md w-full mb-4 ">
               <div className="relative">
                 <img
-                  src={mariagePhoto}
+                  src={`http://localhost:3000/${portfolioServices.portfolioId?.portfolioServices[0].cover}`}
                   alt="Banner Profile"
-                  className="w-full rounded-t-lg"
+                  className="w-full rounded-t-lg max-h-20 object-cover"
                 />
                 <img
-                  src={mariagePhoto}
+                  src={`http://localhost:3000/${portfolioServices.portfolioId?.portfolioServices[0].thumbnail}`}
                   alt="Profile Picture"
                   className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-24 h-24 rounded-full border-4 border-white"
                 />
               </div>
               <div className="flex flex-col items-center justify-center gap-2 pt-6 mt-7">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Agency Name
+                  {portfolioServices.agencyName}
                 </h2>
-                <p className="text-lg text-gray-600">Casablanca, Morocco</p>
+                <p className="text-lg text-gray-600">
+                  {portfolioServices.addresse}
+                </p>
               </div>
               <div className="w-full pt-8 sm:px-12">
                 <a
@@ -102,26 +106,22 @@ const Portfolio = () => {
               <div className="flex flex-col items-start justify-start gap-3 pt-8">
                 <p className="text-lg font-semibold text-gray-800">SERVICES</p>
                 <div className="text-gray-600 flex flex-wrap gap-2">
-                  <p className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium">
-                    <span>Handyman</span>
-                  </p>
-                  <p className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium">
-                    <span>Cleaning</span>
-                  </p>
-                  <p className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium">
-                    <span>Plumber</span>
-                  </p>
-                  <p className="bg-blue-50 rounded-xl px-3 py-2 font-medium">
-                    +3
-                  </p>
+                  {portfolioServices.portfolioId?.portfolioServices.map(
+                    (serv, index) => (
+                      <p
+                        key={serv._id}
+                        className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium"
+                      >
+                        <span>{serv.service.title}</span>
+                      </p>
+                    )
+                  )}
                 </div>
               </div>
               <div className="flex flex-col items-start justify-start gap-3 pt-8">
                 <p className="text-lg font-semibold text-gray-800">ABOUT</p>
                 <p className="text-gray-600">
-                  Welcome to Servibe where convenience meets quality. Discover a
-                  seamless platform connecting you with trusted service
-                  providers effortlessly.
+                  {portfolioServices.portfolioId?.description}
                 </p>
               </div>
             </div>
@@ -129,7 +129,8 @@ const Portfolio = () => {
 
           <div className="lg:col-span-2 p-4 bg-white mt-3  " id="posted">
             <div className=" flex justify-end">
-              <Link to="/portfolio/service">
+              <Link to={`/portfolio/${id}/service`}>
+            
                 <button className="h-10 text-white flex justify-center items-center gap-2 bg-black px-3 rounded-md mb-4">
                   <CiCirclePlus className="h-6 w-6" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
