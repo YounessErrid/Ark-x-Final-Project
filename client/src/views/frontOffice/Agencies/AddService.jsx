@@ -17,17 +17,15 @@ const AddService = () => {
       <div className="col-span-12">
         <p className="pb-3 font-medium text-n100">Service Category*</p>
         <select
-  type="text"
-  placeholder="Service Category"
-  className="w-full bg-white rounded-xl border border-b50 p-3 outline-none pr-8"
->
-  <option value="hello">hello</option>
-  <option value="hello">hello</option>
-  <option value="hello">hello</option>
-  <option value="hello">hello</option>
-</select>
-
-
+          type="text"
+          placeholder="Service Category"
+          className="w-full bg-white rounded-xl border border-b50 p-3 outline-none pr-8"
+        >
+          <option value="hello">hello</option>
+          <option value="hello">hello</option>
+          <option value="hello">hello</option>
+          <option value="hello">hello</option>
+        </select>
       </div>
       <div className="col-span-12 mb-6">
         <ImageLoader />
@@ -38,14 +36,9 @@ const AddService = () => {
         <Editor placeholder="Type your service description here..." />
       </div>
       <div className=" mt-16 sm:mt-10 col-span-12 flex justify-end">
-        <button
-                className="h-10 text-white flex justify-center items-center gap-2 bg-black px-3 rounded-md mb-4"
-              >
-                
-                <span>
-                  Save Service
-                </span>
-              </button>
+        <button className="h-10 text-white flex justify-center items-center gap-2 bg-black px-3 rounded-md mb-4">
+          <span>Save Service</span>
+        </button>
       </div>
     </div>
   );

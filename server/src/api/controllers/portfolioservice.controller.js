@@ -103,6 +103,7 @@ const remove = async (req, res) => {
       });
     }
     return res.status(200).json({
+      data: deletedPortfolioService,
       message: "Portfolio service deleted successfully",
     });
   } catch (error) {

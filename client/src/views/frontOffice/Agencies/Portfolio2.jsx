@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import mariagePhoto from "../../../assets/mariage.jpeg";
 import { BiCheckCircle } from "react-icons/bi"; // Assuming you have this imported for the icons
+import { IoIosArrowDropleft } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
@@ -9,11 +10,15 @@ import AddService from "./AddService";
 import { fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
 
 const Portfolio = () => {
+  const [addServiceMode, setAddServiceMode] = useState(false);
+
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   const { portfolioServices } = useSelector((state) => state.portfolioservice);
+  const uniqueTitles = new Set();
+
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -24,10 +29,9 @@ const Portfolio = () => {
     dispatch(fetchAgencyPortfolio(id));
   }, [dispatch, navigate]);
 
-  // useEffect(() => {
-  //   console.log("portfolioServices", portfolioServices);
-  //   // console.log(id);
-  // }, []);
+  const handleAddServiceMode = () => {
+    setAddServiceMode(!addServiceMode);
+  };
 
   return (
     // <!-- component -->
@@ -62,12 +66,12 @@ const Portfolio = () => {
             <div className="bg-white p-8 pt-0 rounded-lg shadow-md w-full mb-4 ">
               <div className="relative">
                 <img
-                  src={`http://localhost:3000/${portfolioServices.portfolioId?.portfolioServices[0].cover}`}
+                  src={`http://localhost:3000/${portfolioServices.portfolioId?.logo}`}
                   alt="Banner Profile"
-                  className="w-full rounded-t-lg max-h-20 object-cover"
+                  className="w-full rounded-t-lg h-48 object-cover"
                 />
                 <img
-                  src={`http://localhost:3000/${portfolioServices.portfolioId?.portfolioServices[0].thumbnail}`}
+                  src={`http://localhost:3000/${portfolioServices.portfolioId?.logo}`}
                   alt="Profile Picture"
                   className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-24 h-24 rounded-full border-4 border-white"
                 />
@@ -107,14 +111,20 @@ const Portfolio = () => {
                 <p className="text-lg font-semibold text-gray-800">SERVICES</p>
                 <div className="text-gray-600 flex flex-wrap gap-2">
                   {portfolioServices.portfolioId?.portfolioServices.map(
-                    (serv, index) => (
-                      <p
-                        key={serv._id}
-                        className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium"
-                      >
-                        <span>{serv.service.title}</span>
-                      </p>
-                    )
+                    (serv, index) => {
+                      if (!uniqueTitles.has(serv.service.title)) {
+                        uniqueTitles.add(serv.service.title);
+                        return (
+                          <p
+                            key={serv._id}
+                            className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium"
+                          >
+                            <span>{serv.service.title}</span>
+                          </p>
+                        );
+                      }
+                      return null;
+                    }
                   )}
                 </div>
               </div>
@@ -128,17 +138,31 @@ const Portfolio = () => {
           </div>
 
           <div className="lg:col-span-2 p-4 bg-white mt-3  " id="posted">
-            <div className=" flex justify-end">
-              <Link to={`/portfolio/${id}/service`}>
-            
-                <button className="h-10 text-white flex justify-center items-center gap-2 bg-black px-3 rounded-md mb-4">
-                  <CiCirclePlus className="h-6 w-6" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Add Service
-                  </span>
-                </button>
-              </Link>
-            </div>
+            {!addServiceMode ? (
+              <div className=" flex justify-end">
+                <Link to={`/portfolio/${id}/service`}>
+                  <button className="h-10 text-white flex justify-center items-center gap-2 bg-black hover:bg-gray-800 px-3 rounded-md mb-4" onClick={handleAddServiceMode}>
+                    <CiCirclePlus className="h-6 w-6" />
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                      Add Service
+                    </span>
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <div className=" flex justify-start">
+                <Link to={`/portfolio/${id}`}>
+                  <button className="h-10 text-white flex justify-center items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 rounded-md mb-4" onClick={handleAddServiceMode}>
+                    <IoIosArrowDropleft className="h-6 w-6 text-black" />
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap text-black">
+                      Go Back
+                    </span>
+                  </button>
+                </Link>
+                
+              </div>
+            )}
+
             {/* cards */}
             <Routes>
               <Route path="/" element={<ServiceCards />} />
