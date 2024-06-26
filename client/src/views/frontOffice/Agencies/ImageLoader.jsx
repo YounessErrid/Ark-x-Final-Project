@@ -1,25 +1,28 @@
-import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
 
 const StyledFileUploader = ({ onFileUpload }) => {
   const [preview, setPreview] = useState(null);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const uploadedFile = acceptedFiles[0];
-    if (onFileUpload) {
-      onFileUpload(uploadedFile);
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreview(reader.result);
-    };
-    reader.readAsDataURL(uploadedFile);
-  }, [onFileUpload]);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const uploadedFile = acceptedFiles[0];
+      if (onFileUpload) {
+        onFileUpload(uploadedFile);
+      }
+      setPreview(URL.createObjectURL(uploadedFile)) 
+      // const reader = new FileReader();
+      // reader.onload = () => {
+      //   setPreview(reader.result);
+      // };
+      // reader.readAsDataURL(uploadedFile);
+    },
+    [onFileUpload]
+  );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: 'image/*',
+    accept: "image/*",
     maxFiles: 1,
   });
 
@@ -28,33 +31,31 @@ const StyledFileUploader = ({ onFileUpload }) => {
       {...getRootProps()}
       className="upload-container"
       style={{
-        border: '2px dashed #ddd',
-        borderRadius: '12px',
-        padding: '40px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        background: '#f9f9f9',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '200px',
+        border: "2px dashed #ddd",
+        borderRadius: "12px",
+        padding: "40px",
+        textAlign: "center",
+        cursor: "pointer",
+        background: "#f9f9f9",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "200px",
       }}
     >
       <input {...getInputProps()} />
       {preview ? (
         <img
-        src={preview}
-        alt="Preview"
-        style={{
-          
-          
-          objectFit: 'contain',
-          maxHeight: '100%',
-        }}
-      />
+          src={preview}
+          alt="Preview"
+          style={{
+            objectFit: "contain",
+            maxHeight: "100%",
+          }}
+        />
       ) : (
-        <div className="upload-icon" style={{ marginBottom: '16px' }}>
+        <div className="upload-icon" style={{ marginBottom: "16px" }}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="48"
@@ -72,7 +73,9 @@ const StyledFileUploader = ({ onFileUpload }) => {
           </svg>
         </div>
       )}
-      {!preview && <p style={{ color: '#555', fontSize: '16px' }}>Upload File</p>}
+      {!preview && (
+        <p style={{ color: "#555", fontSize: "16px" }}>Upload File</p>
+      )}
     </div>
   );
 };

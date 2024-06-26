@@ -8,6 +8,10 @@ import { CiCirclePlus } from "react-icons/ci";
 import ServiceCards from "./ServiceCards";
 import AddService from "./AddService";
 import { fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import UpdateServie from "./UpdateService";
+
 
 const Portfolio = () => {
   const [addServiceMode, setAddServiceMode] = useState(false);
@@ -164,9 +168,13 @@ const Portfolio = () => {
             )}
 
             {/* cards */}
+            <ToastContainer/>
+
             <Routes>
               <Route path="/" element={<ServiceCards />} />
-              <Route path="/service" element={<AddService />} />
+              <Route path="/service" element={<AddService handleAddServiceMode={handleAddServiceMode} />} />
+              <Route path="/update/:serviceId" element={<UpdateServie />} />
+
             </Routes>
           </div>
         </div>

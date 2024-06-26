@@ -25,8 +25,7 @@ export const fetchServices = createAsyncThunk(
       const data = await response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
-    }
+      return rejectWithValue(error.response?.data);    }
   }
 );
 

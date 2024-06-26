@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';  // Ensure this is imported
 import ImageResize from 'quill-image-resize-module-react';
@@ -7,20 +7,50 @@ import './style.css'
 
 Quill.register('modules/imageResize', ImageResize);
 
-const Editor = ({ placeholder }) => {
+const Editor = ({onChange, placeholder }) => {
   const [editorHtml, setEditorHtml] = useState('');
+  const quillRef = useRef(null);
 
   const handleChange = useCallback((html) => {
     setEditorHtml(html);
-    console.log(html);
+    onChange(html)
+  }, [onChange]);
+
+  const handleImageUpload = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const base64Image = e.target.result;
+          const range = quillRef.current.getEditor().getSelection();
+          quillRef.current.getEditor().insertEmbed(range.index, 'image', base64Image);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
   }, []);
 
   return (
     <ReactQuill
       theme="snow"
+      ref={quillRef}
       value={editorHtml}
       onChange={handleChange}
-      modules={Editor.modules}
+      modules={{
+        ...Editor.modules,
+        toolbar: {
+          container: Editor.modules.toolbar,
+          handlers: {
+            image: handleImageUpload,
+          },
+        },
+      }}
       formats={Editor.formats}
       bounds="#root"
       placeholder={placeholder}

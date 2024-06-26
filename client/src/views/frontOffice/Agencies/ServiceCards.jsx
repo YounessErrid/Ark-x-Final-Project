@@ -1,15 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import mariagePhoto from "../../../assets/mariage.jpeg";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, Route, Routes, useParams } from "react-router-dom";
 import { deletePortfolioService, fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DOMPurify from 'dompurify';
+import UpdateServie from "./UpdateService";
+
 
 const ServiceCards = () => {
   const [isOpenId, setIsOpenId] = useState(null);
   const { portfolioServices } = useSelector((state) => state.portfolioservice);
   const menuRef = useRef(null)
   const dispatch = useDispatch()
-  const agencyId = useParams()
+  const {id} = useParams()
   const toggleMenu = (id) => {
     setIsOpenId(prevId => prevId === id ? null : id);
   };
@@ -20,9 +25,20 @@ const ServiceCards = () => {
     }
   }
 
-  const handleDeleteService = (id) =>{
-    dispatch(deletePortfolioService(id))
-  
+  const handleDeleteService = async (id) =>{
+    try {
+      await dispatch(deletePortfolioService(id)).unwrap()
+      toast.success('Portfolio servie deleted successfully')
+    } catch (error) {
+      toast.success(`Error: ${error.message}`)
+    }
+  }
+
+  const handleRanderHtml =(dirtyHtmlString)=>{
+    let clean = DOMPurify.sanitize(dirtyHtmlString, {USE_PROFILES: {html: true}});
+    return  <div
+    dangerouslySetInnerHTML={{ __html: clean.split(" ").slice(0, 12).join(" ") }}
+  />
   }
 
   useEffect(()=>{
@@ -45,7 +61,10 @@ const ServiceCards = () => {
             <div>
               <h3 className="text-slate-900 font-bold">{serv.name}</h3>
               <p className="text-slate-600 mt-2">
-                {`${serv.description.split(" ").slice(0, 12).join(" ")}...`}
+                
+                {
+                  handleRanderHtml(serv.description)
+                }
               </p>
               <span className="block mt-2 text-sm leading-6 text-indigo-500">
                 {serv.service.title}
@@ -82,9 +101,9 @@ const ServiceCards = () => {
         >
           <div className="" ref={menuRef}>
             <Link
-              to="/edit"
+              to={`/portfolio/${id}/update/${serv._id}`}
               className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100 rounded-md"
-              onClick={() => setIsOpen(false)}
+              
             >
               Edit
             </Link>
@@ -139,7 +158,9 @@ const ServiceCards = () => {
               </button>
             </Link>
           </div>
+       
         </div>
+        
       ))}
     </div>
   );

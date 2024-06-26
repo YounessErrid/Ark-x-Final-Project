@@ -20,6 +20,20 @@ export const fetchAgencyPortfolio = createAsyncThunk(
   }
 );
 
+export const createPorfolioService = createAsyncThunk(
+  "portfolioServices/createPorfolioService",
+  async (data, { rejectWithValue }) => {
+    try {
+      console.log("data");
+
+      const response = await axiosInstance.post(`/portfolioServices/`, data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
 export const deletePortfolioService = createAsyncThunk(
   "portfolioServices/deletePortfolioService",
   async (id, { rejectWithValue }) => {
@@ -48,6 +62,21 @@ const portfolioServicesSlice = createSlice({
         state.portfolioServices = action.payload;
       })
       .addCase(fetchAgencyPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // add portfolio service
+      .addCase(createPorfolioService.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createPorfolioService.fulfilled, (state, action) => {
+        state.loading = false;
+        const data = action.payload.data;
+        console.log("added service data :", data);
+        state.portfolioServices.portfolioId.portfolioServices.push(data);
+      })
+      .addCase(createPorfolioService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
