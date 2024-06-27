@@ -46,6 +46,18 @@ export const deletePortfolioService = createAsyncThunk(
   }
 );
 
+export const updatePortfolioService = createAsyncThunk(
+  "portfolioServices/updatePortfolioService",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(`/portfolioServices/${data.serviceId}`, data.formData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
 const portfolioServicesSlice = createSlice({
   name: "portfolioServices",
   initialState,
@@ -73,7 +85,7 @@ const portfolioServicesSlice = createSlice({
       .addCase(createPorfolioService.fulfilled, (state, action) => {
         state.loading = false;
         const data = action.payload.data;
-        console.log("added service data :", data);
+        // console.log("added service data :", data);
         state.portfolioServices.portfolioId.portfolioServices.push(data);
       })
       .addCase(createPorfolioService.rejected, (state, action) => {
@@ -92,6 +104,21 @@ const portfolioServicesSlice = createSlice({
         state.portfolioServices.portfolioId.portfolioServices = state.portfolioServices.portfolioId.portfolioServices.filter(service => service._id !== dataId);
       })
       .addCase(deletePortfolioService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // update portfolio service
+      .addCase(updatePortfolioService.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePortfolioService.fulfilled, (state, action) => {
+        state.loading = false;
+        const data = action.payload.data;
+        // console.log("added service data :", data);
+        state.portfolioServices.portfolioId.portfolioServices.push(data);
+      })
+      .addCase(updatePortfolioService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

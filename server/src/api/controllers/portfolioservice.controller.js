@@ -58,15 +58,22 @@ const update = async (req, res) => {
     const { ...newPortfolioService } = req.body;
     console.log(req.files);
     const files = req.files;
+
     let images = [];
-    if (files) {
-      files.forEach((element) => {
+    if (req.files && req.files.images) {
+      req.files.images.forEach((element) => {
         images.push(element.path);
       });
     }
+  
+    let thumbnail = newPortfolioService.thumbnail;
+    if (req.files && req.files.thumbnail && req.files.thumbnail[0]) {
+      thumbnail = req.files.thumbnail[0].path;
+    }
 
-    console.log(files);
-    console.log(images);
+    // console.log(files);
+    // console.log(images);
+
     if (!id || !newPortfolioService) {
       return res.status(400).json({
         error: "PortfolioService update failed: Missing required information!",
@@ -74,9 +81,10 @@ const update = async (req, res) => {
     }
     const updatedPortfolioService = await portfolioservice.findByIdAndUpdate(
       id,
-      { ...newPortfolioService, images },
+      { ...newPortfolioService, images, thumbnail },
       { new: true }
     );
+    
     if (!updatedPortfolioService) {
       return res.status(404).json({
         message: "Portfolio service not found",

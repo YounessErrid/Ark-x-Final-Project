@@ -1,8 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const StyledFileUploader = ({ onFileUpload }) => {
-  const [preview, setPreview] = useState(null);
+const StyledFileUploader = ({ thumbnail ,onFileUpload }) => {
+  const [preview, setPreview] = useState(thumbnail || null);
+
+  useEffect(() => {
+    if (thumbnail && typeof thumbnail === 'string') {
+      setPreview(`http://localhost:3000/${thumbnail}`);
+    }
+  }, [thumbnail]);
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -19,6 +25,8 @@ const StyledFileUploader = ({ onFileUpload }) => {
     },
     [onFileUpload]
   );
+
+
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,

@@ -9,7 +9,7 @@ import DOMPurify from 'dompurify';
 import UpdateServie from "./UpdateService";
 
 
-const ServiceCards = () => {
+const ServiceCards = ({handleAddServiceMode}) => {
   const [isOpenId, setIsOpenId] = useState(null);
   const { portfolioServices } = useSelector((state) => state.portfolioservice);
   const menuRef = useRef(null)
@@ -34,12 +34,10 @@ const ServiceCards = () => {
     }
   }
 
-  const handleRanderHtml =(dirtyHtmlString)=>{
-    let clean = DOMPurify.sanitize(dirtyHtmlString, {USE_PROFILES: {html: true}});
-    return  <div
-    dangerouslySetInnerHTML={{ __html: clean.split(" ").slice(0, 12).join(" ") }}
-  />
-  }
+  const handleRanderHtml = (dirtyHtmlString) => {
+    let clean = DOMPurify.sanitize(dirtyHtmlString, { USE_PROFILES: { html: true } });
+    return clean.split(" ").slice(0, 12).join(" ");
+  };
 
   useEffect(()=>{
     document.addEventListener("mousedown" , handleCloseDropMenu)
@@ -54,20 +52,19 @@ const ServiceCards = () => {
       {/* Example of a card */}
       {portfolioServices.portfolioId?.portfolioServices.map((serv) => (
         <div
-          key={serv._id}
+          key={serv?._id}
           className="bg-white p-8 rounded-lg shadow-md relative"
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-slate-900 font-bold">{serv.name}</h3>
-              <p className="text-slate-600 mt-2">
-                
-                {
-                  handleRanderHtml(serv.description)
-                }
-              </p>
+              <h3 className="text-slate-900 font-bold">{serv?.name}</h3>
+              <div className="text-slate-600 mt-2">
+    {
+      <div dangerouslySetInnerHTML={{ __html: handleRanderHtml(serv?.description) }} />
+    }
+  </div>
               <span className="block mt-2 text-sm leading-6 text-indigo-500">
-                {serv.service.title}
+                {serv?.service?.title}
               </span>
             </div>
             <div className="text-gray-500 cursor-pointer absolute top-2 right-2">
@@ -75,7 +72,7 @@ const ServiceCards = () => {
       <button
         type="button"
         className="hover:bg-gray-50 rounded-full p-1"
-        onClick={() => toggleMenu(serv._id)}
+        onClick={() => toggleMenu(serv?._id)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,16 +91,16 @@ const ServiceCards = () => {
         </svg>
       </button>
 
-      {isOpenId === serv._id && (
+      {isOpenId === serv?._id && (
         <div
           className="absolute -mt-2 right-3 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
           
         >
           <div className="" ref={menuRef}>
             <Link
-              to={`/portfolio/${id}/update/${serv._id}`}
+              to={`/portfolio/${id}/update/${serv?._id}`}
               className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100 rounded-md"
-              
+              onClick={handleAddServiceMode}
             >
               Edit
             </Link>
@@ -111,7 +108,7 @@ const ServiceCards = () => {
             <div
               
               className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100 rounded-md"
-              onClick={() => handleDeleteService(serv._id)}
+              onClick={() => handleDeleteService(serv?._id)}
             >
               Delete
             </div>
@@ -123,7 +120,7 @@ const ServiceCards = () => {
           </div>
           <div className="mb-4">
             <img
-              src={`http://localhost:3000/${serv.thumbnail}`}
+              src={`http://localhost:3000/${serv?.thumbnail}`}
               alt="Post Image"
               className="w-full h-48 object-cover rounded-md"
             />
@@ -162,6 +159,7 @@ const ServiceCards = () => {
         </div>
         
       ))}
+      
     </div>
   );
 };

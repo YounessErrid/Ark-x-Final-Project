@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const AgencyProfile = () => {
   const [editProfile, setEditProfile] = useState(false);
   const [editDescription, setEditDescription] = useState(false);
+  const { portfolioServices } = useSelector((state) => state.portfolioservice);
 
   const handleEditEditPrfile = () => {
     setEditProfile(!editProfile);
@@ -14,17 +16,21 @@ const AgencyProfile = () => {
   const submitprofileChange = () => {};
   const submitDescriptionChange = () => {};
 
+  useEffect(()=>{
+    console.log("portfolio service", portfolioServices);
+  }, [])
+
   return (
-    <section class="relative pt-40 pb-24">
+    <section className="relative pt-40 pb-24">
       <img
         src="https://pagedone.io/asset/uploads/1705473378.png"
         alt="cover-image"
-        class="w-full absolute top-0 left-0 z-0 h-60"
+        className="w-full absolute top-0 left-0 z-0 h-60"
       />
 
       <div className="absolute top-2 right-2">
         <button
-          class="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-lg font-medium px-4 py-2 inline-flex space-x-1 items-center"
+          className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-lg font-medium px-4 py-2 inline-flex space-x-1 items-center"
           onClick={handleEditEditPrfile}
         >
           <span>
@@ -34,7 +40,7 @@ const AgencyProfile = () => {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
                 stroke-linecap="round"
@@ -43,22 +49,22 @@ const AgencyProfile = () => {
               />
             </svg>
           </span>
-          <span class="hidden md:inline-block">Edit</span>
+          <span className="hidden md:inline-block">Edit</span>
         </button>
       </div>
 
-      <div class="w-full max-w-7xl mx-auto px-6 md:px-8">
-        <div class="flex items-center justify-center sm:justify-start relative z-10 mb-5">
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
+        <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">
             <div className="relative">
                 <img
                     src="https://pagedone.io/asset/uploads/1705471668.png"
                     alt="user-avatar-image"
-                    class="border-4 border-solid border-white rounded-full"
+                    className="border-4 border-solid border-white rounded-full"
                 />
 
 <div className="absolute top-0 right-2">
         <button
-          class="text-slate-800 hover:text-blue-600 text-sm font-medium px-4 py-2 inline-flex space-x-1 items-center"
+          className="text-slate-800 hover:text-blue-600 text-sm font-medium px-4 py-2 inline-flex space-x-1 items-center"
           onClick={handleEditEditPrfile}
         >
           <span>
@@ -68,7 +74,7 @@ const AgencyProfile = () => {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              className="w-6 h-6"
             >
               <path
                 stroke-linecap="round"
@@ -82,21 +88,21 @@ const AgencyProfile = () => {
 
             </div>
         </div>
-        <div class="">
-          <div class="bg-white p-6 rounded-lg shadow-md w-full mx-auto relative mb-7">
+        <div className="">
+          <div className="bg-white p-6 rounded-lg shadow-md w-full mx-auto relative mb-7">
             {!editProfile ? (
               <div className="profile">
-                <h3 class="font-manrope font-bold text-4xl text-gray-900 mb-4">
+                <h3 className="font-manrope font-bold text-4xl text-gray-900 mb-4">
                   Agency Name
                 </h3>
-                <div class="space-y-2">
-                  <p class="font-normal text-base leading-7 text-gray-500">
+                <div className="space-y-2">
+                  <p className="font-normal text-base leading-7 text-gray-500">
                     Address Address Address Address
                   </p>
-                  <p class="font-normal text-base leading-7 text-gray-500">
+                  <p className="font-normal text-base leading-7 text-gray-500">
                     email@example.com
                   </p>
-                  <p class="font-normal text-base leading-7 text-gray-500">
+                  <p className="font-normal text-base leading-7 text-gray-500">
                     +212-347-6888
                   </p>
                 </div>
@@ -127,45 +133,45 @@ const AgencyProfile = () => {
               </div>
             ) : (
               <div>
-                <form class="">
-                  <div class="flex flex-wrap rounded-lg p-3 dark:bg-gray-600">
-                    <h2 class="text-xl text-gray-600 dark:text-gray-300 pb-2">
+                <form className="">
+                  <div className="flex flex-wrap rounded-lg p-3 dark:bg-gray-600">
+                    <h2 className="text-xl text-gray-600 dark:text-gray-300 pb-2">
                       Account settings:
                     </h2>
 
-                    <div class="flex flex-col gap-2 w-full border-gray-400">
+                    <div className="flex flex-col gap-2 w-full border-gray-400">
                       <div>
-                        <label class="text-gray-600 dark:text-gray-400">
+                        <label className="text-gray-600 dark:text-gray-400">
                           Agency Name
                         </label>
                         <input
-                          class="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
+                          className="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                           type="text"
                         />
                       </div>
 
                       <div>
-                        <label class="text-gray-600 dark:text-gray-400">
+                        <label className="text-gray-600 dark:text-gray-400">
                           Email
                         </label>
                         <input
-                          class="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
+                          className="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                           type="text"
                         />
                       </div>
                       <div>
-                        <label class="text-gray-600 dark:text-gray-400">
+                        <label className="text-gray-600 dark:text-gray-400">
                           Phone
                         </label>
                         <input
-                          class="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
+                          className="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                           type="tel"
                         />
                       </div>
 
-                      <div class="flex justify-end">
+                      <div className="flex justify-end">
                         <button
-                          class="py-1.5 px-3 m-1 text-center bg-gray-400 border rounded-md text-white  hover:bg-gray-500 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
+                          className="py-1.5 px-3 m-1 text-center bg-gray-400 border rounded-md text-white  hover:bg-gray-500 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
                           onClick={() => {
                             setEditProfile(!editProfile);
                           }}
@@ -173,7 +179,7 @@ const AgencyProfile = () => {
                           Cencel change
                         </button>
                         <button
-                          class="py-1.5 px-3 m-1 text-center bg-blue-400 border rounded-md text-white  hover:bg-blue-300 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
+                          className="py-1.5 px-3 m-1 text-center bg-blue-400 border rounded-md text-white  hover:bg-blue-300 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
                           type="submit"
                         >
                           Save changes
@@ -186,20 +192,20 @@ const AgencyProfile = () => {
             )}
           </div>
 
-          <div class="bg-white p-6 rounded-lg shadow-md w-full mx-auto relative mb-7">
+          <div className="bg-white p-6 rounded-lg shadow-md w-full mx-auto relative mb-7">
             {!editDescription ? (
               <div className="description">
-                <h3 class="font-manrope font-bold text-4xl text-gray-900 mb-4">
+                <h3 className="font-manrope font-bold text-4xl text-gray-900 mb-4">
                   description
                 </h3>
-                <div class="space-y-2">
-                  <p class="font-normal text-base leading-7 text-gray-500">
+                <div className="space-y-2">
+                  <p className="font-normal text-base leading-7 text-gray-500">
                     your agency description
                   </p>
                 </div>
                 <div className="absolute top-2 right-2">
                   <button
-                    class="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-lg font-medium px-4 py-2 inline-flex space-x-1 items-center"
+                    className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-lg font-medium px-4 py-2 inline-flex space-x-1 items-center"
                     onClick={handleEditDescription}
                   >
                     <span>
@@ -209,7 +215,7 @@ const AgencyProfile = () => {
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="w-6 h-6"
+                        className="w-6 h-6"
                       >
                         <path
                           stroke-linecap="round"
@@ -218,28 +224,28 @@ const AgencyProfile = () => {
                         />
                       </svg>
                     </span>
-                    <span class="hidden md:inline-block">Edit</span>
+                    <span className="hidden md:inline-block">Edit</span>
                   </button>
                 </div>
               </div>
             ) : (
               <div>
-                <form class="">
-                  <div class="flex flex-wrap rounded-lg p-3 dark:bg-gray-600">
-                    <h2 class="text-xl text-gray-600 dark:text-gray-300 pb-2">
+                <form className="">
+                  <div className="flex flex-wrap rounded-lg p-3 dark:bg-gray-600">
+                    <h2 className="text-xl text-gray-600 dark:text-gray-300 pb-2">
                       Description:
                     </h2>
 
-                    <div class="flex flex-col gap-2 w-full border-gray-400">
+                    <div className="flex flex-col gap-2 w-full border-gray-400">
                       <div>
                         <textarea
-                          class="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
+                          className="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                           name="bio"
                         ></textarea>
                       </div>
-                      <div class="flex justify-end">
+                      <div className="flex justify-end">
                         <button
-                          class="py-1.5 px-3 m-1 text-center bg-gray-400 border rounded-md text-white  hover:bg-gray-500 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
+                          className="py-1.5 px-3 m-1 text-center bg-gray-400 border rounded-md text-white  hover:bg-gray-500 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
                           onClick={() => {
                             setEditDescription(!editDescription);
                           }}
@@ -247,7 +253,7 @@ const AgencyProfile = () => {
                           Cencel change
                         </button>
                         <button
-                          class="py-1.5 px-3 m-1 text-center bg-blue-400 border rounded-md text-white  hover:bg-blue-300 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
+                          className="py-1.5 px-3 m-1 text-center bg-blue-400 border rounded-md text-white  hover:bg-blue-300 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
                           type="submit"
                         >
                           Save changes

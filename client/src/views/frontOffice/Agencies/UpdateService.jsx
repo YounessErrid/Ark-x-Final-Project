@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import ImageLoader from "./ImageLoader";
 import { CiCirclePlus } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { createPorfolioService } from "../../../features/porfolioServiceSlice";
+import { createPorfolioService, updatePortfolioService } from "../../../features/porfolioServiceSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,20 +21,26 @@ const UpdateServie = ({ handleAddServiceMode }) => {
   const { id, serviceId } = useParams();
   const { services } = useSelector((state) => state.services);
   const portfolioServices = useSelector((state) =>
-    state.portfolioservice.portfolioServices.portfolioId.portfolioServices.filter(
-      (serv) => serv._id == serviceId
-    )
+    state.portfolioservice.portfolioServices.portfolioId?.portfolioServices
   );
 
   useEffect(() => {
-    console.log(portfolioServices);
     if (portfolioServices) {
+      const updatedService = portfolioServices?.find(
+        (serv) => serv._id === serviceId
+      );
+      if (updatedService) {
+        setSrviceName(updatedService.name);
+        setServiceCategory(updatedService.service?._id || '');
+        setThumbnail(updatedService.thumbnail);
+        setDescription(updatedService.description) 
+      }
     }
-  }, []);
+  }, [id, portfolioServices, serviceId]);
 
   const handleDescription = (text) => {
     setDescription(text);
-    console.log(text);
+    
   };
 
   const handleTileChang = (e) => {
@@ -49,7 +55,7 @@ const UpdateServie = ({ handleAddServiceMode }) => {
   };
 
   const handleCategoryChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setServiceCategory(e.target.value);
   };
 
@@ -61,8 +67,8 @@ const UpdateServie = ({ handleAddServiceMode }) => {
       formData.append("service", seviceCatgory);
       formData.append("thumbnail", thumbnail);
       try {
-        await dispatch(createPorfolioService(formData)).unwrap();
-        toast.success("Portfolio added successfully");
+        await dispatch(updatePortfolioService({formData, serviceId})).unwrap();
+        toast.success("Portfolio updated successfully");
         setTimeout(() => {
           navigate(`/portfolio/${id}`);
           handleAddServiceMode();
@@ -98,6 +104,7 @@ const UpdateServie = ({ handleAddServiceMode }) => {
           placeholder="Service Category"
           className="w-full bg-white rounded-xl border border-b50 p-3 outline-none pr-8"
           onChange={handleCategoryChange}
+          value={seviceCatgory}
         >
           <option value="">Select an option</option>
           {services &&
@@ -109,12 +116,13 @@ const UpdateServie = ({ handleAddServiceMode }) => {
         </select>
       </div>
       <div className="col-span-12 mb-6">
-        <ImageLoader onFileUpload={handleThumbnailChange} />
+        <ImageLoader thumbnail={thumbnail} onFileUpload={handleThumbnailChange} />
       </div>
       {/* Description */}
       <div className="mt-8 col-span-12 mb-6">
         <p className="pb-3 font-medium text-n100">Service Description*</p>
         <Editor
+        description={description}
           onChange={handleDescription}
           placeholder="Type your service description here..."
         />

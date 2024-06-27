@@ -7,7 +7,8 @@ const { isAuthenticated } = require("../middlewares/userAuth.middleware");
 // router.use('/', express.static(path.join(__dirname, 'uploads')));
 
 router.post(
-  "/",isAuthenticated,
+  "/",
+  isAuthenticated,
   upload.fields([
     { name: "images", maxCount: 10 },
     { name: "thumbnail", maxCount: 1 },
@@ -17,7 +18,14 @@ router.post(
 router.get("/:id", controller.findPortfolioByAgencyId);
 // router.get("/:id", controller.findOne);
 router.get("/", controller.viewAll);
-router.put("/:id", upload.array("images[]"), controller.update);
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "images", maxCount: 10 },
+    { name: "thumbnail", maxCount: 1 },
+  ]),
+  controller.update
+);
 router.delete("/:id", controller.remove);
 module.exports = router;
 /*const express = require('express');

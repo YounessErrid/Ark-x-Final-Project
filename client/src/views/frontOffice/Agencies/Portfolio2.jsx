@@ -8,10 +8,9 @@ import { CiCirclePlus } from "react-icons/ci";
 import ServiceCards from "./ServiceCards";
 import AddService from "./AddService";
 import { fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import UpdateServie from "./UpdateService";
-
 
 const Portfolio = () => {
   const [addServiceMode, setAddServiceMode] = useState(false);
@@ -36,6 +35,8 @@ const Portfolio = () => {
   const handleAddServiceMode = () => {
     setAddServiceMode(!addServiceMode);
   };
+
+  if(!portfolioServices) return null
 
   return (
     // <!-- component -->
@@ -116,14 +117,15 @@ const Portfolio = () => {
                 <div className="text-gray-600 flex flex-wrap gap-2">
                   {portfolioServices.portfolioId?.portfolioServices.map(
                     (serv, index) => {
-                      if (!uniqueTitles.has(serv.service.title)) {
-                        uniqueTitles.add(serv.service.title);
+                     
+                      if (!uniqueTitles.has(serv?.service?.title)) {
+                        uniqueTitles.add(serv?.service?.title);
                         return (
                           <p
-                            key={serv._id}
+                            key={serv?._id}
                             className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium"
                           >
-                            <span>{serv.service.title}</span>
+                            <span>{serv?.service?.title}</span>
                           </p>
                         );
                       }
@@ -145,7 +147,10 @@ const Portfolio = () => {
             {!addServiceMode ? (
               <div className=" flex justify-end">
                 <Link to={`/portfolio/${id}/service`}>
-                  <button className="h-10 text-white flex justify-center items-center gap-2 bg-black hover:bg-gray-800 px-3 rounded-md mb-4" onClick={handleAddServiceMode}>
+                  <button
+                    className="h-10 text-white flex justify-center items-center gap-2 bg-black hover:bg-gray-800 px-3 rounded-md mb-4"
+                    onClick={handleAddServiceMode}
+                  >
                     <CiCirclePlus className="h-6 w-6" />
                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                       Add Service
@@ -156,25 +161,36 @@ const Portfolio = () => {
             ) : (
               <div className=" flex justify-start">
                 <Link to={`/portfolio/${id}`}>
-                  <button className="h-10 text-white flex justify-center items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 rounded-md mb-4" onClick={handleAddServiceMode}>
+                  <button
+                    className="h-10 text-white flex justify-center items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 rounded-md mb-4"
+                    onClick={handleAddServiceMode}
+                  >
                     <IoIosArrowDropleft className="h-6 w-6 text-black" />
                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap text-black">
                       Go Back
                     </span>
                   </button>
                 </Link>
-                
               </div>
             )}
 
             {/* cards */}
-            <ToastContainer/>
+            <ToastContainer />
 
             <Routes>
-              <Route path="/" element={<ServiceCards />} />
-              <Route path="/service" element={<AddService handleAddServiceMode={handleAddServiceMode} />} />
-              <Route path="/update/:serviceId" element={<UpdateServie />} />
-
+              <Route path="/" element={<ServiceCards handleAddServiceMode={handleAddServiceMode} />} />
+              <Route
+                path="/service"
+                element={
+                  <AddService handleAddServiceMode={handleAddServiceMode} />
+                }
+              />
+              <Route
+                path="/update/:serviceId"
+                element={
+                  <UpdateServie handleAddServiceMode={handleAddServiceMode} />
+                }
+              />
             </Routes>
           </div>
         </div>

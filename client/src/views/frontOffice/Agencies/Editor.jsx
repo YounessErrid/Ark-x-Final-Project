@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';  // Ensure this is imported
 import ImageResize from 'quill-image-resize-module-react';
@@ -7,7 +7,7 @@ import './style.css'
 
 Quill.register('modules/imageResize', ImageResize);
 
-const Editor = ({onChange, placeholder }) => {
+const Editor = ({onChange, placeholder, description }) => {
   const [editorHtml, setEditorHtml] = useState('');
   const quillRef = useRef(null);
 
@@ -15,6 +15,12 @@ const Editor = ({onChange, placeholder }) => {
     setEditorHtml(html);
     onChange(html)
   }, [onChange]);
+
+  useEffect(()=>{
+    if(description){
+      setEditorHtml(description)
+    }
+  }, [description])
 
   const handleImageUpload = useCallback(() => {
     const input = document.createElement('input');
