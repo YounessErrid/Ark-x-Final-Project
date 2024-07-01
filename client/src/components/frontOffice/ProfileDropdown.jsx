@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {logoutUser} from '../../features/userSlice'
 
@@ -7,7 +7,7 @@ const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch()
-
+  const {user} = useSelector(state => state.user)
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -21,6 +21,11 @@ const ProfileDropdown = () => {
   const handleLogout = () =>{
     dispatch(logoutUser())
   }
+  // useEffect(()=>{
+  //   console.log("agency idddd",user.agency);
+  // }, [user])
+
+
 
   useEffect(() => {
     if (isOpen) {
@@ -50,7 +55,7 @@ const ProfileDropdown = () => {
       </button>
       {isOpen && (
         <div className="absolute right-0 w-40 mt-2 py-2 bg-white border rounded shadow-xl">
-          <Link to="/profile">
+          <Link to={`/agency/profile/${user.agencyId}`}>
             <button className="w-full text-left transition-colors duration-200 block px-4 py-2 text-normal text-gray-900 rounded hover:bg-blue-200 hover:text-white">
               Profile
             </button>

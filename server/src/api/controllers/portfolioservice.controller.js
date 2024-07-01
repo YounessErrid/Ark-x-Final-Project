@@ -56,7 +56,7 @@ const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { ...newPortfolioService } = req.body;
-    console.log(req.files);
+    // console.log(req.files);
     const files = req.files;
 
     let images = [];
@@ -125,7 +125,7 @@ const remove = async (req, res) => {
 const findPortfolioByAgencyId = async (req, res) => {
   const { id } = req.params;
   try {
-    const agencyPortfolio = await Agency.findOne({ userId: id }).populate({
+    const agencyPortfolio = await Agency.findById(id).populate({
       path: 'portfolioId',
       populate : {
         path: "portfolioServices",
@@ -135,7 +135,7 @@ const findPortfolioByAgencyId = async (req, res) => {
       }
     });
 
-    console.log("agencyPortfolio agency", agencyPortfolio);
+    // console.log("agencyPortfolio agency", agencyPortfolio);
     if (!agencyPortfolio) {
       return res.status(404).json({
         message: "Portfolio service not found",

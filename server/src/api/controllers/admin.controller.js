@@ -146,7 +146,7 @@ const forgotPassword = async (req, res, next) => {
     const resetUrl = `${req.protocol}://${frontendHost}/resetPassword/${resetToken}`;
     const message = `Click the following link to reset your password:\n\n ${resetUrl} \n\n`;
 
-    console.log(message);
+    // console.log(message);
 
     await sendEmail({
       email: req.body.email,
@@ -170,7 +170,7 @@ const forgotPassword = async (req, res, next) => {
 };
 const resetPassword = async (req, res) => {
   try {
-    console.log(req.params.token);
+    // console.log(req.params.token);
     const token = crypto
       .createHash("sha256")
       .update(req.params.token)
@@ -185,7 +185,7 @@ const resetPassword = async (req, res) => {
         message: "Token is Invalid or Expired",
       });
     }
-    console.log("password", req.body.password);
+    // console.log("password", req.body.password);
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
     user.password = hashedPassword;

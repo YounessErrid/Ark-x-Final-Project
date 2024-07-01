@@ -22,6 +22,7 @@ router.delete('/:id',controller.remove)
 router.get('/', controller.viewAll);
 router.get("/search", controller.globalSearch);
 router.get('/:id', controller.findOne)
+router.put('/:id', controller.update)
 // router.put('/:id', controller.update)
 // router.delete('/:id', controller.remove)
 

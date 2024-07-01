@@ -39,7 +39,7 @@ const Login = () => {
       } else if (user.role === "agency" && user.hasAccess === false) {
         navigate("/subscription");
       } else if (user.role === "agency" && user.hasAccess === true) {
-        navigate(`/portfolio/${user.id}`);
+        navigate(`/portfolio/${user.agencyId}`);
       } else {
         navigate("/");
       }

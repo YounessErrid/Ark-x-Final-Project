@@ -124,25 +124,89 @@ const viewAll = async (req, res) => {
     });
   }
 };
+// const findOne = async (req, res) => {
+//   try {
+//     const agency = await Agency.findById(req.params.id).populate(
+//       "userId"
+//     ).populate('portfolioId')
+
+//     if (!agency) {
+//       return res.status(404).json({ error: "No agencies found" });
+//     }
+//     console.log('--------agency---------');
+//     console.log(agency);
+//     console.log('--------agency---------');
+//     // Construct the response object with the desired fields
+//     const responseData = {
+//       _id: agency._id,
+//       fullname: agency.userId === null ? null : agency.userId.fullname,
+//       email: agency.userId === null ? null : agency.userId.email,
+//       profile_image:
+//         agency.userId === null ? null : agency.userId.profile_image,
+//       // phone:
+//       //   agency.userId === null ? null : agency.userId.phone,
+//       agencyName: agency.agencyName,
+//       address: agency.addresse, // Corrected typo
+//       description: agency.portfolioId == null ? null : agency.portfolioId.description
+//     };
+//     return res.status(200).json(responseData);
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: "Internal server error",
+//       message: `Error retrieving agencies: ${error.message}`,
+//     });
+//   }
+// };
+
+const update = async (req, res) => {
+  const updated = req.body;
+  const id = req.params.id;
+  console.log("reqqqq",req);
+  try {
+    const updatedAgency = await Agency.findByIdAndUpdate(id, updated, {
+      new: true,
+      runValidators: true,
+    });
+    if(!updatedAgency){
+      return  res.status(404).json({ error: "No agencies found" })
+    }
+    return res.status(200).json(updatedAgency);
+
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      message: `Error retrieving agencies: ${error.message}`,
+    });
+  }
+};
+
 const findOne = async (req, res) => {
   try {
-    const agency = await Agency.findById(req.params.id).populate(
-      "userId",
-      " fullname email profile_image"
-    );
+
+    const agency = await Agency.findById(req.params.id)
+      .populate("userId")
+      .populate("portfolioId");
 
     if (!agency) {
       return res.status(404).json({ error: "No agencies found" });
     }
-    // Construct the response object with the desired fields
+    // console.log('--------agency---------');
+    // console.log(agency);
+    // console.log('--------agency---------');
     const responseData = {
       _id: agency._id,
       fullname: agency.userId === null ? null : agency.userId.fullname,
       email: agency.userId === null ? null : agency.userId.email,
       profile_image:
         agency.userId === null ? null : agency.userId.profile_image,
+      // phone:
+      //   agency.userId === null ? null : agency.userId.phone,
       agencyName: agency.agencyName,
       address: agency.addresse, // Corrected typo
+      description:
+        agency.portfolioId == null ? null : agency.portfolioId.description,
+      cover: agency.portfolioId == null ? null : agency.portfolioId.cover,
+      logo: agency.portfolioId == null ? null : agency.portfolioId.logo,
     };
     return res.status(200).json(responseData);
   } catch (error) {
@@ -380,5 +444,6 @@ module.exports = {
   globalSearch,
   findOne,
   remove,
+  update,
   checkAgencyEmail,
 };

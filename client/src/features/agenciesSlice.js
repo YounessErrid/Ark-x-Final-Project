@@ -49,13 +49,23 @@ export const searchAgencies = createAsyncThunk(
 export const fetchAgency = createAsyncThunk(
   "agencies/fetchAgency",
   async (id, { rejectWithValue }) => {
-    // Include the search query parameter
     try {
       const response = await axiosInstance.get(`/agencies/${id}`);
-      const data = await response.data;
-      return data;
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const updateAgecny = createAsyncThunk(
+  "agencies/updateAgecny",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(`/agencies/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
     }
   }
 );
@@ -134,7 +144,7 @@ export const agenciesSlice = createSlice({
       .addCase(fetchAgency.fulfilled, (state, action) => {
         state.loading = false;
         state.agency = action.payload;
-        console.log(action.payload);
+        // console.log(action.payload);
       })
       .addCase(fetchAgency.rejected, (state, action) => {
         state.loading = false;

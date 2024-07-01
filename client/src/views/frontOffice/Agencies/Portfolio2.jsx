@@ -45,7 +45,7 @@ const Portfolio = () => {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 lg:gap-8">
           <div className="post pr-6 pt-6 lg:p-1 rounded-md relative">
             <div className="flex justify-end pr-8">
-              <Link to={"/agency/profile"}>
+              <Link to={`/agency/profile/${id}`}>
                 <button className=" rounded-full text-black hover:text-gray-500 font-extrabold">
                   <div className="flex gap-3 justify-center items-center">
                     <span>

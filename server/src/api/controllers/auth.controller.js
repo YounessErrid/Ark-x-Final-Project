@@ -40,6 +40,7 @@ const login  = async (req, res) =>{
               message: "Successfully logged in",
             user: {
               id: user._id,
+              agencyId: userData._id,
               email: user.email,
               role: user.role,
               agencyName: userData.agencyName,
@@ -125,6 +126,7 @@ try {
             message: "Successfully logged in",
               user: {
                 id: user._id,
+                agencyId: userData._id,
                 email: user.email,
                 role: user.role,
                 agencyName: userData.agencyName,
