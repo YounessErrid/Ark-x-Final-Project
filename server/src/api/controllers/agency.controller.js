@@ -161,7 +161,7 @@ const viewAll = async (req, res) => {
 const update = async (req, res) => {
   const updated = req.body;
   const id = req.params.id;
-  console.log("reqqqq",req);
+  // console.log("reqqqq",req);
   try {
     const updatedAgency = await Agency.findByIdAndUpdate(id, updated, {
       new: true,
@@ -207,6 +207,7 @@ const findOne = async (req, res) => {
         agency.portfolioId == null ? null : agency.portfolioId.description,
       cover: agency.portfolioId == null ? null : agency.portfolioId.cover,
       logo: agency.portfolioId == null ? null : agency.portfolioId.logo,
+      portfolioId: agency.portfolioId == null ? null : agency.portfolioId._id,
     };
     return res.status(200).json(responseData);
   } catch (error) {

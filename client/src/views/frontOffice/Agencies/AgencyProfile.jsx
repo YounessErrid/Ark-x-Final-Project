@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAgency } from "../../../features/agenciesSlice";
+import { fetchAgency, updateAgecny } from "../../../features/agenciesSlice";
 import { useParams } from "react-router-dom";
+import { updateUser } from "../../../features/userSlice";
+import { updatePortfolio } from "../../../features/porfolioSlice";
 
 const AgencyProfile = () => {
   const [editProfile, setEditProfile] = useState(false);
@@ -18,8 +20,10 @@ const AgencyProfile = () => {
   const [coverPhoto, setCoverPhoto] = useState(null);
 
   const { agency } = useSelector((state) => state.agencies);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { id } = useParams();
+  
 
   const handleEditProfile = () => {
     setEditProfile(!editProfile);
@@ -51,21 +55,33 @@ const AgencyProfile = () => {
     setDescription(value);
   };
 
-  const submitprofileChange = () => {
+  const submitprofileChange = (e) => {
+    e.preventDefault()
     if (
       profileForm.agencyName !== agency.agencyName ||
       profileForm.address !== agency.address
     ) {
-      dispatch()
+      // here dispatch to the update agency that contains address and agency name
+      const data = {agencyName:profileForm.agencyName, addresse: profileForm.address}
+      // console.log('this is data sent', data);
+      dispatch(updateAgecny({id, data})).then(()=>dispatch(fetchAgency(id))).then(()=> setEditProfile(!editProfile))
     }
     if( profileForm.email !== agency.email ){
-      dispatch()
+      // if the email changed send request to the user and deal with the user schema
+      const userCredentials = {email : profileForm.email}
+      const userId = user?.id
+      dispatch(updateUser({id: userId, userCredentials})).then(()=>dispatch(fetchAgency(id))).then(()=> setEditProfile(!editProfile))
     }
   };
 
-  const submitDescriptionChange = () => {
+  const submitDescriptionChange = (e) => {
+    e.preventDefault()
     if (description !== agency.description) {
-      dispatch()
+      // send request to the portfolio update
+      const formData = new FormData()
+      formData.append("infos", description )
+      const portfolioId = agency?.portfolioId
+      dispatch(updatePortfolio({id : portfolioId, formData})).then(()=>dispatch(fetchAgency(id))).then(()=> setEditDescription(!editDescription))
     }
   };
 
@@ -73,8 +89,12 @@ const AgencyProfile = () => {
     dispatch(fetchAgency(id));
   }, []);
 
+  // useEffect(() => {
+  //   console.log('thisisisis is agency bro', agency);
+  // }, [agency]);
+
   useEffect(() => {
-    console.log("agency", agency);
+    // console.log("agency", agency);
     if (agency) {
       setProfileForm({
         agencyName: agency.agencyName,
@@ -83,7 +103,7 @@ const AgencyProfile = () => {
       });
       setDescription(agency.description);
     }
-  }, []);
+  }, [agency]);
 
   return (
     <section className="relative pt-40 pb-24">
@@ -337,6 +357,7 @@ const AgencyProfile = () => {
                         <button
                           className="py-1.5 px-3 m-1 text-center bg-blue-400 border rounded-md text-white  hover:bg-blue-300 hover:text-gray-100 dark:text-gray-200 dark:bg-violet-700"
                           type="submit"
+                          onClick={submitDescriptionChange}
                         >
                           Save changes
                         </button>

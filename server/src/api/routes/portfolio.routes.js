@@ -12,7 +12,7 @@ router.post("/", uploadFields, controller.create);
 // router.post("/", controller.create);
 router.get("/:id", controller.findOne);
 router.get("/", controller.viewAll);
-router.put("/:id", controller.update);
+router.put("/:id", uploadFields, controller.update);
 router.delete("/:id", controller.remove);
 
 module.exports = router;

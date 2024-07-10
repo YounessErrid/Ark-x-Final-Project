@@ -141,6 +141,7 @@ const findPortfolioByAgencyId = async (req, res) => {
         message: "Portfolio service not found",
       });
     }
+    // console.log("agencyPortfolio: ",agencyPortfolio);
     return res.status(200).json(agencyPortfolio);
   } catch (error) {
     return res.status(500).json({

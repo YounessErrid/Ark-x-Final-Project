@@ -308,22 +308,20 @@ const remove = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { ...newAdminData } = req.body; // Exclude createdAt from newPostData
+    // console.log("Request body:", req.body);
+    const { fullname, email } = req.body;
     const path = req.file || null;
-    // newAdminData.profile_image = path;
 
-    if (!id || !newAdminData) {
-      return res
-        .status(400)
-        .json({ error: "Admin update failed: Missing required fields!" });
+    if (!id) {
+      return res.status(400).json({ error: "Admin update failed: Missing required fields!" });
     }
 
-    // const admin = await Admin.findById(id);
-    // if (!admin) {
-    //   return res.status(404).json({ error: "Admin not found!" });
-    // }
     const user = await User.findById(id);
-    if (user.profile_image && path !== null) {
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+
+    if (user.profile_image && path) {
       fs.unlink(user.profile_image, (err) => {
         if (err) {
           console.error("Error deleting previous image:", err);
@@ -333,35 +331,36 @@ const update = async (req, res) => {
       });
       user.profile_image = path.path;
     }
-    if (newAdminData.fullname) {
-      user.fullname = newAdminData.fullname;
+
+    if (fullname) {
+      user.fullname = fullname;
     }
+
+    if (email) {
+      user.email = email;
+    }
+
     const updatedAdmin = await user.save();
 
-    if (!updatedAdmin) {
-      return res.status(404).json({ error: "User not found!" });
-    }
     res.status(202).json({
       success: true,
-      message: "Admin successfully updated",
+      message: "Successfully updated",
       user: {
         id: user._id,
         role: user.role,
         fullname: user.fullname,
+        email: user.email,
         profile: user.profile_image,
       },
     });
-
-    // return res.status(200).json(updatedAdmin);
   } catch (error) {
-    return res
-      .status(500)
-      .json([
-        { error: "Internal server error" },
-        { message: `Error updating admin: ${error.message}` },
-      ]);
+    return res.status(500).json({
+      error: "Internal server error",
+      message: `Error updating admin: ${error.message}`,
+    });
   }
 };
+
 const changePassword = async (req, res) => {
   try {
     const id = req.params.id;

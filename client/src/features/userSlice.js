@@ -298,23 +298,15 @@ export const updateUser = createAsyncThunk(
   "user/updateUser",
   async ({ id, userCredentials }, { rejectWithValue }) => {
     try {
-      const { fullname, selectedfile } = userCredentials;
-      console.log(fullname, selectedfile);
-      // Create a new FormData object
-      // const formData = toFormData(userCredentials);
+      const { fullname, email ,selectedfile } = userCredentials;
+      
       const formData = new FormData();
-      formData.append("fullname", fullname);
-      formData.append("profile_image", selectedfile);
-      console.log(formData);
-      // Send the request with FormData instead of the raw userCredentials object
+      if (email) formData.append("email", email);
+      if (fullname) formData.append("fullname", fullname);
+      if (selectedfile) formData.append("profile_image", selectedfile);
       const request = await axiosInstance.put(
         `admins/auth/update/${id}`,
         formData
-        // {
-        //   headers: {
-        //     "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
-        //   },
-        // }
       );
       const response = await request.data;
       return response;
