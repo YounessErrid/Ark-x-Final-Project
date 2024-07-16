@@ -8,6 +8,10 @@ const portfolioserviceSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  shortDescription: {
+    type: String,
+    trim: true,
+  },
   // list of images
   thumbnail: {
     type: String,

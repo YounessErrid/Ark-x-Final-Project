@@ -16,6 +16,7 @@ router.post(
   controller.create
 );
 router.get("/:id", controller.findPortfolioByAgencyId);
+router.get("/agency/:id", controller.findOne);
 // router.get("/:id", controller.findOne);
 router.get("/", controller.viewAll);
 router.put(

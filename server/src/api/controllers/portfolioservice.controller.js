@@ -5,7 +5,7 @@ const User = require("../models/user.model");
 
 const create = async (req, res) => {
 
-  const { name, description, service } = req.body;
+  const { name, description, service, shortDescription } = req.body;
   let images = [];
   if (req.files && req.files.images) {
     req.files.images.forEach((element) => {
@@ -18,7 +18,7 @@ const create = async (req, res) => {
     thumbnail = req.files.thumbnail[0].path;
   }
   try {
-    if (!name || !description || !service) {
+    if (!name || !description || !service || !shortDescription) {
       return res.status(400).json({
         error:
           "^portfolioService creation failed: Missing required information!",
@@ -27,6 +27,7 @@ const create = async (req, res) => {
     const newPortfolioService = new portfolioservice({
       name,
       description,
+      shortDescription,
       images,
       thumbnail,
       service,
@@ -150,6 +151,7 @@ const findPortfolioByAgencyId = async (req, res) => {
     });
   }
 };
+
 const findOne = async (req, res) => {
   const { id } = req.params;
   try {
@@ -159,7 +161,31 @@ const findOne = async (req, res) => {
         message: "Portfolio service not found",
       });
     }
-    return res.status(200).json(portfolioService);
+
+    console.log("id", id);
+    console.log("portfolioservice", portfolioService);
+
+    const portfolio = await Portfolio.findOne({portfolioServices : id})
+
+    if (!portfolio) {
+      return res.status(404).json({
+        message: "Portfolio not found",
+      });
+    }
+
+    const agency = await Agency.findOne({portfolioId : portfolio._id})
+    if (!agency) {
+      return res.status(404).json({
+        message: "agency not found",
+      });
+    }
+
+    return res.status(200).json({
+      ...portfolioService._doc,
+        agencyName: agency?.agencyName,
+        addresse : agency?.addresse,
+        logo: portfolio?.logo
+    });
   } catch (error) {
     return res.status(500).json({
       error: "Internal server error",
@@ -167,6 +193,7 @@ const findOne = async (req, res) => {
     });
   }
 };
+
 const viewAll = async (req, res) => {
   try {
     const portfolioServices = await portfolioservice.find();

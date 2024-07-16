@@ -71,7 +71,7 @@ const Portfolio = () => {
             <div className="bg-white p-8 pt-0 rounded-lg shadow-md w-full mb-4 ">
               <div className="relative">
                 <img
-                  src={`http://localhost:3000/${portfolioServices.portfolioId?.logo}`}
+                  src={`http://localhost:3000/${portfolioServices.portfolioId?.cover}`}
                   alt="Banner Profile"
                   className="w-full rounded-t-lg h-48 object-cover"
                 />

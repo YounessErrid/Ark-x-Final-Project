@@ -2,50 +2,54 @@ import React, { useEffect, useRef, useState } from "react";
 import mariagePhoto from "../../../assets/mariage.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Route, Routes, useParams } from "react-router-dom";
-import { deletePortfolioService, fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import DOMPurify from 'dompurify';
+import {
+  deletePortfolioService,
+  fetchAgencyPortfolio,
+} from "../../../features/porfolioServiceSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import DOMPurify from "dompurify";
 import UpdateServie from "./UpdateService";
 
-
-const ServiceCards = ({handleAddServiceMode}) => {
+const ServiceCards = ({ handleAddServiceMode }) => {
   const [isOpenId, setIsOpenId] = useState(null);
   const { portfolioServices } = useSelector((state) => state.portfolioservice);
-  const menuRef = useRef(null)
-  const dispatch = useDispatch()
-  const {id} = useParams()
+  const menuRef = useRef(null);
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const toggleMenu = (id) => {
-    setIsOpenId(prevId => prevId === id ? null : id);
+    setIsOpenId((prevId) => (prevId === id ? null : id));
   };
 
-  const handleCloseDropMenu = (e) =>{
-    if(menuRef.current && !menuRef.current.contains(e.target)){
-      setIsOpenId(prev => prev == null)
+  const handleCloseDropMenu = (e) => {
+    if (menuRef.current && !menuRef.current.contains(e.target)) {
+      setIsOpenId((prev) => prev == null);
     }
-  }
+  };
 
-  const handleDeleteService = async (id) =>{
+  const handleDeleteService = async (id) => {
     try {
-      await dispatch(deletePortfolioService(id)).unwrap()
-      toast.success('Portfolio servie deleted successfully')
+      await dispatch(deletePortfolioService(id)).unwrap();
+      toast.success("Portfolio servie deleted successfully");
     } catch (error) {
-      toast.success(`Error: ${error.message}`)
+      toast.success(`Error: ${error.message}`);
     }
-  }
+  };
 
   const handleRanderHtml = (dirtyHtmlString) => {
-    let clean = DOMPurify.sanitize(dirtyHtmlString, { USE_PROFILES: { html: true } });
-    return clean.split(" ").slice(0, 12).join(" ");
+    let clean = DOMPurify.sanitize(dirtyHtmlString, {
+      USE_PROFILES: { html: true },
+    });
+    return clean;
   };
 
-  useEffect(()=>{
-    document.addEventListener("mousedown" , handleCloseDropMenu)
+  useEffect(() => {
+    document.addEventListener("mousedown", handleCloseDropMenu);
 
-    return ()=>{
-      document.addEventListener("mousedown" , handleCloseDropMenu)
-    } 
-  }, [])
+    return () => {
+      document.addEventListener("mousedown", handleCloseDropMenu);
+    };
+  }, []);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -59,63 +63,57 @@ const ServiceCards = ({handleAddServiceMode}) => {
             <div>
               <h3 className="text-slate-900 font-bold">{serv?.name}</h3>
               <div className="text-slate-600 mt-2">
-    {
-      <div dangerouslySetInnerHTML={{ __html: handleRanderHtml(serv?.description) }} />
-    }
-  </div>
+                <p>{serv?.shortDescription}</p>
+              </div>
               <span className="block mt-2 text-sm leading-6 text-indigo-500">
                 {serv?.service?.title}
               </span>
             </div>
             <div className="text-gray-500 cursor-pointer absolute top-2 right-2">
-            <div className="relative inline-block text-left">
-      <button
-        type="button"
-        className="hover:bg-gray-50 rounded-full p-1"
-        onClick={() => toggleMenu(serv?._id)}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="7" r="1" />
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="12" cy="17" r="1" />
-        </svg>
-      </button>
+              <div className="relative inline-block text-left">
+                <button
+                  type="button"
+                  className="hover:bg-gray-50 rounded-full p-1"
+                  onClick={() => toggleMenu(serv?._id)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="7" r="1" />
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="12" cy="17" r="1" />
+                  </svg>
+                </button>
 
-      {isOpenId === serv?._id && (
-        <div
-          className="absolute -mt-2 right-3 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-          
-        >
-          <div className="" ref={menuRef}>
-            <Link
-              to={`/portfolio/${id}/update/${serv?._id}`}
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100 rounded-md"
-              onClick={handleAddServiceMode}
-            >
-              Edit
-            </Link>
-            
-            <div
-              
-              className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100 rounded-md"
-              onClick={() => handleDeleteService(serv?._id)}
-            >
-              Delete
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+                {isOpenId === serv?._id && (
+                  <div className="absolute -mt-2 right-3 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="" ref={menuRef}>
+                      <Link
+                        to={`/portfolio/${id}/update/${serv?._id}`}
+                        className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100 rounded-md"
+                        onClick={handleAddServiceMode}
+                      >
+                        Edit
+                      </Link>
+
+                      <div
+                        className="text-gray-700 block px-4 py-2 text-sm hover:bg-slate-100 rounded-md"
+                        onClick={() => handleDeleteService(serv?._id)}
+                      >
+                        Delete
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="mb-4">
@@ -138,7 +136,7 @@ const ServiceCards = ({handleAddServiceMode}) => {
                 <span>42 Likes</span>
               </button>
             </div>
-            <Link to={'/'}>
+            <Link to={`/service-details/${serv?._id}`}>
               <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-50 rounded-full p-1">
                 <span>View details</span>
                 <svg
@@ -155,11 +153,8 @@ const ServiceCards = ({handleAddServiceMode}) => {
               </button>
             </Link>
           </div>
-       
         </div>
-        
       ))}
-      
     </div>
   );
 };

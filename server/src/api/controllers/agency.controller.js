@@ -6,11 +6,11 @@ const Service = require("../models/services.model");
 const Portfolio = require("../models/portfolio.model");
 
 const register = async (req, res) => {
-  const { email, password, fullname, addresse, agencyName } = req.body;
+  const { email, password, fullname, addresse, agencyName, phone } = req.body;
 
   try {
     const path = req.file ? req.file.path : null;
-    if (!email || !password || !fullname || !addresse || !agencyName) {
+    if (!email || !password || !fullname || !addresse || !agencyName || !phone) {
       return res.status(400).json({
         error: "Agency creation failed: Missing required information!",
       });
@@ -28,6 +28,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       fullname: fullname,
       profile_image: path,
+      phone: phone,
       role: "agency",
     });
 
@@ -199,8 +200,7 @@ const findOne = async (req, res) => {
       email: agency.userId === null ? null : agency.userId.email,
       profile_image:
         agency.userId === null ? null : agency.userId.profile_image,
-      // phone:
-      //   agency.userId === null ? null : agency.userId.phone,
+      phone: agency.userId === null ? null : agency.userId.phone,
       agencyName: agency.agencyName,
       address: agency.addresse, // Corrected typo
       description:

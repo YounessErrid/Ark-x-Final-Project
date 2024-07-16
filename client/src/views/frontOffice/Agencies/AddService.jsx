@@ -17,6 +17,7 @@ const AddService = ({handleAddServiceMode}) => {
   const [seviceCatgory, setServiceCategory] = useState("")
   const [thumbnail, setThumbnail] = useState("")
   const [description, setDescription] = useState("")
+  const [shortDescription, setShortDescription] = useState("")
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {id} = useParams()
@@ -31,6 +32,11 @@ const AddService = ({handleAddServiceMode}) => {
     const serviceName = e.target.value
     // console.log(serviceName);
     setSrviceName(serviceName)
+  }
+
+  const handleShortDescriptionChange = (e)=>{
+    const shortDescription = e.target.value
+    setShortDescription(shortDescription)
   }
 
   const handleThumbnailChange = (file)=>{
@@ -48,6 +54,7 @@ const AddService = ({handleAddServiceMode}) => {
     if (serviceName || thumbnail || description) {
       formData.append('name', serviceName)
       formData.append('description', description)
+      formData.append('shortDescription', shortDescription)
       formData.append('service', seviceCatgory)
       formData.append('thumbnail', thumbnail)
       try {
@@ -97,8 +104,20 @@ const AddService = ({handleAddServiceMode}) => {
           }
         </select>
       </div>
-      <div className="col-span-12 mb-6">
+      <div className="col-span-12 mb-">
         <ImageLoader onFileUpload={handleThumbnailChange} />
+      </div>
+      {/* short Description */}
+      <div className="mt-8 col-span-12">
+        <p className="pb-3 font-medium text-n100">Summary Description*</p>
+        <textarea
+          type="text"
+          onChange={handleShortDescriptionChange}
+          name="shortDescription"
+          value={shortDescription}
+          placeholder="Short description..."
+          className="w-full bg-white rounded-xl border border-b50 bg-n10 p-3 outline-none placeholder:text-n800"
+        />
       </div>
       {/* Description */}
       <div className="mt-8 col-span-12 mb-6">

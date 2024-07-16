@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAgency, updateAgecny } from "../../../features/agenciesSlice";
 import { useParams } from "react-router-dom";
@@ -19,11 +19,13 @@ const AgencyProfile = () => {
   const [logo, setLogo] = useState(null);
   const [coverPhoto, setCoverPhoto] = useState(null);
 
+  const logoRef = useRef(null);
+  const coverRef = useRef(null);
+
   const { agency } = useSelector((state) => state.agencies);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { id } = useParams();
-  
 
   const handleEditProfile = () => {
     setEditProfile(!editProfile);
@@ -55,33 +57,81 @@ const AgencyProfile = () => {
     setDescription(value);
   };
 
+  // cover change
+  const handleCoverButtonClick = (e) => {
+    coverRef.current.click();
+  };
+  const handleCoverChange = (e) => {
+    // setLogo(e.target.files[0])
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("cover", file);
+      const portfolioId = agency?.portfolioId;
+      dispatch(updatePortfolio({ id: portfolioId, formData })).then(() =>
+        dispatch(fetchAgency(id))
+      );
+    }
+  };
+
+  // Logo change
+  const handleLogoButtonClick = () => {
+    logoRef.current.click();
+  };
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("logo", file);
+      const portfolioId = agency?.portfolioId;
+      dispatch(updatePortfolio({ id: portfolioId, formData })).then(() =>
+        dispatch(fetchAgency(id))
+      );
+    }
+  };
+
   const submitprofileChange = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (
       profileForm.agencyName !== agency.agencyName ||
       profileForm.address !== agency.address
     ) {
       // here dispatch to the update agency that contains address and agency name
-      const data = {agencyName:profileForm.agencyName, addresse: profileForm.address}
+      const data = {
+        agencyName: profileForm.agencyName,
+        addresse: profileForm.address,
+      };
       // console.log('this is data sent', data);
-      dispatch(updateAgecny({id, data})).then(()=>dispatch(fetchAgency(id))).then(()=> setEditProfile(!editProfile))
+      dispatch(updateAgecny({ id, data }))
+        .then(() => dispatch(fetchAgency(id)))
+        .then(() => setEditProfile(!editProfile));
     }
-    if( profileForm.email !== agency.email ){
+    if (
+      profileForm.email !== agency.email ||
+      profileForm.phone !== agency.phone
+    ) {
       // if the email changed send request to the user and deal with the user schema
-      const userCredentials = {email : profileForm.email}
-      const userId = user?.id
-      dispatch(updateUser({id: userId, userCredentials})).then(()=>dispatch(fetchAgency(id))).then(()=> setEditProfile(!editProfile))
+      const userCredentials = {
+        email: profileForm.email,
+        phone: profileForm.phone,
+      };
+      const userId = user?.id;
+      dispatch(updateUser({ id: userId, userCredentials }))
+        .then(() => dispatch(fetchAgency(id)))
+        .then(() => setEditProfile(!editProfile));
     }
   };
 
   const submitDescriptionChange = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (description !== agency.description) {
       // send request to the portfolio update
-      const formData = new FormData()
-      formData.append("infos", description )
-      const portfolioId = agency?.portfolioId
-      dispatch(updatePortfolio({id : portfolioId, formData})).then(()=>dispatch(fetchAgency(id))).then(()=> setEditDescription(!editDescription))
+      const formData = new FormData();
+      formData.append("infos", description);
+      const portfolioId = agency?.portfolioId;
+      dispatch(updatePortfolio({ id: portfolioId, formData }))
+        .then(() => dispatch(fetchAgency(id)))
+        .then(() => setEditDescription(!editDescription));
     }
   };
 
@@ -89,34 +139,39 @@ const AgencyProfile = () => {
     dispatch(fetchAgency(id));
   }, []);
 
-  // useEffect(() => {
-  //   console.log('thisisisis is agency bro', agency);
-  // }, [agency]);
-
   useEffect(() => {
-    // console.log("agency", agency);
+    console.log("agency", agency);
     if (agency) {
       setProfileForm({
         agencyName: agency.agencyName,
         address: agency.address,
         email: agency.email,
+        phone: agency.phone,
       });
       setDescription(agency.description);
+      setLogo(agency.logo);
+      setCoverPhoto(agency.cover);
     }
   }, [agency]);
 
   return (
     <section className="relative pt-40 pb-24">
       <img
-        src={`http://localhost:3000/${agency.cover}`}
+        src={coverPhoto ? `http://localhost:3000/${coverPhoto}` : 'https://via.placeholder.com/800x400'}
         alt="cover-image"
         className="w-full absolute top-0 left-0 z-0 h-60 object-cover"
+      />
+      <input
+        type="file"
+        className="hidden"
+        ref={coverRef}
+        onChange={handleCoverChange}
       />
 
       <div className="absolute top-2 right-2">
         <button
           className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-lg font-medium px-4 py-2 inline-flex space-x-1 items-center"
-          onClick={handleEditProfile}
+          onClick={handleCoverButtonClick}
         >
           <span>
             <svg
@@ -142,15 +197,21 @@ const AgencyProfile = () => {
         <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">
           <div className="relative">
             <img
-              src={`http://localhost:3000/${agency.logo}`}
+              src={logo ? `http://localhost:3000/${logo}` : 'https://i.pravatar.cc/4'}
               alt="user-avatar-image"
               className="border-4 border-solid border-white rounded-full h-[150px] w-[150px] object-cover"
+            />
+            <input
+              type="file"
+              className="hidden"
+              ref={logoRef}
+              onChange={handleLogoChange}
             />
 
             <div className="absolute top-0 right-2">
               <button
-                className="text-slate-800 hover:text-blue-600 text-sm font-medium px-4 py-2 inline-flex space-x-1 items-center"
-                onClick={handleEditProfile}
+                className="text-slate-800 hover:text-blue-600 text-sm font-medium mt-4 inline-flex space-x-1 items-center bg-white"
+                onClick={handleLogoButtonClick}
               >
                 <span>
                   <svg
@@ -187,7 +248,7 @@ const AgencyProfile = () => {
                     {agency?.email}
                   </p>
                   <p className="font-normal text-base leading-7 text-gray-500">
-                    +212-347-6888
+                    {agency?.phone}
                   </p>
                 </div>
                 <div className="absolute top-2 right-2">
@@ -269,6 +330,9 @@ const AgencyProfile = () => {
                         <input
                           className="w-full py-3 border bg-white border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                           type="tel"
+                          name="phone"
+                          value={profileForm.phone}
+                          onChange={handleProfileFormChange}
                         />
                       </div>
 

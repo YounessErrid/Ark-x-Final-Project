@@ -298,10 +298,11 @@ export const updateUser = createAsyncThunk(
   "user/updateUser",
   async ({ id, userCredentials }, { rejectWithValue }) => {
     try {
-      const { fullname, email ,selectedfile } = userCredentials;
+      const { fullname, email ,selectedfile, phone } = userCredentials;
       
       const formData = new FormData();
       if (email) formData.append("email", email);
+      if (phone) formData.append("phone", phone);
       if (fullname) formData.append("fullname", fullname);
       if (selectedfile) formData.append("profile_image", selectedfile);
       const request = await axiosInstance.put(

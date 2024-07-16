@@ -3,6 +3,7 @@ import axiosInstance from "../utils/axiosInstance";
 
 const initialState = {
   portfolioServices: [],
+  portfolioService:{},
   loading: false,
   error: null,
   status: null,
@@ -13,6 +14,18 @@ export const fetchAgencyPortfolio = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/portfolioServices/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const fetchPortfolioService = createAsyncThunk(
+  "portfolioServices/fetchPortfolioService",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/portfolioServices/agency/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
@@ -64,7 +77,7 @@ const portfolioServicesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // fetch portfolio service
+      // fetch agency portfolio servicesss
       .addCase(fetchAgencyPortfolio.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -74,6 +87,20 @@ const portfolioServicesSlice = createSlice({
         state.portfolioServices = action.payload;
       })
       .addCase(fetchAgencyPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // fetch portfolioservice
+      .addCase(fetchPortfolioService.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPortfolioService.fulfilled, (state, action) => {
+        state.loading = false;
+        state.portfolioService = action.payload;
+        // console.log("portfolioService", action.payload);
+      })
+      .addCase(fetchPortfolioService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

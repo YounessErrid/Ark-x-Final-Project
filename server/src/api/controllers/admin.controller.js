@@ -308,8 +308,8 @@ const remove = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    // console.log("Request body:", req.body);
-    const { fullname, email } = req.body;
+    console.log("Request body:", req.body);
+    const { fullname, email, phone }= req.body;
     const path = req.file || null;
 
     if (!id) {
@@ -338,6 +338,10 @@ const update = async (req, res) => {
 
     if (email) {
       user.email = email;
+    }
+
+    if(phone){
+      user.phone = phone
     }
 
     const updatedAdmin = await user.save();

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import {logoutUser} from '../../features/userSlice'
 
 const ProfileDropdown = () => {
+  
+  
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch()
@@ -47,11 +49,11 @@ const ProfileDropdown = () => {
         className="block h-10 w-10 rounded-full overflow-hidden focus:outline-none"
         onClick={toggleDropdown}
       >
-        <img
-          className="h-full w-full object-cover"
-          src="https://eu.ui-avatars.com/api/?name=John&size=1000"
-          alt="avatar"
-        />
+         <div className="w-10 h-10 bg-slate-400 rounded-full flex items-center justify-center">
+    <p className="text-white text-xl font-semibold">
+      {user?.agencyName.charAt(0).toUpperCase()}
+    </p>
+  </div>
       </button>
       {isOpen && (
         <div className="absolute right-0 w-40 mt-2 py-2 bg-white border rounded shadow-xl">
