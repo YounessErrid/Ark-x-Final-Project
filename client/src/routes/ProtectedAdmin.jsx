@@ -11,24 +11,20 @@ const Protected = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Dispatch checkSession action on component mount
-    dispatch(checkSession());
-  }, [dispatch]);
 
-  useEffect(() => {
-    // Set dataLoaded to true when loading is false
-    if (!loading) {
-      setTimeout(() => {
-        setDataLoaded(true);
-      }, 1000);
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   // Set dataLoaded to true when loading is false
+  //   if (!loading) {
+  //     setTimeout(() => {
+  //       setDataLoaded(true);
+  //     }, 1000);
+  //   }
+  // }, [loading]);
 
-  // Return loading spinner if loading is true and data is not loaded yet
-  if (!dataLoaded) {
-    return <Spinner loaded={dataLoaded} />;
-  }
+  // // Return loading spinner if loading is true and data is not loaded yet
+  // if (!dataLoaded) {
+  //   return <Spinner loaded={dataLoaded} />;
+  // }
 
   // After data is loaded, check for authentication
   // return isAuthenticated && user?.role === 'admin' ? <Outlet /> : <Navigate to="/login" />;

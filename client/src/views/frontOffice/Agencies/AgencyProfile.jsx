@@ -154,6 +154,10 @@ const AgencyProfile = () => {
     }
   }, [agency]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <section className="relative pt-40 pb-24">
       <img

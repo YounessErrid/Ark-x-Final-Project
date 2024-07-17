@@ -34,13 +34,13 @@ export const userSlice = createSlice({
           state.isAuthenticated = false;
         }
       })
-      // .addCase(checkSession.rejected, (state, action) => {
-      //   state.loading = false;
-      //   state.error = action.error.message;
-      //   // If session validation fails, clear user state
-      //   state.user = null;
-      //   state.isAuthenticated = false;
-      // })
+      .addCase(checkSession.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        // If session validation fails, clear user state
+        state.user = null;
+        state.isAuthenticated = false;
+      })
       // login user
       .addCase(loginUser.pending, (state) => {
         state.loading = true;

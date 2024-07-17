@@ -11,6 +11,7 @@ import { fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateServie from "./UpdateService";
+import { Spinner } from "../../../components/Spinner";
 
 const Portfolio = () => {
   const [addServiceMode, setAddServiceMode] = useState(false);
@@ -19,14 +20,15 @@ const Portfolio = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { portfolioServices } = useSelector((state) => state.portfolioservice);
+  const { portfolioServices, loading } = useSelector((state) => state.portfolioservice);
+  const { isAuthenticated } = useSelector((state) => state.user);
   const uniqueTitles = new Set();
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   }
+  // }, [user, navigate]);
 
   useEffect(() => {
     dispatch(fetchAgencyPortfolio(id));
@@ -35,6 +37,14 @@ const Portfolio = () => {
   const handleAddServiceMode = () => {
     setAddServiceMode(!addServiceMode);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  // if (loading ) {
+  //   return <Spinner loaded={!loading} />;
+  // }
 
   if(!portfolioServices) return null
 

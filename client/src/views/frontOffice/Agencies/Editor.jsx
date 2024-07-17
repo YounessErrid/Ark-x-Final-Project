@@ -3,7 +3,7 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize-module-react';
 import Pica from 'pica';
-
+import 'react-quill/dist/quill.snow.css'
 import './style.css';
 
 Quill.register('modules/imageResize', ImageResize);
@@ -50,6 +50,7 @@ const Editor = ({ onChange, placeholder, description }) => {
   const handleChange = useCallback((html) => {
     setEditorHtml(html);
     onChange(html);
+    console.log("html", html);
   }, [onChange]);
 
   useEffect(() => {

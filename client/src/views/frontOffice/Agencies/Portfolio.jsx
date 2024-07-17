@@ -9,7 +9,7 @@ const Portfolio = () => {
   useEffect(() => {
     dispatch(fetchAgency(id));
   }, [])
-  console.log(agency.agencyName);
+  // console.log(agency.agencyName);
   return (
     <div className="bg-white min-h-screen flex justify-center">
       <section className="p-5 h-full">

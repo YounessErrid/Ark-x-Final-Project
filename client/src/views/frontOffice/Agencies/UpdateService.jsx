@@ -84,6 +84,10 @@ const UpdateServie = ({ handleAddServiceMode }) => {
     dispatch(fetchServices());
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+  
   return (
     <div className="4xl:large-container grid grid-cols-12 gap-4 rounded-2xl bg-white p-4 max-4xl:mx-4 sm:gap-6 sm:p-10 shadow-md">
       <div className="col-span-12">

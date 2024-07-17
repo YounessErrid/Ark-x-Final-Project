@@ -51,6 +51,10 @@ const ServiceCards = ({ handleAddServiceMode }) => {
     };
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* Example of a card */}
@@ -116,16 +120,18 @@ const ServiceCards = ({ handleAddServiceMode }) => {
               </div>
             </div>
           </div>
-          <div className="mb-4">
+          <div className="mb-4 overflow-hidden">
+            <Link to={`/service-details/${serv?._id}`}>
             <img
               src={`http://localhost:3000/${serv?.thumbnail}`}
               alt="Post Image"
-              className="w-full h-48 object-cover rounded-md"
+              className="w-full h-48 object-cover rounded-md cursor-pointer transform transition duration-500 hover:scale-110 "
             />
+            </Link>
           </div>
           <div className="flex items-center justify-between text-gray-500">
             <div className="flex items-center space-x-2">
-              <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-50 rounded-full p-1">
+              <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
                 <svg
                   className="w-5 h-5 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +143,7 @@ const ServiceCards = ({ handleAddServiceMode }) => {
               </button>
             </div>
             <Link to={`/service-details/${serv?._id}`}>
-              <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-50 rounded-full p-1">
+              <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
                 <span>View details</span>
                 <svg
                   viewBox="0 0 32 32"

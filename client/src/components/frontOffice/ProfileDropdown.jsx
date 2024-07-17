@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {logoutUser} from '../../features/userSlice'
 
 const ProfileDropdown = () => {
@@ -9,6 +9,7 @@ const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const {user} = useSelector(state => state.user)
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -17,11 +18,11 @@ const ProfileDropdown = () => {
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
-    }
+    }   
   };
 
   const handleLogout = () =>{
-    dispatch(logoutUser())
+    dispatch(logoutUser()).then(()=> navigate('/login'))
   }
   // useEffect(()=>{
   //   console.log("agency idddd",user.agency);

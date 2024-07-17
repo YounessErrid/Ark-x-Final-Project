@@ -10,4 +10,6 @@ router.get("/:id", isAuthenticated, controller.findOne);
 router.put("/:id", isAuthenticated, controller.update);
 router.delete("/:id", isAuthenticated, controller.remove);
 
+
+
 module.exports = router;

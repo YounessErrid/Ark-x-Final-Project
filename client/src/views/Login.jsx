@@ -8,9 +8,10 @@ import { loginUser } from "../features/userSlice";
 import loginSvg from "../assets/Login.svg";
 import logo from "../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "../components/Spinner";
 
 const Login = () => {
-  const { isAuthenticated, user, error } = useSelector((state) => state.user);
+  const { isAuthenticated, user, error, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,6 +46,11 @@ const Login = () => {
       }
     }
   }, [isAuthenticated, navigate, user]);
+
+
+  if (loading) {
+    return <Spinner loaded={!loading} />;
+  }
 
   return (
     <section className="gradient-form h-full bg-gray-300 dark:bg-neutral-700">

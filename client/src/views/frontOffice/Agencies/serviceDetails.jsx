@@ -9,6 +9,7 @@ const ServiceDetails = () => {
 
   const dipsatch = useDispatch()
   const {portfolioService} = useSelector(state => state.portfolioservice)
+  const {user} = useSelector(state => state.user)
   const {portfolioServiceId} = useParams()
 
   useEffect(()=>{
@@ -23,13 +24,17 @@ const ServiceDetails = () => {
     USE_PROFILES: { html: true },
   });
 
+  useEffect(()=>{
+    window.scroll(0,0)
+  }, [])
+
 
   return (
     <div className="font-sans bg-white p-4">
       <div className="grid items-start grid-cols-1 lg:grid-cols-4 gap-x-12 max-w-6xl mx-auto">
         {/* Image Section */}
         <div className=" flex justify-start lg:col-span-4">
-                <Link to={`/portfolio/`}>
+                <Link to={`/portfolio/${user?.agencyId}`}>
                   <button
                     className="h-10 text-white flex justify-center items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 rounded-md mb-4"
                     // onClick={handleAddServiceMode}
