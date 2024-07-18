@@ -6,24 +6,18 @@ import { Spinner } from "../components/Spinner";
 
 const ProtectedAgency = () => {
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
-  // const [dataLoaded, setDataLoaded] = useState(false);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     setTimeout(() => {
-  //       setDataLoaded(true);
-  //     }, 1000);
-  //   }
-  // }, [loading]);
-
-  // // Return loading spinner if loading is true and data is not loaded yet
-  // if (!dataLoaded) {
-  //   return <Spinner loaded={dataLoaded} />;
-  // }
 
   // After data is loaded, check for authentication
   const isAgency = isAuthenticated && user?.role === "agency";
   const isAgencyHasAccess = user?.hasAccess;
+
+  // console.log("isAgencyHasAccess", isAgencyHasAccess);
+  // console.log("isAgency", isAgency);
+
+  // useEffect(()=>{
+  //   console.log("user11", user);
+
+  // }, [user])
   
   return isAgency ? (
     isAgencyHasAccess ? (

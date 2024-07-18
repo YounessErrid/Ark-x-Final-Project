@@ -7,12 +7,10 @@ const portfolioSchema = new mongoose.Schema({
   },
   logo: {
     type: String,
-    unique: true,
     trim: true,
   },
   cover: {
     type: String,
-    unique: true,
     trim: true,
   },
   portfolioServices: [{

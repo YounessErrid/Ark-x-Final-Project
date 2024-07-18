@@ -23,7 +23,7 @@ const plans = [
 ];
 
 const Subscription = () => {
-  const {user, isAuthenticated} = useSelector((state) => state.user);
+  const {user, isAuthenticated, loading} = useSelector((state) => state.user);
   const [plan, setPlan] = useState(plans[0]);
   const [error, setError] = useState("");
   const [userCredential, setUserCredential] = useState({
@@ -43,12 +43,16 @@ const Subscription = () => {
   }, [user, plan]);
 
   useEffect(() => {
-    if(!user && !isAuthenticated) navigate("/login")
-    if (user && user.hasAccess === true) {
-        navigate("/portfolio");
+    if (!loading) {
+      if (!isAuthenticated) {
+        navigate("/login");
+      } else if (user && user.role !== "agency") {
+        navigate("/unauthorized");
+      } else if (user && user.hasAccess) {
+        navigate(`/portfolio/${user?.agencyId}`);
+      }
     }
-    
-  }, [user, navigate]);
+  }, [user, isAuthenticated, loading, navigate]);
 
   const handleSubscribe = async () => {
     try {
@@ -58,6 +62,9 @@ const Subscription = () => {
         userCredential
       );
 
+      // useEffect(()=>{
+      //   console.log("user", user);
+      // }, [user])
       // console.log(data);
 
       const stripe = await stripePromise;

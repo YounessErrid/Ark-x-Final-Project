@@ -36,7 +36,7 @@ export const userSlice = createSlice({
       })
       .addCase(checkSession.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        // state.error = action.error.message;
         // If session validation fails, clear user state
         state.user = null;
         state.isAuthenticated = false;
@@ -91,17 +91,10 @@ export const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        // state.user = action.payload.user;
-        // state.isAuthenticated = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        console.log(action.payload);
-        if (action.error.message === "Rejected") {
-          state.error = "Email already exists.";
-        } else {
-          state.error = action.error.message;
-        }
+        state.error = action.payload || action.error.message;
       })
       // check agency email
       .addCase(checkAgencyEmail.pending, (state) => {
@@ -132,6 +125,27 @@ export const userSlice = createSlice({
         // console.log(action.payload.error);
         if (action.error.message === "Rejected") {
           state.error = "Email already exists.";
+        } else {
+          state.error = action.error.message;
+        }
+      })
+      //Update User agency
+      .addCase(updateUserAgency.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = null;
+      })
+      .addCase(updateUserAgency.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        // state.user = action.payload.user;
+        state.success = true;
+      })
+      .addCase(updateUserAgency.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        if (action.error.message === "Rejected") {
+          state.error = "Can't find this email";
         } else {
           state.error = action.error.message;
         }
@@ -233,7 +247,8 @@ export const checkSession = createAsyncThunk(
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );
@@ -250,7 +265,8 @@ export const loginUser = createAsyncThunk(
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );
@@ -289,7 +305,8 @@ export const registerUser = createAsyncThunk(
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );
@@ -313,7 +330,34 @@ export const updateUser = createAsyncThunk(
       return response;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
+    }
+  }
+);
+
+// update user for Agency
+export const updateUserAgency = createAsyncThunk(
+  "user/updateUserAgency",
+  async ({ id, userCredentials }, { rejectWithValue }) => {
+    try {
+      const { fullname, email ,selectedfile, phone } = userCredentials;
+      
+      const formData = new FormData();
+      if (email) formData.append("email", email);
+      if (phone) formData.append("phone", phone);
+      if (fullname) formData.append("fullname", fullname);
+      if (selectedfile) formData.append("profile_image", selectedfile);
+      const request = await axiosInstance.put(
+        `admins/auth/update/${id}`,
+        formData
+      );
+      const response = await request.data;
+      return response;
+    } catch (error) {
+      console.log(error);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );
@@ -335,7 +379,8 @@ export const forgetPassword = createAsyncThunk(
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );
@@ -355,7 +400,8 @@ export const resetPassword = createAsyncThunk(
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );
@@ -375,7 +421,8 @@ export const changePassword = createAsyncThunk(
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );
@@ -409,7 +456,8 @@ export const registerAgency = createAsyncThunk(
       const response = await request.data;
       return response;
     } catch (error) {
-      return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data);
+;
     }
   }
 );

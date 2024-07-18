@@ -1,12 +1,13 @@
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const SuccessPage = () => {
   const navigate = useNavigate();
-
+  const {user} = useSelector(state => state.user)
   const handleRedirect = () => {
-    navigate('/', { replace: true });
+    navigate(`/portfolio/${user?.agencyId}`, { replace: true });
   };
 
   return (

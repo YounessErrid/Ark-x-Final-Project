@@ -308,7 +308,7 @@ const remove = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Request body:", req.body);
+    // console.log("Request body:", req.body);
     const { fullname, email, phone }= req.body;
     const path = req.file || null;
 
@@ -345,6 +345,21 @@ const update = async (req, res) => {
     }
 
     const updatedAdmin = await user.save();
+
+    // if(user.role === 'agency' && user.hasAccess){
+    //   return res.status(202).json({
+    //     success: true,
+    //     message: "Successfully updated",
+    //     user: {
+    //       id: user._id,
+    //       role: user.role,
+    //       fullname: user.fullname,
+    //       email: user.email,
+    //       profile: user.profile_image,
+    //       hasAccess : user.hasAccess
+    //     },
+    //   });
+    // }
 
     res.status(202).json({
       success: true,

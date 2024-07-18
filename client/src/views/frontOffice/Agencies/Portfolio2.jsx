@@ -81,12 +81,12 @@ const Portfolio = () => {
             <div className="bg-white p-8 pt-0 rounded-lg shadow-md w-full mb-4 ">
               <div className="relative">
                 <img
-                  src={`http://localhost:3000/${portfolioServices.portfolioId?.cover}`}
+                  src={portfolioServices.portfolioId?.cover ?`http://localhost:3000/${portfolioServices.portfolioId?.cover}` : 'https://via.placeholder.com/800x400'}
                   alt="Banner Profile"
                   className="w-full rounded-t-lg h-48 object-cover"
                 />
                 <img
-                  src={`http://localhost:3000/${portfolioServices.portfolioId?.logo}`}
+                  src={portfolioServices.portfolioId?.logo ?`http://localhost:3000/${portfolioServices.portfolioId?.logo}` : 'https://i.pravatar.cc/2'}
                   alt="Profile Picture"
                   className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-24 h-24 rounded-full border-4 border-white"
                 />

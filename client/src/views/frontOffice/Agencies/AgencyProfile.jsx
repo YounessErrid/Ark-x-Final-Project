@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAgency, updateAgecny } from "../../../features/agenciesSlice";
 import { useParams } from "react-router-dom";
-import { updateUser } from "../../../features/userSlice";
+import { updateUser, updateUserAgency } from "../../../features/userSlice";
 import { updatePortfolio } from "../../../features/porfolioSlice";
 
 const AgencyProfile = () => {
@@ -116,11 +116,16 @@ const AgencyProfile = () => {
         phone: profileForm.phone,
       };
       const userId = user?.id;
-      dispatch(updateUser({ id: userId, userCredentials }))
+      dispatch(updateUserAgency({ id: userId, userCredentials }))
         .then(() => dispatch(fetchAgency(id)))
+        // .then(()=> console.log("its hereeeeee"))
         .then(() => setEditProfile(!editProfile));
     }
   };
+
+  // useEffect(()=>{
+  //   console.log("user", user);
+  // }, [user])
 
   const submitDescriptionChange = (e) => {
     e.preventDefault();

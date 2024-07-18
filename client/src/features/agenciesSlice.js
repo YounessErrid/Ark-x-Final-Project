@@ -63,6 +63,7 @@ export const updateAgecny = createAsyncThunk(
   async ({data, id}, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.put(`/agencies/${id}`, data);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data);

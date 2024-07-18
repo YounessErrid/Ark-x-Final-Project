@@ -52,6 +52,8 @@ const handleStripeEvents = async (req, res) => {
             agency.portfolioId = savedPortfolio._id;
             await agency.save();
 
+            console.log("agency", agency);
+
             const newSubscription = new Subscription({
               agencyId: agency._id,
               activationDate: new Date(start_date * 1000),
@@ -66,6 +68,7 @@ const handleStripeEvents = async (req, res) => {
               amount: amount_total / 100,
             });
             await newPayment.save();
+
 
             
 
