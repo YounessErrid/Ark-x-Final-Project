@@ -66,8 +66,8 @@ const Header = () => {
             className="cursor-pointer absolute right-3 top-3"
           />
           <img src={Logo} className="w-10 inline py-6 " alt="React Logo" />
-          <ul className="uppercase ">
-            <li className="px-4 py-2 border-b border-gray-600 hover:text-primary cursor-pointer " onClick={handleOpenMenuChange}>
+          <ul className="uppercase w-full">
+            <li className="px-4 py-2 border-b border-gray-600 hover:text-primary cursor-pointer" onClick={handleOpenMenuChange}>
               <Link to="/">Home</Link>
             </li>
             <li className="px-4 py-2 border-b border-gray-600 hover:text-primary cursor-pointer " onClick={handleOpenMenuChange}>

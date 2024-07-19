@@ -23,6 +23,7 @@ import AgencyProfile from "./views/frontOffice/Agencies/AgencyProfile";
 import ServiceDetails from "./views/frontOffice/Agencies/serviceDetails";
 import ProtectedAgency from "./routes/ProtectedAgency";
 import { Spinner } from "./components/Spinner";
+import PortfolioView from "./views/frontOffice/Clients/PortfolioView";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,6 +59,9 @@ function App() {
             path="/service-details/:portfolioServiceId"
             element={<ServiceDetails />}
           />
+          <Route path="/client/portfolio/:id" element={<PortfolioView />} />
+
+
         {/* agency routes */}
           <Route element={<ProtectedAgency />}>
             <Route path="/portfolio/:id/*" element={<Portfolio2 />} />
