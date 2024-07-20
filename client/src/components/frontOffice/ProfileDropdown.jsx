@@ -52,7 +52,8 @@ const ProfileDropdown = () => {
       >
          <div className="w-10 h-10 bg-slate-400 rounded-full flex items-center justify-center">
     <p className="text-white text-xl font-semibold">
-      {user?.agencyName?.charAt(0).toUpperCase()}
+      {user.role === "agency" && user?.agencyName?.charAt(0).toUpperCase()}
+      {user.role === "client" && user?.fullname?.charAt(0).toUpperCase()}
     </p>
   </div>
       </button>

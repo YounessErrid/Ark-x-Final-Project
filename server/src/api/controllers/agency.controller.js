@@ -97,15 +97,17 @@ const destroy = async (req, res) => {
 
 const viewAll = async (req, res) => {
   try {
+    // console.log("heleeoelele")
     const agencies = await Agency.find().populate(
       "userId",
       " fullname email profile_image"
-    );
+    ).populate("portfolioId");
 
     if (agencies.length === 0) {
       return res.status(404).json({ error: "No agencies found" });
     }
     // Construct the response object with the desired fields
+    console.log("agencies", agencies);
     const responseData = agencies.map((agency) => {
       return {
         _id: agency._id,
@@ -115,6 +117,7 @@ const viewAll = async (req, res) => {
           agency.userId === null ? null : agency.userId.profile_image,
         agencyName: agency.agencyName,
         address: agency.addresse,
+        logo: agency?.portfolioId?.logo
       };
     });
     return res.status(200).json(responseData);

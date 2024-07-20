@@ -30,9 +30,9 @@ export const Agencies = () => {
     setDataLoaded(true);
   }, [dispatch]);
 
-  // useEffect(()=>{
-  //   console.log("agencies", agencies);
-  // }, [agencies])
+  useEffect(()=>{
+    console.log("agencies", agencies);
+  }, [agencies])
 
   return (
     <div>
@@ -99,55 +99,37 @@ export const Agencies = () => {
               food truck ugh squid celiac humblebrag.
             </p>
           </div>
-           <div className="p-6">
-     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  c gap-6">
-     {/* Example of a card */}
-      {agencies && agencies.map((serv) => (
-        <div
-          key={serv?._id}
-          className="bg-white p-8 rounded-lg shadow-md relative"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-slate-900 font-bold">{serv?.agencyName}</h3>
-             
-            </div>
-            <div className="text-gray-500 cursor-pointer absolute top-2 right-2">
-             
-            </div>
+          <div className="flex flex-wrap -m-4">
+            {loading && !dataLoaded && <Spinner />}
+            {agencies &&
+              agencies.map((agency) => (
+                <div key={agency._id} className="xl:w-1/4 md:w-1/2 p-4">
+                  <div
+                    onClick={(e) => agencyHero(agency._id)}
+                    className="cursor-pointer"
+                  >
+                    <div className="bg-gray-100 p-6 rounded-lg">
+                      <img
+                        className="h-40 rounded w-full object-cover object-center mb-6"
+                        src={`http://localhost:3000/${agency.profile_image}`}
+                        alt="content"
+                      />
+                      <h3 className="tracking-widest text-indigo-500 text-xs font-medium title-font">
+                        {/* {agency.portfolio.description} */}
+                      </h3>
+                      <h2 className=" text-gray-900 font-medium  mb-4">
+                        {agency.agencyName}
+                      </h2>
+                      <p className="leading-relaxed text-base">
+                        {/* {agency.portfolio[0]?.description} */}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+            {/* Répétez la structure ci-dessus pour chaque produit */}
           </div>
-          <div className="mb-4 overflow-hidden">
-            <Link to={`/client/portfolio/${serv?._id}`}>
-            <img
-              src={serv.logo ? `http://localhost:3000/${serv?.logo}` : 'https://via.placeholder.com/800x400'}
-              alt="Post Image"
-              className="w-full h-48 object-cover rounded-md cursor-pointer transform transition duration-500 hover:scale-110 "
-            />
-            </Link>
-          </div>
-          <div className="flex items-center justify-end text-gray-500">
-           
-            <Link to={`/client/portfolio/${serv?._id}`}>
-              <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
-                <span>View details</span>
-                <svg
-                  viewBox="0 0 32 32"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 fill-current"
-                >
-                  <title />
-                  <g data-name="Layer 2" id="Layer_2">
-                    <path d="M1,16A15,15,0,1,1,16,31,15,15,0,0,1,1,16Zm28,0A13,13,0,1,0,16,29,13,13,0,0,0,29,16Z" />
-                    <path d="M12.13,21.59,17.71,16l-5.58-5.59a1,1,0,0,1,0-1.41h0a1,1,0,0,1,1.41,0l6.36,6.36a.91.91,0,0,1,0,1.28L13.54,23a1,1,0,0,1-1.41,0h0A1,1,0,0,1,12.13,21.59Z" />
-                  </g>
-                </svg>
-              </button>
-            </Link>
-          </div>
-        </div>
-      ))}
-    </div>
-    </div>
         </div>
       </section>
     </div>
