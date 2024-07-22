@@ -19,12 +19,11 @@ export const Front = () => {
   // useEffect(()=>{
   //   console.log("user", user);
   // }, [user])
-  
+
   return (
     <div className='min-h-screen min-w-screen  bg-whiteDirty'>
       <div className="text-center bg-secondary text-white py-2">Follow Us in our Social Media</div>
-      {user?.role === "agency" && (<Header />)}
-      {user?.role === "client" && (<ClientHeader />)}
+      {user?.role === "agency" ? (<Header />) : (<ClientHeader />)}
       <Outlet />
       <Footer />
     </div>

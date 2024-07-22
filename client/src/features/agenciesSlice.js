@@ -19,13 +19,16 @@ export const deleteAgency = createAsyncThunk(
 // Async thunk to fetch all agencies
 export const fetchAgencies = createAsyncThunk(
   "agencies/fetchAgencies",
-  async (_, { rejectWithValue }) => {
+  async ({ search, page, pageSize }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/agencies");
+      const response = await axiosInstance.get(`/agencies/search`, {
+        params: { search: search, page: page, pageSize: pageSize }, 
+      });
       const data = await response.data;
       return data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      // console.log(error);
+      return rejectWithValue(error.response?.data);
     }
   }
 );
@@ -60,7 +63,7 @@ export const fetchAgency = createAsyncThunk(
 
 export const updateAgecny = createAsyncThunk(
   "agencies/updateAgecny",
-  async ({data, id}, { rejectWithValue }) => {
+  async ({ data, id }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.put(`/agencies/${id}`, data);
       console.log(response.data);
@@ -103,6 +106,7 @@ export const agenciesSlice = createSlice({
         state.loading = false;
         state.status = null;
         state.error = action.error.message;
+        console.log(action.error);
       })
       // Delete agency reducers
       .addCase(deleteAgency.pending, (state) => {

@@ -340,8 +340,15 @@ const findOne = async (req, res) => {
 // };
 
 const globalSearch = async (req, res) => {
-  const { search, ...pagination } = req.query;
+  const { search, page, pageSize } = req.query;
   const searchRegex = new RegExp(search, "i");
+
+  const currentPage = parseInt(page) || 1;
+  const pageSizeInt = parseInt(pageSize) || 10;
+
+  const skip = (currentPage - 1)*pageSizeInt
+  const limit = pageSizeInt
+
   const aggregation = [
     {
       $lookup: {
@@ -380,24 +387,41 @@ const globalSearch = async (req, res) => {
         ],
       },
     },
+    {
+      $facet: {
+        metadata: [{ $count: "totalCount" }],
+        data: [{ $skip: skip }, { $limit: limit }],
+      },
+    },
+    {
+      $unwind: "$metadata",
+    },
   ];
 
   try {
-    // const [agencies, totalCount] = await Promise.all([
-    //   Agency.aggregate(aggregation),
-    //   Agency.countDocuments(aggregation), // Text search for top-level fields
-    // ]);
-    const agencies = await Agency.aggregate(aggregation);
-    const totalCount = agencies.length;
+    const results = await Agency.aggregate(aggregation);
+    const totalCount = results.length ? results[0].metadata.totalCount : 0;
+    const agencies = results.length ? results[0].data : []
+    
+    const totalPages = Math.ceil(totalCount / pageSizeInt);
 
-    const currentPage = parseInt(pagination.page) || 1;
-    const pageSize = parseInt(pagination.pageSize) || 10;
-    const totalPages = Math.ceil(totalCount / pageSize);
+    const resultedAgencies = agencies.map(agency =>{
+      return {
+        agencyId : agency?._id,
+        agencyName: agency?.agencyName,
+        logo: agency?.portfolio[0]?.logo
+      }
+    })
+
+    const nextPage = currentPage < totalPages ? currentPage + 1 : null;
+const previousPage = currentPage > 1 ? currentPage - 1 : null;
+
+    // console.log(resultedAgencies);
 
     if (agencies.length > 0) {
       return res
         .status(200)
-        .json({ agencies, totalCount, currentPage, totalPages });
+        .json({ agencies:resultedAgencies, totalCount, currentPage, totalPages, nextPage,  previousPage});
     } else {
       return res.status(404).json({ message: "Agencies not found" });
     }

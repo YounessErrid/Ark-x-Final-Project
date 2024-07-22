@@ -3,9 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchAgencies, fetchAgencies } from "../../../features/agenciesSlice";
 import { Spinner } from "../../../components/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-
+import ReactPaginate from "react-paginate";
+import "./style.css"
 export const Agencies = () => {
-  const { loading, error, agencies } = useSelector((state) => state.agencies);
+  const { agencies } = useSelector((state) => state.agencies.agencies);
+  const { currentPage, nextPage, previousPage, totalCount, totalPages } =
+    useSelector((state) => state.agencies);
+    const [page, setPage] = useState(1);
+    const pageSize = 2;
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -17,22 +23,24 @@ export const Agencies = () => {
   };
 
   const handleSearch = () => {
-    // Dispatch search action with searchQuery
-    dispatch(searchAgencies(searchQuery));
+    setPage(1); 
+    dispatch(fetchAgencies({ search: searchQuery, page: 1, pageSize }));
   };
-  const agencyHero = (id) => {
-    // dispatch(fetchAgency(id))
-    navigate(`/portfolio/${id}`);
-  };
+
+  const handlePageChange = ()=>{
+    const selectedPage = data.selected + 1; // ReactPaginate uses zero-based index
+    setPage(selectedPage);
+    dispatch(fetchAgencies({ search: searchQuery, page: selectedPage, pageSize }));
+  }
 
   useEffect(() => {
-    dispatch(fetchAgencies(searchQuery));
+    dispatch(fetchAgencies({search :searchQuery, page, pageSize: 2}));
     setDataLoaded(true);
-  }, [dispatch]);
+  }, [dispatch, searchQuery, page, pageSize]);
 
-  // useEffect(()=>{
-  //   console.log("agencies", agencies);
-  // }, [agencies])
+  useEffect(() => {
+    console.log("agencies", agencies);
+  }, [agencies]);
 
   return (
     <div>
@@ -99,58 +107,82 @@ export const Agencies = () => {
               food truck ugh squid celiac humblebrag.
             </p>
           </div>
-           <div className="p-6">
-     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  c gap-6">
-     {/* Example of a card */}
-      {agencies && agencies.map((serv) => (
-        <div
-          key={serv?._id}
-          className="bg-white p-8 rounded-lg shadow-md relative"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-slate-900 font-bold">{serv?.agencyName}</h3>
-             
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  c gap-6">
+              {/* Example of a card */}
+              {agencies &&
+                agencies.map((serv) => (
+                  <div
+                    key={serv?._id}
+                    className="bg-white p-8 rounded-lg shadow-md relative"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-slate-900 font-bold">
+                          {serv?.agencyName}
+                        </h3>
+                      </div>
+                      <div className="text-gray-500 cursor-pointer absolute top-2 right-2"></div>
+                    </div>
+                    <div className="mb-4 overflow-hidden">
+                      <Link to={`/client/portfolio/${serv?._id}`}>
+                        <img
+                          src={
+                            serv.logo
+                              ? `http://localhost:3000/${serv?.logo}`
+                              : "https://via.placeholder.com/800x400"
+                          }
+                          alt="Post Image"
+                          className="w-full h-48 object-cover rounded-md cursor-pointer transform transition duration-500 hover:scale-110 "
+                        />
+                      </Link>
+                    </div>
+                    <div className="flex items-center justify-end text-gray-500">
+                      <Link to={`/client/portfolio/${serv?._id}`}>
+                        <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
+                          <span>View details</span>
+                          <svg
+                            viewBox="0 0 32 32"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-5 h-5 fill-current"
+                          >
+                            <title />
+                            <g data-name="Layer 2" id="Layer_2">
+                              <path d="M1,16A15,15,0,1,1,16,31,15,15,0,0,1,1,16Zm28,0A13,13,0,1,0,16,29,13,13,0,0,0,29,16Z" />
+                              <path d="M12.13,21.59,17.71,16l-5.58-5.59a1,1,0,0,1,0-1.41h0a1,1,0,0,1,1.41,0l6.36,6.36a.91.91,0,0,1,0,1.28L13.54,23a1,1,0,0,1-1.41,0h0A1,1,0,0,1,12.13,21.59Z" />
+                            </g>
+                          </svg>
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
             </div>
-            <div className="text-gray-500 cursor-pointer absolute top-2 right-2">
-             
-            </div>
-          </div>
-          <div className="mb-4 overflow-hidden">
-            <Link to={`/client/portfolio/${serv?._id}`}>
-            <img
-              src={serv.logo ? `http://localhost:3000/${serv?.logo}` : 'https://via.placeholder.com/800x400'}
-              alt="Post Image"
-              className="w-full h-48 object-cover rounded-md cursor-pointer transform transition duration-500 hover:scale-110 "
+            <div className="flex justify-center mt-6">
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={totalPages}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageChange}
+              containerClassName={"pagination"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              breakLinkClassName={"page-link"}
+              activeClassName={"active"}
+              activeLinkClassName={"page-link-active"}
             />
-            </Link>
           </div>
-          <div className="flex items-center justify-end text-gray-500">
-           
-            <Link to={`/client/portfolio/${serv?._id}`}>
-              <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
-                <span>View details</span>
-                <svg
-                  viewBox="0 0 32 32"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 fill-current"
-                >
-                  <title />
-                  <g data-name="Layer 2" id="Layer_2">
-                    <path d="M1,16A15,15,0,1,1,16,31,15,15,0,0,1,1,16Zm28,0A13,13,0,1,0,16,29,13,13,0,0,0,29,16Z" />
-                    <path d="M12.13,21.59,17.71,16l-5.58-5.59a1,1,0,0,1,0-1.41h0a1,1,0,0,1,1.41,0l6.36,6.36a.91.91,0,0,1,0,1.28L13.54,23a1,1,0,0,1-1.41,0h0A1,1,0,0,1,12.13,21.59Z" />
-                  </g>
-                </svg>
-              </button>
-            </Link>
           </div>
-        </div>
-      ))}
-    </div>
-    </div>
         </div>
       </section>
     </div>
-   
   );
 };
