@@ -10,9 +10,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DOMPurify from "dompurify";
 import UpdateServie from "./UpdateService";
+import ReactPaginate from "react-paginate";
 
 const ServiceCards = ({ handleAddServiceMode }) => {
   const [isOpenId, setIsOpenId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
   const { portfolioServices } = useSelector((state) => state.portfolioservice);
   const menuRef = useRef(null);
   const dispatch = useDispatch();
@@ -20,6 +22,20 @@ const ServiceCards = ({ handleAddServiceMode }) => {
   const toggleMenu = (id) => {
     setIsOpenId((prevId) => (prevId === id ? null : id));
   };
+
+  const cardPerPage = 2;
+
+  const totalPages = Math.ceil(portfolioServices.portfolioId?.portfolioServices.length/ cardPerPage)
+
+  const startIndex = currentPage * cardPerPage
+  const endIndex = startIndex + cardPerPage
+
+  const currentCards = portfolioServices.portfolioId?.portfolioServices.slice(startIndex, endIndex)
+
+  const handlePageChange = (data)=>{
+    
+    setCurrentPage(data.selected)
+  }
 
   const handleCloseDropMenu = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -58,7 +74,7 @@ const ServiceCards = ({ handleAddServiceMode }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* Example of a card */}
-      {portfolioServices.portfolioId?.portfolioServices.map((serv) => (
+      { currentCards && currentCards.map((serv) => (
         <div
           key={serv?._id}
           className="bg-white p-8 rounded-lg shadow-md relative"
@@ -161,6 +177,29 @@ const ServiceCards = ({ handleAddServiceMode }) => {
           </div>
         </div>
       ))}
+      <div className=" lg:col-span-2 mt-4 ">
+      <ReactPaginate
+                  previousLabel={"Previous"}
+                  nextLabel={"Next"}
+                  breakLabel={"..."}
+                  breakClassName={"break-me"}
+                  pageCount={totalPages}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageChange}
+                  containerClassName={"pagination"}
+                  pageClassName={"page-item"}
+                  pageLinkClassName={"page-link"}
+                  previousClassName={"page-item"}
+                  previousLinkClassName={"page-link"}
+                  nextClassName={"page-item"}
+                  nextLinkClassName={"page-link"}
+                  breakLinkClassName={"page-link"}
+                  activeClassName={"active"}
+                  activeLinkClassName={"page-link-active"}
+                />
+
+      </div>
     </div>
   );
 };

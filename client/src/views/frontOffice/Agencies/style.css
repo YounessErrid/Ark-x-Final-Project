@@ -23,20 +23,20 @@
   padding: 0;
 }
 
-.pagination .page-item {
+.page-item {
   margin: 0 5px;
 }
 
-.pagination .page-link {
+.page-link {
   padding: 8px 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   text-decoration: none;
   color: #333;
 }
 
-.pagination .page-link-active {
-  background-color: #007bff;
+.page-link-active {
+  background-color: #7D9CAB;
   color: white;
   border: 1px solid #007bff;
 }
