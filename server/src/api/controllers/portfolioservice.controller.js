@@ -142,8 +142,25 @@ const findPortfolioByAgencyId = async (req, res) => {
         message: "Portfolio service not found",
       });
     }
+
+    const result = {
+      agencyName: agencyPortfolio?.agencyName,
+      addresse: agencyPortfolio?.addresse,
+      description: agencyPortfolio?.portfolioId?.description,
+      logo: agencyPortfolio?.portfolioId?.logo,
+      cover: agencyPortfolio?.portfolioId?.cover,
+      portfolioServices: agencyPortfolio?.portfolioId?.portfolioServices,
+      service: agencyPortfolio?.portfolioId?.portfolioServices?.map(serv => {
+        return {
+          title : serv.service.title,
+          _id:serv.service._id
+        }
+      }),
+    }
+    // console.log("agencyPortfolio", result)
+
     // console.log("agencyPortfolio: ",agencyPortfolio);
-    return res.status(200).json(agencyPortfolio);
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({
       error: "Internal server error",

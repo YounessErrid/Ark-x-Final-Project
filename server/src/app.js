@@ -20,6 +20,7 @@ const serviceRouter = require("./api/routes/services.routes");
 const portfolioServiceRouter = require("./api/routes/portfolioservices.routes");
 const portfolioRouter = require("./api/routes/portfolio.routes");
 const statisticsRouter = require("./api/routes/statistics.routes");
+const userRouter = require("./api/routes/user.routes");
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
@@ -82,6 +83,7 @@ const main = async () => {
   app.use("/api/services", serviceRouter);
   app.use("/api/portfolio", portfolioRouter);
   app.use("/api/statistics", statisticsRouter);
+  app.use("/api/user", userRouter);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

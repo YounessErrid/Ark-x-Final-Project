@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import ImageLoader from "./ImageLoader";
 import { CiCirclePlus } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { createPorfolioService, updatePortfolioService } from "../../../features/porfolioServiceSlice";
+import { createPorfolioService, fetchAgencyPortfolio, updatePortfolioService } from "../../../features/porfolioServiceSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,14 +16,12 @@ const UpdateServie = ({ handleAddServiceMode }) => {
   const [seviceCatgory, setServiceCategory] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [description, setDescription] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id, serviceId } = useParams();
   const { services } = useSelector((state) => state.services);
-  const portfolioServices = useSelector((state) =>
-    state.portfolioservice.portfolioServices.portfolioId?.portfolioServices
-  );
-
+  const { portfolioServices } = useSelector((state) => state.portfolioservice.portfolioServices);
   useEffect(() => {
     if (portfolioServices) {
       const updatedService = portfolioServices?.find(
@@ -34,6 +32,7 @@ const UpdateServie = ({ handleAddServiceMode }) => {
         setServiceCategory(updatedService.service?._id || '');
         setThumbnail(updatedService.thumbnail);
         setDescription(updatedService.description) 
+        setShortDescription(updatedService.shortDescription) 
       }
     }
   }, [id, portfolioServices, serviceId]);
@@ -41,6 +40,9 @@ const UpdateServie = ({ handleAddServiceMode }) => {
   const handleDescription = (text) => {
     setDescription(text);
     
+  };
+  const handleShortDescriptionChange = (e) => {
+    setShortDescription(e.target.value);
   };
 
   const handleTileChang = (e) => {
@@ -64,10 +66,12 @@ const UpdateServie = ({ handleAddServiceMode }) => {
     if (serviceName || thumbnail || description) {
       formData.append("name", serviceName);
       formData.append("description", description);
+      formData.append("shortDescription", shortDescription);
       formData.append("service", seviceCatgory);
       formData.append("thumbnail", thumbnail);
       try {
         await dispatch(updatePortfolioService({formData, serviceId})).unwrap();
+        await dispatch(fetchAgencyPortfolio(id))
         toast.success("Portfolio updated successfully");
         setTimeout(() => {
           navigate(`/portfolio/${id}`);
@@ -121,6 +125,18 @@ const UpdateServie = ({ handleAddServiceMode }) => {
       </div>
       <div className="col-span-12 mb-6">
         <ImageLoader thumbnail={thumbnail} onFileUpload={handleThumbnailChange} />
+      </div>
+       {/* short Description */}
+       <div className="mt-8 col-span-12">
+        <p className="pb-3 font-medium text-n100">Summary Description*</p>
+        <textarea
+          type="text"
+          onChange={handleShortDescriptionChange}
+          name="shortDescription"
+          value={shortDescription}
+          placeholder="Short description..."
+          className="w-full bg-white rounded-xl border border-b50 bg-n10 p-3 outline-none placeholder:text-n800"
+        />
       </div>
       {/* Description */}
       <div className="mt-8 col-span-12 mb-6">

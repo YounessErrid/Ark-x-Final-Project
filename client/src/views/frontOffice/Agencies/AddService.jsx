@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import ImageLoader from "./ImageLoader";
 import { CiCirclePlus } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { createPorfolioService } from "../../../features/porfolioServiceSlice";
+import { createPorfolioService, fetchAgencyPortfolio } from "../../../features/porfolioServiceSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useParams } from "react-router-dom";
@@ -59,6 +59,7 @@ const AddService = ({handleAddServiceMode}) => {
       formData.append('thumbnail', thumbnail)
       try {
         await dispatch(createPorfolioService(formData)).unwrap()
+        await dispatch(fetchAgencyPortfolio(id))
         toast.success("Portfolio added successfully")
         setTimeout(()=>{
           navigate(`/portfolio/${id}`)

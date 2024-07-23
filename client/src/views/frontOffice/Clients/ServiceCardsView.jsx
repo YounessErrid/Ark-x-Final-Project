@@ -1,23 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import mariagePhoto from "../../../assets/mariage.jpeg";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Route, Routes, useParams } from "react-router-dom";
-import {
-  deletePortfolioService,
-  fetchAgencyPortfolio,
-} from "../../../features/porfolioServiceSlice";
-import { ToastContainer, toast } from "react-toastify";
+import { Link, useParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import DOMPurify from "dompurify";
-import UpdateServie from "../Agencies/UpdateService";
 import ReactPaginate from "react-paginate";
 
 const ServiceCardsView = () => {
   const [isOpenId, setIsOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { portfolioServices } = useSelector((state) => state.portfolioservice);
-  const menuRef = useRef(null);
+  const { portfolioServices } = useSelector((state) => state.portfolioservice.portfolioServices);  const menuRef = useRef(null);
   const dispatch = useDispatch();
   const { id } = useParams();
   const toggleMenu = (id) => {
@@ -30,23 +21,19 @@ const ServiceCardsView = () => {
     }
   };
 
-  const cardPerPage = 2;
+  const cardPerPage = 6;
 
-  const totalPages = Math.ceil(portfolioServices.portfolioId?.portfolioServices.length/ cardPerPage)
+  const totalPages = portfolioServices ?Math.ceil(portfolioServices.length/ cardPerPage) : 0
 
   const startIndex = currentPage * cardPerPage
   const endIndex = startIndex + cardPerPage
 
-  const currentCards = portfolioServices.portfolioId?.portfolioServices.slice(startIndex, endIndex)
+  const currentCards = portfolioServices ? portfolioServices.slice(startIndex, endIndex) : []
 
   const handlePageChange = (data)=>{
     
     setCurrentPage(data.selected)
   }
-
-
-
-
 
   useEffect(() => {
     document.addEventListener("mousedown", handleCloseDropMenu);

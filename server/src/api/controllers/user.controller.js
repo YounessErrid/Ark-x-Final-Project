@@ -1,3 +1,4 @@
+const Portfolioservice = require("../models/portfolioServices.model");
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 
@@ -167,6 +168,69 @@ const remove = async (req, res) => {
   }
 };
 
+const addLike = async (req, res) =>{
+  const {userId, portfolioServiceId} = req.params;
+
+  try {
+    const user = await User.findById(userId)
+    
+    if(!user){
+      return res.status(401).json({erorr: "User not found"})
+    }
+
+    const portfolioService = await Portfolioservice.findById(portfolioServiceId)
+
+    if(!portfolioService){
+      return res.status(401).json({erorr: "PortfolioService not found"})
+    }
+
+    portfolioService.likes.push(userId)
+
+    await portfolioService.save()
+
+    res.json({message: "Like added successfully"})
+  } catch (error) {
+    return res
+    .status(500)
+    .json([
+      { error: "Internal server error" },
+      { message: `Error deleting Client: ${error.message}` },
+    ]);
+  }
+}
+
+const removeLike = async (req, res) =>{
+  const {userId, portfolioServiceId} = req.params;
+
+  try {
+    const user = await User.findById(userId)
+    
+    if(!user){
+      return res.status(401).json({erorr: "User not found"})
+    }
+
+    const portfolioService = await Portfolioservice.findById(portfolioServiceId)
+
+    if(!portfolioService){
+      return res.status(401).json({erorr: "PortfolioService not found"})
+    }
+
+    portfolioService.likes.filter(like => like !== userId)
+
+    await portfolioService.save()
+
+    res.json({message: "Like added successfully"})
+  } catch (error) {
+    return res
+    .status(500)
+    .json([
+      { error: "Internal server error" },
+      { message: `Error deleting Client: ${error.message}` },
+    ]);
+  }
+}
+
+
 module.exports = {
   login,
   register,
@@ -175,4 +239,6 @@ module.exports = {
   viewAll,
   update,
   remove,
+  addLike,
+  removeLike
 };

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { fetchPortfolioService } from "../../../features/porfolioServiceSlice";
 import DOMPurify from "dompurify";
+// import 'react-quill/dist/quill.snow.css'
+// import './style.css';
 
 const ServiceDetails = () => {
   const dipsatch = useDispatch();

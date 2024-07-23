@@ -15,7 +15,7 @@ import ReactPaginate from "react-paginate";
 const ServiceCards = ({ handleAddServiceMode }) => {
   const [isOpenId, setIsOpenId] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const { portfolioServices } = useSelector((state) => state.portfolioservice);
+  const { portfolioServices } = useSelector((state) => state.portfolioservice.portfolioServices);
   const menuRef = useRef(null);
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -23,17 +23,16 @@ const ServiceCards = ({ handleAddServiceMode }) => {
     setIsOpenId((prevId) => (prevId === id ? null : id));
   };
 
-  const cardPerPage = 2;
+  const cardPerPage = 6;
 
-  const totalPages = Math.ceil(portfolioServices.portfolioId?.portfolioServices.length/ cardPerPage)
+  const totalPages = portfolioServices ?Math.ceil(portfolioServices.length/ cardPerPage) : 0
 
   const startIndex = currentPage * cardPerPage
   const endIndex = startIndex + cardPerPage
 
-  const currentCards = portfolioServices.portfolioId?.portfolioServices.slice(startIndex, endIndex)
+  const currentCards = portfolioServices ? portfolioServices.slice(startIndex, endIndex) : []
 
   const handlePageChange = (data)=>{
-    
     setCurrentPage(data.selected)
   }
 
@@ -43,9 +42,10 @@ const ServiceCards = ({ handleAddServiceMode }) => {
     }
   };
 
-  const handleDeleteService = async (id) => {
+  const handleDeleteService = async (portfolioId) => {
     try {
-      await dispatch(deletePortfolioService(id)).unwrap();
+      await dispatch(deletePortfolioService(portfolioId)).unwrap();
+      await dispatch(fetchAgencyPortfolio(id))
       toast.success("Portfolio servie deleted successfully");
     } catch (error) {
       toast.success(`Error: ${error.message}`);

@@ -113,7 +113,7 @@ const portfolioServicesSlice = createSlice({
         state.loading = false;
         const data = action.payload.data;
         // console.log("added service data :", data);
-        state.portfolioServices.portfolioId.portfolioServices.push(data);
+        // state.portfolioServices.portfolioId.portfolioServices.push(data);
       })
       .addCase(createPorfolioService.rejected, (state, action) => {
         state.loading = false;
@@ -126,9 +126,9 @@ const portfolioServicesSlice = createSlice({
       })
       .addCase(deletePortfolioService.fulfilled, (state, action) => {
         state.loading = false;
-        const dataId = action.payload.data._id;
-        console.log("Deleted service data ID:", dataId);
-        state.portfolioServices.portfolioId.portfolioServices = state.portfolioServices.portfolioId.portfolioServices.filter(service => service._id !== dataId);
+        // const dataId = action.payload.data._id;
+        // console.log("Deleted service data ID:", dataId);
+        // state.portfolioServices.portfolioId.portfolioServices = state.portfolioServices.portfolioId.portfolioServices.filter(service => service._id !== dataId);
       })
       .addCase(deletePortfolioService.rejected, (state, action) => {
         state.loading = false;
@@ -143,7 +143,6 @@ const portfolioServicesSlice = createSlice({
         state.loading = false;
         const data = action.payload.data;
         // console.log("added service data :", data);
-        state.portfolioServices.portfolioId.portfolioServices.push(data);
       })
       .addCase(updatePortfolioService.rejected, (state, action) => {
         state.loading = false;

@@ -17,7 +17,7 @@ import SuccessPage from "./views/frontOffice/SuccessPage";
 import { checkSession } from "./features/userSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Portfolio from "./views/frontOffice/Agencies/Portfolio";
+// import Portfolio from "./views/frontOffice/Agencies/Portfolio";
 import Portfolio2 from "./views/frontOffice/Agencies/Portfolio2";
 import AgencyProfile from "./views/frontOffice/Agencies/AgencyProfile";
 import ServiceDetails from "./views/frontOffice/Agencies/serviceDetails";

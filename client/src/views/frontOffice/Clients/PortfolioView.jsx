@@ -18,6 +18,7 @@ const PortfolioView = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { portfolioServices, loading } = useSelector((state) => state.portfolioservice);
+  const { agencyName, addresse, description, logo, cover, service } = useSelector((state) => state.portfolioservice.portfolioServices);
   const { isAuthenticated } = useSelector((state) => state.user);
   const uniqueTitles = new Set();
 
@@ -55,22 +56,22 @@ const PortfolioView = () => {
             <div className="bg-white p-8 pt-0 rounded-lg shadow-md w-full mb-4 ">
               <div className="relative">
                 <img
-                  src={portfolioServices.portfolioId?.cover ?`http://localhost:3000/${portfolioServices.portfolioId?.cover}` : 'https://via.placeholder.com/800x400'}
+                  src={cover ?`http://localhost:3000/${cover}` : 'https://via.placeholder.com/800x400'}
                   alt="Banner Profile"
                   className="w-full rounded-t-lg h-48 object-cover"
                 />
                 <img
-                  src={portfolioServices.portfolioId?.logo ?`http://localhost:3000/${portfolioServices.portfolioId?.logo}` : 'https://i.pravatar.cc/2'}
+                  src={logo ?`http://localhost:3000/${logo}` : 'https://i.pravatar.cc/2'}
                   alt="Profile Picture"
                   className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-24 h-24 rounded-full border-4 border-white"
                 />
               </div>
               <div className="flex flex-col items-center justify-center gap-2 pt-6 mt-7">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {portfolioServices.agencyName}
+                  {agencyName}
                 </h2>
                 <p className="text-lg text-gray-600">
-                  {portfolioServices.addresse}
+                  {addresse}
                 </p>
               </div>
               <div className="w-full pt-8 sm:px-12">
@@ -99,17 +100,17 @@ const PortfolioView = () => {
               <div className="flex flex-col items-start justify-start gap-3 pt-8">
                 <p className="text-lg font-semibold text-gray-800">SERVICES</p>
                 <div className="text-gray-600 flex flex-wrap gap-2">
-                  {portfolioServices.portfolioId?.portfolioServices.map(
+                {service && service.map(
                     (serv, index) => {
                      
-                      if (!uniqueTitles.has(serv?.service?.title)) {
-                        uniqueTitles.add(serv?.service?.title);
+                      if (!uniqueTitles.has(serv?.title)) {
+                        uniqueTitles.add(serv?.title);
                         return (
                           <p
                             key={serv?._id}
                             className="bg-blue-50 flex items-center justify-center gap-2 rounded-xl px-3 py-2 font-medium"
                           >
-                            <span>{serv?.service?.title}</span>
+                            <span>{serv?.title}</span>
                           </p>
                         );
                       }
@@ -121,7 +122,7 @@ const PortfolioView = () => {
               <div className="flex flex-col items-start justify-start gap-3 pt-8">
                 <p className="text-lg font-semibold text-gray-800">ABOUT</p>
                 <p className="text-gray-600">
-                  {portfolioServices.portfolioId?.description}
+                  {description}
                 </p>
               </div>
             </div>
