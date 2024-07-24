@@ -2,24 +2,25 @@ import React, { useEffect } from "react";
 import { IoIosArrowDropleft } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { fetchPortfolioService } from "../../../features/porfolioServiceSlice";
+import { fetchPortfolioService, likePortfolioService, removeLikePortfolioService } from "../../../features/porfolioServiceSlice";
 import DOMPurify from "dompurify";
 // import 'react-quill/dist/quill.snow.css'
 // import './style.css';
+import { FaHeart, FaRegHeart } from "react-icons/fa"; 
 
 const ServiceDetails = () => {
-  const dipsatch = useDispatch();
+  const dispatch = useDispatch();
   const { portfolioService } = useSelector((state) => state.portfolioservice);
   const { user } = useSelector((state) => state.user);
   const { portfolioServiceId } = useParams();
 
   useEffect(() => {
-    dipsatch(fetchPortfolioService(portfolioServiceId));
-  }, [dipsatch]);
+    dispatch(fetchPortfolioService(portfolioServiceId));
+  }, [dispatch]);
 
-  useEffect(() => {
-    console.log(portfolioService);
-  }, [portfolioService]);
+  // useEffect(() => {
+  //   console.log(portfolioService);
+  // }, [portfolioService]);
 
   const cleanDescription = DOMPurify.sanitize(
     portfolioService?.description || "",
@@ -28,9 +29,22 @@ const ServiceDetails = () => {
     }
   );
 
+  const handleLikeButton = (userId, portfolioServiceId) => {
+   
+
+    const liked = portfolioService.likes.includes(userId)
+
+    if(liked){
+      return dispatch(removeLikePortfolioService({userId, portfolioServiceId}))
+    }
+    dispatch(likePortfolioService({userId, portfolioServiceId}))
+
+  };
+
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
+  
 
   return (
     <div className="font-sans bg-white p-4">
@@ -68,16 +82,15 @@ const ServiceDetails = () => {
             {portfolioService?.name}
           </h2>
           <div className="flex items-center space-x-2 mt-4">
-            <button className="flex justify-center items-center gap-2  hover:bg-gray-50 rounded-full p-1">
-              <svg
-                className="w-6 h-6 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 21.35l-1.45-1.32C6.11 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-4.11 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-              <span>42 Likes</span>
-            </button>
+          <button
+                  className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1"
+                  onClick={() => handleLikeButton(user?.id, portfolioService._id)}
+                >
+                  {portfolioService.likes?.includes(user?.id) ? (<FaHeart className="w-5 h-5 text-red-600" />) : (<FaRegHeart className="text-gray-600 w-5 h-5" />)}
+                  
+                  <span>{portfolioService?.likes?.length} Likes</span>
+                  
+                </button>
           </div>
           <p className="text-gray-600 mt-4">
             {portfolioService?.shortDescription}

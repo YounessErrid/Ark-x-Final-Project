@@ -172,23 +172,29 @@ const addLike = async (req, res) =>{
   const {userId, portfolioServiceId} = req.params;
 
   try {
-    const user = await User.findById(userId)
+    const [user, portfolioService ] = await Promise.all([
+      User.findById(userId),
+      Portfolioservice.findById(portfolioServiceId)
+    ])
     
     if(!user){
       return res.status(401).json({erorr: "User not found"})
     }
 
-    const portfolioService = await Portfolioservice.findById(portfolioServiceId)
-
     if(!portfolioService){
       return res.status(401).json({erorr: "PortfolioService not found"})
     }
 
+    const match = portfolioService.likes.includes(userId)
+
+    if(match){
+      return res.status(400).json({erorr: "User has already liked this portfolio service"})
+    }
     portfolioService.likes.push(userId)
 
     await portfolioService.save()
 
-    res.json({message: "Like added successfully"})
+    res.json({message: "Like added successfully", userId, portfolioId: portfolioService._id})
   } catch (error) {
     return res
     .status(500)
@@ -215,11 +221,13 @@ const removeLike = async (req, res) =>{
       return res.status(401).json({erorr: "PortfolioService not found"})
     }
 
-    portfolioService.likes.filter(like => like !== userId)
+    const index  = portfolioService.likes.indexOf(userId)
+    
+    portfolioService.likes.splice(index, 1)
 
     await portfolioService.save()
 
-    res.json({message: "Like added successfully"})
+    res.json({message: "Like removed successfully", userId, portfolioId: portfolioServiceId})
   } catch (error) {
     return res
     .status(500)

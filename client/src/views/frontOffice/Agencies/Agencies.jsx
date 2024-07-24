@@ -35,6 +35,11 @@ export const Agencies = () => {
   useEffect(() => {
     dispatch(fetchAgencies({ search: searchQuery, page, pageSize }));
   }, [dispatch, searchQuery, page, pageSize]);
+  // useEffect(() => {
+  //   console.log("agencies", agencies);
+  // }, [agencies]);
+
+
 
   return (
     <div>
@@ -106,7 +111,7 @@ export const Agencies = () => {
               {agencies &&
                 agencies.map((serv) => (
                   <div
-                    key={serv?._id}
+                    key={serv?.agencyId}
                     className="bg-white p-8 rounded-lg shadow-md relative"
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -118,7 +123,7 @@ export const Agencies = () => {
                       <div className="text-gray-500 cursor-pointer absolute top-2 right-2"></div>
                     </div>
                     <div className="mb-4 overflow-hidden">
-                      <Link to={`/client/portfolio/${serv?._id}`}>
+                      <Link to={`/client/portfolio/${serv?.agencyId}`}>
                         <img
                           src={
                             serv.logo
@@ -131,7 +136,7 @@ export const Agencies = () => {
                       </Link>
                     </div>
                     <div className="flex items-center justify-end text-gray-500">
-                      <Link to={`/client/portfolio/${serv?._id}`}>
+                      <Link to={`/client/portfolio/${serv?.agencyId}`}>
                         <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
                           <span>View details</span>
                           <svg

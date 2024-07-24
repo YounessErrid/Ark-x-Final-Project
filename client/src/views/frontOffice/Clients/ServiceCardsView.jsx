@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import ReactPaginate from "react-paginate";
+import { likePortfolioServices, removeLikePortfolioServices } from "../../../features/porfolioServiceSlice";
+import { FaHeart, FaRegHeart } from "react-icons/fa"; 
 
 const ServiceCardsView = () => {
   const [isOpenId, setIsOpenId] = useState(null);
@@ -11,6 +13,9 @@ const ServiceCardsView = () => {
   const { portfolioServices } = useSelector((state) => state.portfolioservice.portfolioServices);  const menuRef = useRef(null);
   const dispatch = useDispatch();
   const { id } = useParams();
+  const {user} = useSelector(
+    (state) => state.user
+  );
   const toggleMenu = (id) => {
     setIsOpenId((prevId) => (prevId === id ? null : id));
   };
@@ -34,6 +39,22 @@ const ServiceCardsView = () => {
     
     setCurrentPage(data.selected)
   }
+
+  const handleLikeButton = (userId, portfolioServiceId) => {
+    const portfolioService = currentCards.find(card => card._id == portfolioServiceId)
+
+    if(!portfolioService) {
+      return null
+    }
+
+    const liked = portfolioService.likes.includes(userId)
+
+    if(liked){
+      return dispatch(removeLikePortfolioServices({userId, portfolioServiceId}))
+    }
+    dispatch(likePortfolioServices({userId, portfolioServiceId}))
+
+  };
 
   useEffect(() => {
     document.addEventListener("mousedown", handleCloseDropMenu);
@@ -80,16 +101,15 @@ const ServiceCardsView = () => {
           </div>
           <div className="flex items-center justify-between text-gray-500">
             <div className="flex items-center space-x-2">
-              <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
-                <svg
-                  className="w-5 h-5 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
+            <button
+                  className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1"
+                  onClick={() => handleLikeButton(user?.id, serv._id)}
                 >
-                  <path d="M12 21.35l-1.45-1.32C6.11 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-4.11 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-                <span>42 Likes</span>
-              </button>
+                  {serv.likes?.includes(user?.id) ? (<FaHeart className="w-5 h-5 text-red-600" />) : (<FaRegHeart className="text-gray-600 w-5 h-5" />)}
+                  
+                  <span>{serv?.likes?.length} Likes</span>
+                  
+                </button>
             </div>
             <Link to={`/service-details/${serv?._id}`}>
               <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
@@ -111,7 +131,7 @@ const ServiceCardsView = () => {
         </div>
       ))}
       <div className=" lg:col-span-2 mt-4 ">
-      <ReactPaginate
+      { portfolioServices && portfolioServices.length !== 0 && <ReactPaginate
                   previousLabel={"Previous"}
                   nextLabel={"Next"}
                   breakLabel={"..."}
@@ -130,7 +150,7 @@ const ServiceCardsView = () => {
                   breakLinkClassName={"page-link"}
                   activeClassName={"active"}
                   activeLinkClassName={"page-link-active"}
-                />
+                />}
 
       </div>
     </div>

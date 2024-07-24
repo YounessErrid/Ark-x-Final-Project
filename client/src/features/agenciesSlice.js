@@ -66,7 +66,7 @@ export const updateAgecny = createAsyncThunk(
   async ({ data, id }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.put(`/agencies/${id}`, data);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
@@ -100,13 +100,13 @@ export const agenciesSlice = createSlice({
         state.loading = false;
         state.status = null;
         state.agencies = action.payload;
-        console.log(action.payload);
+        // console.log(action.payload);
       })
       .addCase(fetchAgencies.rejected, (state, action) => {
         state.loading = false;
         state.status = null;
         state.error = action.error.message;
-        console.log(action.error);
+        // console.log(action.error);
       })
       // Delete agency reducers
       .addCase(deleteAgency.pending, (state) => {
