@@ -179,8 +179,8 @@ const findOne = async (req, res) => {
       });
     }
 
-    console.log("id", id);
-    console.log("portfolioservice", portfolioService);
+    // console.log("id", id);
+    // console.log("portfolioservice", portfolioService);
 
     const portfolio = await Portfolio.findOne({portfolioServices : id})
 

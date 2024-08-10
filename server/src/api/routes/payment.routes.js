@@ -2,14 +2,33 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/payment.controller");
 const { isAuthenticated } = require("../middlewares/userAuth.middleware");
+const { authMiddleware } = require("../middlewares/roles");
 
 // // CRUD routes for Subscription
-router.post("/", isAuthenticated, controller.create);
-router.get("/", controller.viewAll);
-router.get("/:id", isAuthenticated, controller.findOne);
-router.put("/:id", isAuthenticated, controller.update);
-router.delete("/:id", isAuthenticated, controller.remove);
-
-
+router.post("/", isAuthenticated, authMiddleware("agency"), controller.create);
+router.get(
+  "/",
+  isAuthenticated,
+  authMiddleware("admin", "superadmin"),
+  controller.viewAll
+);
+router.get(
+  "/:id",
+  isAuthenticated,
+  authMiddleware("admin", "superadmin"),
+  controller.findOne
+);
+router.put(
+  "/:id",
+  isAuthenticated,
+  authMiddleware("admin", "superadmin"),
+  controller.update
+);
+router.delete(
+  "/:id",
+  isAuthenticated,
+  authMiddleware("admin", "superadmin"),
+  controller.remove
+);
 
 module.exports = router;

@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/stripe.controller");
+const { isAuthenticated } = require("../middlewares/userAuth.middleware");
 
-// const { createCustomer } = require("../../config/stripe");
-// router.post("/create-customerv1", async (req, res) => {
+
 //   if (!req.body) {
 //     return res
 //       .status(400)
@@ -28,13 +28,14 @@ const controller = require("../controllers/stripe.controller");
 // Define route to create a checkout session
 
 // route to create a checkout session
-router.post("/checkout", controller.checkout);
+router.post("/checkout",isAuthenticated,  controller.checkout);
 
-router.get("/subscriptions/:id", controller.getSubscription);
+router.get("/subscriptions/:id", isAuthenticated, controller.getSubscription);
 
 // route to handle webhook events
 router.post(
   "/",
+  isAuthenticated,
   express.raw({ type: "application/json" }),
   controller.handleStripeEvents
 );

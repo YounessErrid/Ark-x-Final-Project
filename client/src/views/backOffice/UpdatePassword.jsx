@@ -6,10 +6,12 @@ import { changePassword } from "../../features/userSlice";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Setting from "./Setting";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UpdatePassword = () => {
   const { user, error } = useSelector((state) => state.user);
-  const id = user.id;
+  const id = user?.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const schema = z.object({
@@ -31,9 +33,14 @@ const UpdatePassword = () => {
       await dispatch(
         changePassword({ id, userCredentials: { oldPassword, newPassword } })
       ).unwrap();
-      navigate("/dashboard");
+      toast.success('Passwored changed successfully')
+      setTimeout(()=>{
+        user.role == "admin" ? navigate("/dashboard") : navigate("/")
+      }, 2000)
     } catch (error) {
       console.log(error);
+      // toast.error('Passwored changed successfully')
+
     }
   };
 
@@ -90,6 +97,7 @@ const UpdatePassword = () => {
           </form>
         </div>
       </section>
+      <ToastContainer />
     </>
   );
 };

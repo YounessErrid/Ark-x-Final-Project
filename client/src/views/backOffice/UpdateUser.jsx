@@ -11,11 +11,11 @@ const UpdateUser = () => {
   const user = useSelector((state) => state.user.user);
   const [profileImage, setProfileImage] = useState(
     user?.profile
-      ? `http://localhost:3000/${user.profile}`
+      ? `http://localhost:3000/${user?.profile}`
       : "https://placehold.co/600x400"
   );
   const [selectedfile, setSelectedfile] = useState();
-  const id = user.id;
+  const id = user?.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const schema = z.object({
@@ -31,7 +31,7 @@ const UpdateUser = () => {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      fullname: user.fullname,
+      fullname: user?.fullname,
     },
   });
 
@@ -58,12 +58,12 @@ const UpdateUser = () => {
   };
 
   const onSubmit = ({ fullname }) => {
-    console.log(selectedfile);
+    // console.log(selectedfile);
     // const formData = toFormData({fullname, selectedfile})
     // formData.append("fullname", fullname);
     // formData.append("profileImage", selectedfile);
     dispatch(updateUser({ id, userCredentials: { fullname, selectedfile } }));
-    navigate("/dashboard");
+    user?.role == "admin" ? navigate("/dashboard") : navigate('/');
   };
   return (
     <>

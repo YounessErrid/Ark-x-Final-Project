@@ -321,7 +321,9 @@ const update = async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    if (user.profile_image && path) {
+    // console.log(path)
+
+    if ( path) {
       fs.unlink(user.profile_image, (err) => {
         if (err) {
           console.error("Error deleting previous image:", err);
@@ -329,6 +331,8 @@ const update = async (req, res) => {
           console.log("Previous image deleted successfully");
         }
       });
+      console.log("path")
+
       user.profile_image = path.path;
     }
 

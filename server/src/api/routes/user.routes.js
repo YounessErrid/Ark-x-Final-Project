@@ -6,8 +6,8 @@ const {authenticate, isAuthenticated} = require("../middlewares/userAuth.middlew
 
 
 // likes
-router.post('/likes/:userId/:portfolioServiceId', controller.addLike);
-router.delete('/likes/:userId/:portfolioServiceId' ,controller.removeLike);
+router.post('/likes/:userId/:portfolioServiceId', isAuthenticated, controller.addLike);
+router.delete('/likes/:userId/:portfolioServiceId' ,isAuthenticated, controller.removeLike);
 
 
 module.exports = router;

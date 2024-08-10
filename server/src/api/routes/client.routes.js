@@ -9,6 +9,7 @@ const {
 const validateLoginInput = require("../validations/loginUser.validator");
 const validateRegisterClient = require("../validations/registerClient.validator");
 const upload = require("../middlewares/upload");
+const { authMiddleware } = require("../middlewares/roles");
 
 // Auth routes
 router.post(
@@ -22,14 +23,23 @@ router.post(
   authenticate,
   controller.login
 );
-router.post("/contact", controller.contact);
+router.post("/contact", isAuthenticated, controller.contact);
 router.get("/auth/logout", controller.destroy);
 
 // // CRUD routes for Post
 // router.post('/', controller.create)
-router.get("/", controller.viewAll);
-// router.get('/:id', controller.findOne)
-// router.put('/:id', isAuthenticated, controller.update)
-router.delete("/:id", controller.remove);
+router.get(
+  "/",
+  isAuthenticated,
+  authMiddleware("admin", "superadmin"),
+  controller.viewAll
+);
+
+router.delete(
+  "/:id",
+  isAuthenticated,
+  authMiddleware("admin", "superadmin"),
+  controller.remove
+);
 
 module.exports = router;

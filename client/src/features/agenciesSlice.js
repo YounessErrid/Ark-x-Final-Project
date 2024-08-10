@@ -49,6 +49,7 @@ export const searchAgencies = createAsyncThunk(
     }
   }
 );
+
 export const fetchAgency = createAsyncThunk(
   "agencies/fetchAgency",
   async (id, { rejectWithValue }) => {

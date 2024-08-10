@@ -24,6 +24,11 @@ import ServiceDetails from "./views/frontOffice/Agencies/serviceDetails";
 import ProtectedAgency from "./routes/ProtectedAgency";
 import { Spinner } from "./components/Spinner";
 import PortfolioView from "./views/frontOffice/Clients/PortfolioView";
+import ClientProfile from "./views/frontOffice/Clients/ClientProfile";
+import UpdateUser from "./views/backOffice/UpdateUser";
+import UpdatePassword from "./views/backOffice/UpdatePassword";
+// import UpdateUser from "./views/backOffice/UpdateUser";
+// import UpdatePassword from "./views/backOffice/UpdatePassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -60,7 +65,8 @@ function App() {
             element={<ServiceDetails />}
           />
           <Route path="/client/portfolio/:id" element={<PortfolioView />} />
-
+          <Route path="/client/profile/*" element={<ClientProfile />} />
+         
 
         {/* agency routes */}
           <Route element={<ProtectedAgency />}>
