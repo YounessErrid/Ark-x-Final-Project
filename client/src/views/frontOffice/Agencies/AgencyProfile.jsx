@@ -145,7 +145,7 @@ const AgencyProfile = () => {
   }, []);
 
   useEffect(() => {
-    console.log("agency", agency);
+    // console.log("agency", agency);
     if (agency) {
       setProfileForm({
         agencyName: agency.agencyName,

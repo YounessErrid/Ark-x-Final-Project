@@ -12,9 +12,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateServie from "./UpdateService";
 import { Spinner } from "../../../components/Spinner";
+import { fetchAgency } from "../../../features/agenciesSlice";
+import { FaEnvelope, FaPhone, FaTimes } from "react-icons/fa";
 
 const Portfolio = () => {
   const [addServiceMode, setAddServiceMode] = useState(false);
+  const [showGetInTouch, setShowGetInTouch] = useState(false);
 
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
@@ -22,6 +25,7 @@ const Portfolio = () => {
   const { id } = useParams();
   const { portfolioServices, loading } = useSelector((state) => state.portfolioservice);
   const { agencyName, addresse, description, logo, cover, service } = useSelector((state) => state.portfolioservice.portfolioServices);
+  const { agency } = useSelector((state) => state.agencies);
   const { isAuthenticated } = useSelector((state) => state.user);
   const uniqueTitles = new Set();
 
@@ -38,6 +42,12 @@ const Portfolio = () => {
     window.scrollTo(0, 0)
   }, [])
 
+  const handleGetInTouchClick = () => {
+    setShowGetInTouch(!showGetInTouch);
+    dispatch(fetchAgency(id));
+  };
+
+ 
 
   if(!portfolioServices) return null
 
@@ -93,9 +103,9 @@ const Portfolio = () => {
                 </p>
               </div>
               <div className="w-full pt-8 sm:px-12">
-                <a
+              <button
                   className="relative block w-full rounded-full bg-n700 px-6 py-3 text-sm font-semibold text-white bg-black"
-                  href="/chat"
+                  onClick={handleGetInTouchClick}
                 >
                   <div className="relative z-20 flex items-center justify-center gap-3">
                     <span className="text-xl">
@@ -113,7 +123,7 @@ const Portfolio = () => {
                     </span>
                     <span>Get in touch</span>
                   </div>
-                </a>
+                </button>
               </div>
               <div className="flex flex-col items-start justify-start gap-3 pt-8">
                 <p className="text-lg font-semibold text-gray-800">SERVICES</p>
@@ -198,6 +208,53 @@ const Portfolio = () => {
           </div>
         </div>
       </main>
+      {showGetInTouch ? (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-6 mx-auto max-w-6xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-200 rounded-t">
+                  <h3 className="text-3xl font-semibold">
+                    Contact Information
+                  </h3>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 flex-auto">
+                  <div className="flex items-center my-4 text-gray-700 text-lg leading-relaxed">
+                    <FaEnvelope className="mr-3 text-blue-500" />
+                    <span className="mr-4">
+                      <strong>Email:</strong>
+                    </span>
+                    <span>
+                    {agency && agency.email}
+                    </span>
+                  </div>
+                  <div className="flex items-center my-4 text-gray-700 text-lg leading-relaxed">
+                    <FaPhone className="mr-3 text-green-500" />
+                    <span className="mr-4">
+                      <strong>Phone:</strong>
+                    </span>
+                    <span>{agency && agency.phone}</span>
+                  </div>
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-gray-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowGetInTouch(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
     </div>
   );
 };

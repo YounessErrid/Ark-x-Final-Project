@@ -27,6 +27,7 @@ import PortfolioView from "./views/frontOffice/Clients/PortfolioView";
 import ClientProfile from "./views/frontOffice/Clients/ClientProfile";
 import UpdateUser from "./views/backOffice/UpdateUser";
 import UpdatePassword from "./views/backOffice/UpdatePassword";
+import ProtectedClient from "./routes/ProtectedClient";
 // import UpdateUser from "./views/backOffice/UpdateUser";
 // import UpdatePassword from "./views/backOffice/UpdatePassword";
 
@@ -37,21 +38,22 @@ function App() {
     dispatch(checkSession());
   }, [dispatch]);
 
-  const { loading } = useSelector((state) => state.user);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  // const { loading } = useSelector((state) => state.user);
+  // const [dataLoaded, setDataLoaded] = useState(false);
 
-  useEffect(() => {
-    if (!loading) {
-      setTimeout(() => {
-        setDataLoaded(true);
-      }, 1000);
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   if (loading) {
+  //     setDataLoaded(false); 
+  //   } else {
+  //     setTimeout(() => {
+  //       setDataLoaded(true);completes
+  //     }, 1000);
+  //   }
+  // }, [loading]);
 
-  // Return loading spinner if loading is true and data is not loaded yet
-  if (!dataLoaded) {
-    return <Spinner loaded={dataLoaded} />;
-  }
+  // if (!dataLoaded) {
+  //   return <Spinner loaded={dataLoaded} />;
+  // }
 
   return (
     <div data-theme="dark">
@@ -60,15 +62,18 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/agenciespage" element={<Agencies />} />
-          <Route
-            path="/service-details/:portfolioServiceId"
-            element={<ServiceDetails />}
-          />
-          <Route path="/client/portfolio/:id" element={<PortfolioView />} />
-          <Route path="/client/profile/*" element={<ClientProfile />} />
-         
 
-        {/* agency routes */}
+          <Route element={<ProtectedClient />}>
+            <Route path="/client/profile/*" element={<ClientProfile />} />
+
+            <Route
+              path="/service-details/:portfolioServiceId/:agencyId"
+              element={<ServiceDetails />}
+            />
+            <Route path="/client/portfolio/:id" element={<PortfolioView />} />
+          </Route>
+
+          {/* agency routes */}
           <Route element={<ProtectedAgency />}>
             <Route path="/portfolio/:id/*" element={<Portfolio2 />} />
             <Route path="/agency/profile/:id" element={<AgencyProfile />} />

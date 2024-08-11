@@ -91,7 +91,7 @@ const ServiceCardsView = () => {
             </div>
           </div>
           <div className="mb-4 overflow-hidden">
-            <Link to={`/service-details/${serv?._id}`}>
+            <Link to={`/service-details/${serv?._id}/${id}`}>
             <img
               src={`http://localhost:3000/${serv?.thumbnail}`}
               alt="Post Image"
@@ -111,7 +111,7 @@ const ServiceCardsView = () => {
                   
                 </button>
             </div>
-            <Link to={`/service-details/${serv?._id}`}>
+            <Link to={`/service-details/${serv?._id}/${id}`}>
               <button className="flex justify-center items-center gap-2 px-2 hover:bg-gray-100 rounded-full p-1">
                 <span>View details</span>
                 <svg
