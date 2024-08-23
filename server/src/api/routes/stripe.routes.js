@@ -35,7 +35,6 @@ router.get("/subscriptions/:id", isAuthenticated, controller.getSubscription);
 // route to handle webhook events
 router.post(
   "/",
-  isAuthenticated,
   express.raw({ type: "application/json" }),
   controller.handleStripeEvents
 );

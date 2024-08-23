@@ -5,8 +5,11 @@ const sendContactEmail = require("../helpers/contacUsService");
 
 const register = async (req, res) => {
   const { email, password, fullname, phone } = req.body;
+
+  console.log("bodyyy", req.body)
   try {
-    let path = req.file ? req.file.path : null; // Check if req.file exists before accessing path
+    let path = req.file ? req.file.path : null; 
+    
     if (!email || !password || !fullname || !phone) {
       return res.status(400).json({
         error: "User creation failed: Missing required information!",

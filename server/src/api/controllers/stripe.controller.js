@@ -27,6 +27,8 @@ const handleStripeEvents = async (req, res) => {
           amount_total,
         } = event.data.object;
 
+        // console.log("i'm hereee  ")
+
         try {
           if (subscriptionId) {
             const subscriptionDetails = await stripe.subscriptions.retrieve(
@@ -52,7 +54,7 @@ const handleStripeEvents = async (req, res) => {
             agency.portfolioId = savedPortfolio._id;
             await agency.save();
 
-            console.log("agency", agency);
+            // console.log("agency", agency);
 
             const newSubscription = new Subscription({
               agencyId: agency._id,
@@ -169,7 +171,7 @@ const getSubscription = async (req, res) => {
 
 const checkout = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { priceId, email } = req.body;
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],

@@ -94,7 +94,7 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload?.error || "Registration failed";
       })
       // check agency email
       .addCase(checkAgencyEmail.pending, (state) => {
@@ -290,17 +290,12 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (userCredentials, { rejectWithValue }) => {
     try {
-      // Create a new FormData object
-      const formData = toFormData(userCredentials);
-      // Send the request with FormData instead of the raw userCredentials object
+      
+      console.log("userCredentials",userCredentials);
       const request = await axiosInstance.post(
         "/clients/auth/register",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
-          },
-        }
+        userCredentials
+       
       );
       const response = await request.data;
       return response;

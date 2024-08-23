@@ -67,7 +67,7 @@ export const Dashboard = () => {
                 <div className="w-10 rounded-full">
                   <img
                     src={
-                      `http://localhost:3000/${user.profile}` ||
+                      user.profile ?`http://localhost:3000/${user.profile}` :
                       "https://placehold.co/600x400"
                     }
                     alt="Profile"

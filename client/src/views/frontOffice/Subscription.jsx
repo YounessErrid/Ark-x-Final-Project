@@ -5,18 +5,18 @@ import { useSelector } from "react-redux";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
-const stripePromise = loadStripe(
-  "pk_test_51P2yVE06sb7pwrAB80oCcrMIdYHKaqejx4ekh4fXPKspuwU7gPgLUbPBbGJHjXlHycUfYUZdv4QUKcJl1tyYMuRl00unWBOHw3"
-);
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
 
 const plans = [
   {
-    priceId: "price_1P2yct06sb7pwrABc9MaEEFB",
+    priceId: import.meta.env.VITE_STRIPE_PLAN_MONTHLY_PRICE_ID,
     price: 500,
     duration: "/month",
   },
   {
-    priceId: "price_1PHpAi06sb7pwrABVZE7TYss",
+    priceId: import.meta.env.VITE_STRIPE_PLAN_YEARLY_PRICE_ID,
     price: 2400,
     duration: "/year",
   },

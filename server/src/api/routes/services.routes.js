@@ -19,7 +19,7 @@ router.get(
 router.get(
   "/",
   isAuthenticated,
-  authMiddleware("admin", "superadmin"),
+  authMiddleware("admin", "superadmin", "agency"),
   controller.viewAll
 );
 router.put(

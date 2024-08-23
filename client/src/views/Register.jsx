@@ -28,17 +28,22 @@ const Register = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    // dispatch(registerUser(data));
-    // isAuthenticated && navigate("/login");
+  useEffect(()=>{
+    console.log("error", error);
+  }, [error])
 
-    dispatch(registerUser(data)).then((result) => {
-      // Check if the action was fulfilled
-      if (result.meta.requestStatus === "fulfilled") {
-        // Do something if dispatch was successful
-        navigate("/login");
-      }
-    });
+  const onSubmit = async (data) => {
+    const formData = new FormData()
+    formData.append("fullname", data.fullname)
+    formData.append("email", data.email)
+    formData.append("password", data.password)
+    formData.append("phone", data.phone)
+    try {
+      dispatch(registerUser(formData)).unwrap()
+      navigate('/login')
+    } catch (error) {
+      console.log(error)
+    }
   };
   useEffect(() => {
     if (isAuthenticated) {

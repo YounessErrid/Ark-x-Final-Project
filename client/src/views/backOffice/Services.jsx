@@ -72,7 +72,7 @@ export const Services = () => {
           // Do something if dispatch was successful
           closeModal();
         }
-      });
+      }).then(()=> dispatch(fetchServices()));
     }
   };
 
@@ -119,15 +119,21 @@ export const Services = () => {
   ]);
 
   useEffect(() => {
-    if (error) SetTitleError(error);
     dispatch(fetchServices());
     setDataLoaded(true);
-
+  }, [dispatch]); // This only runs once when the component mounts
+  
+  useEffect(() => {
     if (formData) {
       setValue("title", formData.title || ""); // Set title field value
       setValue("description", formData.description || "");
     }
-  }, [dispatch, formData, error, status]);
+  }, [formData, setValue]); // This runs when formData changes
+  
+  // Handle errors separately
+  useEffect(() => {
+    if (error) SetTitleError(error);
+  }, [error]);
 
   return (
     <div className="w-full">
@@ -157,7 +163,7 @@ export const Services = () => {
               </p>
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="mb-8">
-                  {titleError && <p className="text-red-400">{titleError}</p>}
+                  {/* {titleError && <p className="text-red-400">{titleError}</p>} */}
                   <label
                     htmlFor="serviceTitle"
                     className="block text-base font-normal text-gray-700 dark:text-gray-200"
