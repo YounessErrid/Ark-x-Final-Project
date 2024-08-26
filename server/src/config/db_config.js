@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 require('dotenv').config()
 
 //import DB url from .env file
-const DB_URL = process.env.URL_MONGODB_SERVER_LOCAL
+const DB_URL = process.env.URL_MONGODB_SERVER_ATLAS
+// const DB_URL = process.env.URL_MONGODB_SERVER_LOCAL
 
 // Connect to the MongoDB instance
 const connect = async () => {
